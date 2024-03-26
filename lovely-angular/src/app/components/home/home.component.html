@@ -1,0 +1,38 @@
+<div class="container-fluid">
+  <div class="card text-center mx-auto my-5 position-relative" style="max-width: 400px;">
+    <!-- Imagen -->
+    @if(currentUser){
+      <img [src]="getImageUrl2(currentUser.fotoPerfil)" class="card-img-top" alt="Imagen del perfil">
+     } 
+
+    <!-- Botones de iconos -->
+    <div style="transform:translate(-50%, 300%) !important" class="position-absolute top-50 start-50 translate-middle">
+      <a href="" class="btn btn-dark m-1 rounded-5 text-light"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+      </svg></a>
+      <a href="" (click)="onLike()" class="btn btn-success rounded-5 m-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+      </svg></a>
+      <a href="" (click)="onReject()" class="btn btn-danger rounded-5 m-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg></a>
+    </div>
+
+    <!-- Contenido -->
+    @if(currentUser){ 
+      <div class="card-body">
+        <h5 class="card-title">{{ currentUser.nombre }}, {{ currentUser.edad }}</h5>
+        <p class="card-text">Periodista Deportivo </p>
+        <p class="card-text"><small class="text-muted">{{ currentUser.ubicacion }}</small></p>
+        
+      </div>
+    }@else {
+      The user is not logged in
+    } 
+    
+  </div>
+</div>
+
+
+

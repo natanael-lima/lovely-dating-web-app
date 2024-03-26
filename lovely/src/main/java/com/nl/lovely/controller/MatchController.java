@@ -1,0 +1,81 @@
+package com.nl.lovely.controller;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import com.nl.lovely.entity.User;
+import com.nl.lovely.entity.UserProfile;
+import com.nl.lovely.enums.ActionType;
+import com.nl.lovely.exception.NotFoundException;
+import com.nl.lovely.service.MatchService;
+import com.nl.lovely.service.UserProfileService;
+import com.nl.lovely.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("/api/matches")
+public class MatchController {
+	@Autowired
+    private MatchService matchService;
+    @Autowired
+    private UserProfileService userProfileService;
+
+    
+    @PostMapping("/like")
+    public ResponseEntity<String> likeUser(@RequestParam Long likerId, @RequestParam Long targetId) {
+    	try {
+            UserProfile liker = userProfileService.findUserById(likerId);
+            UserProfile target = userProfileService.findUserById(targetId);
+
+            matchService.handleLike(liker, target);
+            
+            return ResponseEntity.ok("Liked user " + targetId);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
+    }
+    
+    @PostMapping("/dislike")
+    public ResponseEntity<String> dislikeUser(@RequestParam Long likerId, @RequestParam Long targetId) {
+    	try {
+    		UserProfile liker = userProfileService.findUserById(likerId);
+            UserProfile target = userProfileService.findUserById(targetId);
+
+            //matchService.handleDislike(liker, target);
+            
+            return ResponseEntity.ok("Disliked user " + targetId);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
+    }
+    
+    @PostMapping("/{targetId}")
+    public ResponseEntity<String> performAction(@PathVariable Long targetId, Authentication authentication) {
+    
+    	UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername(); // Si el username se utiliza para buscar el UserProfile
+        UserProfile actor = userProfileService.findByUsername(username); // Método para buscar el UserProfile por nombre de usuario
+        UserProfile target = userProfileService.findUserById(targetId);
+        matchService.processAction(actor, target,ActionType.LIKE);
+
+        return ResponseEntity.ok("Acción realizada correctamente");
+    }
+    
+    
+    
+}
