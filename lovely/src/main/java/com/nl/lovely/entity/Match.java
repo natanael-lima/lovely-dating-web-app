@@ -17,6 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +36,7 @@ public class Match {
 	    private Long id;
 	 	
 	 	@Column(name="fecha")
+	 	@Temporal(TemporalType.TIMESTAMP)
 	    private LocalDateTime matchedAt;
 
 	    @ManyToOne(fetch = FetchType.LAZY)
@@ -44,7 +47,7 @@ public class Match {
 	    @JoinColumn(name = "profile2_id")
 	    private UserProfile profile2;
 
-	    //@OneToOne(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	    //private Chat chat;
+	    @OneToOne(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	    private Chat chat;
 
 }

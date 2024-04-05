@@ -19,9 +19,5 @@ public interface JwtService {
 	public String getToken(UserDetails user);
 	public String getUsernameFromToken(String token);
 	public boolean isTokenValid(String token, UserDetails userDetails);
-	//public Date getExpiration(String token);
-	//public boolean isTokenExpired(String token);
-	//public Claims getAllClaims(String token);
-	//public <T> T getClaim(String token, Function<Claims,T> claimsResolver);
 	 
 }

@@ -9,46 +9,64 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.entity.User;
 import com.nl.lovely.enums.RoleType;
 import com.nl.lovely.exception.NotFoundException;
 import com.nl.lovely.repository.UserRepository;
+import com.nl.lovely.request.UserRequest;
+import com.nl.lovely.response.UserResponse;
 import com.nl.lovely.service.UserService;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImp implements UserService{
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-	
-	@Override
-	public User saveUser(User user) {
-		
-		/*User newUser = new User(
-			    user.getNombre(),
-			    user.getApellido(),
-			    user.getUsername(),
-			    passwordEncoder.encode(user.getPassword()),
-			    user.getFotoPerfil(),
-			    user.getUbicacion(),
-			    user.getEdad(),
-			    user.getGenero(),
-			    RoleType.USER
-			);
-		newUser.setLoggedIn(false);*/
-		return userRepository.save(null);
-	}
-	
 
 	@Override
-	public User updateUser(User user) {
+	public Optional<User> findByUsername(String username) {
 		// TODO Auto-generated method stub
-		return userRepository.save(user) ;
+		Optional<User> result= userRepository.findByUsername(username);
+		return result;
 	}
 	
+	@Transactional
+	public UserResponse updateUser(UserRequest userRequest) {
+		// TODO Auto-generated method stub
+		User user = User.builder()
+		        .id(userRequest.getId())
+		        .lastname(userRequest.getLastname())
+		        .name(userRequest.getName())
+		        .role(RoleType.USER)
+		        .build();
+		        
+		        userRepository.updateUser(user.getId(), user.getLastname(), user.getName());
 
+		        return new UserResponse("El usuario se actualizo satisfactoriamente");
+	}
+	
+	@Override
+	public UserDTO getUser(Long id) {
+	        
+		User user= userRepository.findById(id).orElse(null);
+	       
+	        if (user!=null)
+	        {
+	            UserDTO userDTO = UserDTO.builder()
+	            .id(user.getId())
+	            .username(user.getUsername())
+	            .lastname(user.getLastname())
+	            .name(user.getName())
+	            .build();
+	            return userDTO;
+	        }
+			return null;      
+	}
+	
 	@Override
 	public void deleteUser(Long id) {
 		// TODO Auto-generated method stub
@@ -92,32 +110,12 @@ public class UserServiceImp implements UserService{
         return allUsers.get(randomIndex);
 	}
 
-	/*@Override
-	public boolean checkEmail(String email) {
-		// TODO Auto-generated method stub
-		//return userRepository.existsByEmail(email);
-		return false;
-	}
-
-
 	@Override
-	public User findUserById(Long id) {
+	public Optional<User> findUserById(Long id) {
 		// TODO Auto-generated method stub
-				return userRepository.findById(id)
-			            .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+		return userRepository.findById(id);
 	}
 
-    */
-	@Override
-	public Optional<User> findByUsername(String username) {
-		// TODO Auto-generated method stub
-		Optional<User> result= userRepository.findByUsername(username);
-		return result;
-	}
-
-
-
-
-	
+   
 
 }

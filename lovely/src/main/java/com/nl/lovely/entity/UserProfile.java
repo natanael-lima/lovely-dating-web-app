@@ -6,6 +6,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,12 +39,13 @@ public class UserProfile {
     private String location;
     private String gender;
     private String age;
+    private String likeGender;
+    private Integer maxAge;
+    private Integer minAge;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    
-    
     
     @OneToMany(mappedBy = "liker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAction> actionsForMe = new ArrayList<>();
@@ -54,15 +56,8 @@ public class UserProfile {
     
     @OneToMany(mappedBy = "profile1", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Match> matches;
-    //@ElementCollection
-    //@CollectionTable(name = "profile_interests", joinColumns = @JoinColumn(name = "profile_id"))
-    //@Column(name = "interest")
-    //private List<String> interests;
   
-    //@Embedded
-    //private Preference preferences;
-    //@OneToMany(mappedBy = "profile2", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<Match> matchesAsProfile2;
+    
     
     @Override
     public String toString() {

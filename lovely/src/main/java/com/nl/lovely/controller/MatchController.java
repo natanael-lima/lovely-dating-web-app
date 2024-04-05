@@ -65,7 +65,7 @@ public class MatchController {
     }
     
     @PostMapping("/{targetId}")
-    public ResponseEntity<String> performAction(@PathVariable Long targetId, Authentication authentication) {
+    public ResponseEntity<String> ActionLike(@PathVariable Long targetId, Authentication authentication) {
     
     	UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername(); // Si el username se utiliza para buscar el UserProfile
@@ -75,7 +75,17 @@ public class MatchController {
 
         return ResponseEntity.ok("Acción realizada correctamente");
     }
+    @PostMapping("/{userId}")
+    public ResponseEntity<String> ActionDislike(@PathVariable Long targetId, Authentication authentication) {
     
+    	UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername(); // Si el username se utiliza para buscar el UserProfile
+        UserProfile actor = userProfileService.findByUsername(username); // Método para buscar el UserProfile por nombre de usuario
+        UserProfile target = userProfileService.findUserById(targetId);
+        matchService.processAction(actor, target,ActionType.DISLIKE);
+
+        return ResponseEntity.ok("Acción realizada correctamente");
+    }
     
     
 }

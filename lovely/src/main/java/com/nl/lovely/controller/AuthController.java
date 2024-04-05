@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.nl.lovely.entity.User;
+import com.nl.lovely.request.LoginRequest;
+import com.nl.lovely.request.RegisterRequest;
+import com.nl.lovely.response.AuthResponse;
 import com.nl.lovely.service.AuthService;
 import com.nl.lovely.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
-//@CrossOrigin(origins = "http://localhost:4200") // Reemplaza esto con el dominio de tu frontend
+@CrossOrigin(origins = "http://localhost:4200") // Reemplaza esto con el dominio de tu frontend
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -36,44 +39,7 @@ public class AuthController {
     @PostMapping(value="registration-user")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
     {
-    
         return ResponseEntity.ok(authService.register(request));
     }
-    
-
-    
-    /*
-     * @PostMapping(value="registration-user")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request,@RequestPart("imageFile") MultipartFile imageFile, @RequestPart("user") User user)
-    {
-    	/*try {
-            if (imageFile != null && !imageFile.isEmpty()) {
-                user.setFotoPerfil(imageFile.getBytes());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Manejar el error
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        //User savedUser = userService.saveUser(user);
-        return ResponseEntity.ok(authService.register(request));
-    }
-    
-     * 
-     * @PostMapping(value = "/registration-user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<User> createUser(@RequestPart("imageFile") MultipartFile imageFile, @RequestPart("user") User user) {
-        try {
-            if (imageFile != null && !imageFile.isEmpty()) {
-                user.setFotoPerfil(imageFile.getBytes());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Manejar el error
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        User savedUser = userService.saveUser(user);
-        return ResponseEntity.ok(savedUser);
-    }*/
-	   
-  	
+  
 }

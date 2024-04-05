@@ -1,0 +1,71 @@
+/* Estilos adicionales */
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+.profile-info {
+    margin-bottom: 20px;
+}
+.profile-options {
+    margin-bottom: 20px;
+}
+.container-profile {
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+  }
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.change-photo-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-color: black;
+    border: 1px solid rgb(214, 214, 214);
+}
+
+.change-photo-icon svg {
+    width: 24px;
+    height: 24px;
+    color: rgb(0, 0, 0);
+}
+
+.change-photo-icon:hover {
+    background-color: #f5f0e5;
+}
+.label-icon{
+    cursor: pointer;
+}
+
+.btn-custom-color{
+    background-color: #351f07;
+    border: 0px;
+}
+.btn-custom-color:hover{
+    background-color: #645943;
+    color: white;
+    border: 0px;
+}

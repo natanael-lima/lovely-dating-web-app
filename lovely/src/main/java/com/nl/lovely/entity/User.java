@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nl.lovely.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,12 +34,11 @@ public class User implements UserDetails{
     private String lastname;
 	@Column(name = "name")
 	private String name;
-	@Column(name = "loggedIn")
-	private Boolean loggedIn;
 	@Enumerated(EnumType.STRING)
 	private RoleType role; //ADMIN-USER
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore // Evita la serialización infinita
     private UserProfile profile;
    
 	@Override
