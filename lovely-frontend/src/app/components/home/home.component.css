@@ -54,5 +54,5 @@
     left: 0;
     right: 0;
     color:white;
-    background-color: #0000004f;
+    border-image: fill 0 linear-gradient(#0001,#000);
   }

@@ -1,7 +1,5 @@
 package com.nl.lovely.request;
 
-import com.nl.lovely.enums.RoleType;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,14 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfileRequest {
-	
+public class UserProfilePhotoRequest {
 	Long id; // ID del perfil del usuario
 	Long userId; // ID del usuario logueado 
-    String location;
-    String gender;
-    String age;
-    String likeGender;
-    Integer maxAge;
-    Integer minAge;
+    byte[] photo;
+	String photoFileName;
 }
+
+	
+	
+ 

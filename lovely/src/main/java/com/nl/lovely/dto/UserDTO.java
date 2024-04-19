@@ -11,5 +11,4 @@ public class UserDTO {
      String username;
      String lastname;
 	 String name;
-	 
 	}

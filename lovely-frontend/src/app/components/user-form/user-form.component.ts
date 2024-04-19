@@ -16,6 +16,7 @@ import { throwError } from 'rxjs';
 export class UserFormComponent {
   
   registerSuccessMessage = false; // Variable para controlar la visibilidad del mensaje de registro exitoso
+  errorMessage=false;
   user: User;
   model = new User('', '', '', '');
 
@@ -27,11 +28,18 @@ export class UserFormComponent {
     this.userService.registerUser(this.user).pipe(
       tap(response => {
         // Registro exitoso, mostrar el mensaje
-        this.registerSuccessMessage = true;
+        if (response) {
+          this.registerSuccessMessage = true;
+        }
+        
       }),
       catchError(error => {
-        console.error('Error al registrar el usuario:', error);
-        // Puedes manejar el error aquí, por ejemplo, mostrar un mensaje de error
+        
+          this.errorMessage = true;
+        
+          console.error('Error al registrar el usuario:', error);
+          // Puedes manejar otros tipos de errores aquí
+        
         return throwError(error);
       })
     ).subscribe();

@@ -1,4 +1,5 @@
-export interface Chat{
-    message : string;
-    user: string;
+export class Chat {
+    id!: number;
+    matchId!: number;
+    messageList!: string[];
 }

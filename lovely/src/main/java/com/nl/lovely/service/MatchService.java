@@ -1,6 +1,9 @@
 package com.nl.lovely.service;
 
-import com.nl.lovely.entity.User;
+import java.util.List;
+
+import com.nl.lovely.dto.MatchDTO;
+import com.nl.lovely.entity.Match;
 import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.ActionType;
 
@@ -15,4 +18,10 @@ public interface MatchService {
 	public void handleDislike(UserProfile disliker, UserProfile target);
 	
 	public void processAction(UserProfile liker, UserProfile target, ActionType actionType);
+	
+	public List<MatchDTO> findAllMatchByUserProfile(Long profileId);
+	
+	public MatchDTO getMatchByUserProfile();
+	
+	public MatchDTO findMatchByProfileIds(Long profileId1, Long profileId2);
 }

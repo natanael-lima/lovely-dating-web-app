@@ -18,12 +18,10 @@ public interface UserService {
 	public void deleteUser(Long id);
 	
 	public Optional<User> findByUsername (String username);
-	
-	public List<User> getRandomProfiles (int count);
-	
-	public User getRandomProfile();
 
 	public Optional<User> findUserById(Long id);
+	
+	 public List<UserDTO> getUsersByMatch(Long userId);
 	
 	//public boolean checkEmail(String email);
 
