@@ -42,6 +42,7 @@ public class AuthServiceImp implements AuthService {
 	
 	@Override
 	public AuthResponse register(RegisterRequest request) {
+		
 		// Construir el objeto User con la imagen y otros datos
 		User user = User.builder()
 		        .username(request.getUsername())

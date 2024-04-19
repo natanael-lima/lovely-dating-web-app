@@ -34,8 +34,10 @@ public class UserProfile {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	@Column(name = "photo", length = 4000000) // Cambia 4000000 al valor máximo que desees
     @Lob
     private byte[] photo;
+	private String photoFileName;
     private String location;
     private String gender;
     private String age;

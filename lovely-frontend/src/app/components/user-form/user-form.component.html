@@ -38,6 +38,10 @@
           <div class="alert alert-success mt-3" role="alert">
             ¡Registro exitoso! ¡Bienvenido!
           </div>
+        }@if(errorMessage){
+          <div class="alert alert-danger mt-3" role="alert" >
+            Error usuario ya existe con ese username!
+          </div>
         }
         
       </div>

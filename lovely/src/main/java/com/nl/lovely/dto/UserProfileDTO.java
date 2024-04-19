@@ -13,6 +13,7 @@ public class UserProfileDTO {
 	Long id; // ID del perfil del usuario
 	Long userId; // ID del usuario logueado
     byte[] photo;
+    String photoFileName;
     String location;
     String gender;
     String age;

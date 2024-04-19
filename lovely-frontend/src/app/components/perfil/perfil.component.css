@@ -21,6 +21,7 @@
 .profile-picture-container {
     position: relative;
     display: inline-block;
+    
 }
 
 .profile-picture {
@@ -68,4 +69,7 @@
     background-color: #645943;
     color: white;
     border: 0px;
+}
+.linea{
+    margin: 0.1px;
 }

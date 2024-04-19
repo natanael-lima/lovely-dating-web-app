@@ -3,7 +3,7 @@ package com.nl.lovely.service.imp;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +13,7 @@ import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.entity.User;
 import com.nl.lovely.enums.RoleType;
 import com.nl.lovely.exception.NotFoundException;
+import com.nl.lovely.repository.UserProfileRepository;
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.request.UserRequest;
 import com.nl.lovely.response.UserResponse;
@@ -26,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImp implements UserService{
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private UserProfileRepository userProfileRepository;
+	
 
 	@Override
 	public Optional<User> findByUsername(String username) {
@@ -73,49 +77,29 @@ public class UserServiceImp implements UserService{
 		userRepository.deleteById(id);
 	}
 
-
-	@Override
-	public List<User> getRandomProfiles(int count) {
-		List<User> allUsers = userRepository.findAll();
-        if (allUsers.size() <= count) {
-            return allUsers; // Si hay menos perfiles que el número deseado, devolvemos todos los perfiles
-        } else {
-            // Usamos una muestra aleatoria de la lista de perfiles
-            Random random = new Random();
-            for (int i = allUsers.size() - 1; i > 0; i--) {
-                int j = random.nextInt(i + 1);
-                User temp = allUsers.get(i);
-                allUsers.set(i, allUsers.get(j));
-                allUsers.set(j, temp);
-            }
-            return allUsers.subList(0, count); // Devolvemos una sublista con los perfiles aleatorios
-        }
-	}
-
-	@Override
-	public User getRandomProfile() {
-		// Obtener la lista de todos los usuarios
-        List<User> allUsers = userRepository.findAll();
-
-        // Verificar si hay usuarios en la lista
-        if (allUsers.isEmpty()) {
-            return null; // Devolver null si no hay usuarios
-        }
-
-        // Obtener un índice aleatorio dentro del rango de la lista de usuarios
-        Random random = new Random();
-        int randomIndex = random.nextInt(allUsers.size());
-
-        // Obtener el usuario aleatorio en función del índice generado
-        return allUsers.get(randomIndex);
-	}
-
 	@Override
 	public Optional<User> findUserById(Long id) {
 		// TODO Auto-generated method stub
 		return userRepository.findById(id);
 	}
 
+	@Override
+	public List<UserDTO> getUsersByMatch(Long userId) {
+		// TODO Auto-generated method stub
+		List<User> users = userProfileRepository.findUsersByMatch(userId);
+		return users.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+	}
+	
+	private UserDTO convertToDTO(User user) {
+        return UserDTO.builder()
+                      .id(user.getId())
+                      .username(user.getUsername())
+                      .lastname(user.getLastname())
+                      .name(user.getName())
+                      .build();
+    }
    
 
 }

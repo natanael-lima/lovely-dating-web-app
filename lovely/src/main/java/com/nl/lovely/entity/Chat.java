@@ -33,7 +33,7 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
     
-    public void addMessage(Message message) {
+    /*public void addMessage(Message message) {
         messages.add(message);
         message.setChat(this);
     }
@@ -41,5 +41,5 @@ public class Chat {
     public void removeMessage(Message message) {
         messages.remove(message);
         message.setChat(null);
-    }
+    }*/
 }
