@@ -1,81 +1,53 @@
+<div class="container-fluid">
+  <div class="row mt-5 justify-content-center">
+    <div class="col-lg-6 mx-auto container-profile bg-light">
+      <a class="btn btn-dark rounded-pill m-1" href="/match" >Volver</a>
+      <div class="chat-container border rounded p-4 bg-body" #chatContainer>
+        <div *ngFor="let item of messageList" class="message-container">
+          <div *ngIf="item.isSender" class="sender-message">
+            <div class="message">
+              <p>{{ item.content }}</p>
+              <span class="time">{{ formatTimestamp(item.timestamp) }}</span>
+            </div>
+            <img class="user-image" src="../assets/sender.png" alt="User Image">
+          </div>
+          <div *ngIf="!item.isSender" class="receiver-message">
+            <img class="user-image" src="../assets/receiver.png" alt="User Image">
+            <div class="message">
+              <p>{{ item.content }}</p>
+              <span class="time">{{ formatTimestamp(item.timestamp) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-group mt-3">
+        <input type="text" class="form-control rounded-pill px-3 m-1" placeholder="Escribir el mensaje..." [(ngModel)]="messageInput">
+        <button class="btn btn-primary rounded-pill px-3 m-1" (click)="sendMessage()">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <style>
-    /* Estilos adicionales */
-    .chat-container {
-      height: 50vh;
-      overflow-y: scroll;
-    }
+           
+   
 
-    .message {
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-
-    .message.sender {
-      background-color: #f3f2e8;
-      text-align: right;
-      margin-left: 50px;
-    }
-
-    .message.receiver {
-      background-color: #e2dfc7;
-      text-align: left;
-      margin-right: 50px;
-    }
-
-    .message input[type="text"] {
-      width: calc(100% - 40px);
-      margin-right: 5px;
-    }
-
-    .message button {
-      width: 40px;
-    }
-    .container-profile {
-      padding: 40px;
-
-      border-radius: 8px;
-      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
-    }
-  </style>
-  <div class="container-fluid">
+<!--   <div class="container-fluid">
     <div class="row mt-5 justify-content-center ">
       <div class="col-lg-6 mx-auto container-profile bg-light">
-        <div class="chat-container border rounded p-5 bg-body">
-          <div class="message receiver">
-            <p>Hello, how can I help you?</p>
-            <span class="time">11:30 AM</span>
+        <div class="chat-container border rounded p-5 bg-body" #chatContainer>
+          <img class="user-image"  alt="User Image">
+          <div *ngFor="let item of messageList" class="message" [ngClass]="{'sender': item.isSender, 'receiver': !item.isSender}">
+            
+            <p>{{ item.content }}</p>
+            <span class="time">{{item.timestamp}}</span>
+           
           </div>
-          <!--<div class="message sender" >
-            <input class="message_input" placeholder="Message..."/>
-            <span class="time">11:32 AM</span>
-          </div>-->
-          <div class="message sender" >
-            <p>Que haces amigo, prueba de mensaje tamaño si es largo el mensaje jajaja probando probando creo que es lo mas largo que escribira alguien creo xd</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message sender" >
-            <p>Hi, I am fine and you?</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message receiver" >
-            <p>Hi, I am fine and you?</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message sender" >
-            <p>Hi, I am fine and you?</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          
-          <!-- More messages here -->
         </div>
         <div class="input-group mt-3">
-          <input type="text" class="form-control" placeholder="Escribir el mensaje...">
-          <button class="btn btn-danger" (click)="sendMessage()">Enviar</button>
+          <input type="text" class="form-control rounded-pill px-3 m-1" placeholder="Escribir el mensaje..." [(ngModel)]="messageInput">
+          <button class="btn btn-primary rounded-pill px-3 m-1" (click)="sendMessage()">Enviar</button>
         </div>
       </div>
     </div>
   </div>
-
-
+-->

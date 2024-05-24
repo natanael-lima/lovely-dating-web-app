@@ -1,32 +1,3 @@
-<style>
-    /* Personaliza los estilos según sea necesario */
-    body {
-      background-color: #f0f2f5; /* Color de fondo similar al de Facebook */
-      font-family: Arial, sans-serif; /* Fuente similar a la de Facebook */
-    }
-    .user-list {
-      max-height: 400px;
-      overflow-y: auto;
-      text-align: center; /* Centra el contenido */
-    }
-    .user-list .list-group-item {
-      cursor: pointer;
-      text-align: left; /* Alinea el texto a la izquierda */
-    }
-    .user-list .list-group-item img {
-      width: 40px; /* Tamaño de la imagen de perfil */
-      height: 40px;
-      border-radius: 50%; /* Borde redondeado para la imagen de perfil */
-      margin-right: 10px; /* Espaciado entre la imagen y el texto */
-    }
-    .container-profile {
-      padding: 40px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
-    }
-  </style>
-
 <div class="container">
   <div class="row mt-5 justify-content-center ">
       <div class="col-md-8 container-profile bg-light">
@@ -36,44 +7,28 @@
         <div class="user-list">
           
           <div class="list-group">
-            <a href="/chat/1" class="list-group-item list-group-item-action">
+            <a  *ngFor="let user of users" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" (click)="goToChat(user.id)">
+              <div>
+                <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
+                {{ user.name }} <!-- Asume que MatchDTO tiene un campo profile2Nombre con el nombre del perfil -->
+              </div>
+              <div>
+                <button class="btn btn-outline-danger btn-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                  </svg>
+                </button>
+              </div>
+            </a> 
+
+            <!-- <a href="/chat/{{currentUser.id}}" class="list-group-item list-group-item-action">
               <img src="https://via.placeholder.com/40" alt="Usuario 1"> Pepito
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="/chat/2" class="list-group-item list-group-item-action">
               <img src="https://via.placeholder.com/40" alt="Usuario 2"> Juanito
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Martinito
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Fulanito
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Messi
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Lebron
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Jack
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Po 
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Iron Make
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Baki
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Rococo
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <img src="https://via.placeholder.com/40" alt="Usuario 3"> Brad Pitt
-            </a>
-            <!-- Agrega más usuarios según sea necesario -->
-            <!--<nav   aria-label="Page navigation">
+            <nav   aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
                   <li class="page-item">
                     <a class="page-link" href="#" aria-label="Previous">

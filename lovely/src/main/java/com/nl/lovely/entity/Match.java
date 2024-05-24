@@ -47,7 +47,7 @@ public class Match {
 	    @JoinColumn(name = "profile2_id")
 	    private UserProfile profile2;
 
-	    @OneToOne(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	    @OneToOne(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	    private Chat chat;
 
 }

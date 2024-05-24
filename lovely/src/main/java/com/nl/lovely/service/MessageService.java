@@ -1,11 +1,14 @@
 package com.nl.lovely.service;
 
+import java.util.List;
+
+import com.nl.lovely.dto.MessageDTO;
 import com.nl.lovely.entity.Message;
 
 public interface MessageService {
 
-	public Message saveMessage(Message message);
+	public MessageDTO saveMessage(MessageDTO message);
 	
-	public Message findMessageById(Long id);
+	public List<MessageDTO> findMessagesByChatId(Long chatId);
 	
 }

@@ -1,8 +1,11 @@
 package com.nl.lovely.service.imp;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nl.lovely.dto.ChatDTO;
 import com.nl.lovely.entity.Chat;
 import com.nl.lovely.exception.NotFoundException;
 import com.nl.lovely.repository.ChatRepository;
@@ -29,5 +32,22 @@ public class ChatServiceImp implements ChatService{
 		// TODO Auto-generated method stub
 		chatRepository.deleteById(id);
 	}
+
+	@Override
+	public ChatDTO findChatByMatchId(Long matchId) {
+
+		 Chat chat = chatRepository.findByMatchId(matchId)
+	            .orElseThrow(() -> new RuntimeException("Chat for Match with ID " + matchId + " not found"));
+
+	    return convertToDTO(chat);
+	}
+	
+	private ChatDTO convertToDTO(Chat chat) {
+	    return ChatDTO.builder()
+	            .id(chat.getId())
+	            .matchId(chat.getMatch() != null ? chat.getMatch().getId() : null)
+	            .build();
+	}
+
 
 }

@@ -1,0 +1,106 @@
+/* Estilos adicionales */
+/*.chat-container {
+    height: 50vh;
+    overflow-y: scroll;
+  }
+
+  .message {
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .message.sender {
+    background-color: #f3f2e8;
+    text-align: right;
+    margin-left: 50px;
+  }
+
+  .message.receiver {
+    background-color: #e2dfc7;
+    text-align: left;
+    margin-right: 50px;
+  }
+
+  .message input[type="text"] {
+    width: calc(100% - 40px);
+    margin-right: 5px;
+  }
+
+  .message button {
+    width: 40px;
+  }
+  .container-profile {
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .user-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px; 
+  }*/
+
+/* Estilos adicionales */
+
+.user-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Hace que la imagen sea circular */
+  margin-right: 5px; /* Espacio entre la imagen y el mensaje */
+  margin-left: 5px; /* Espacio entre la imagen y el mensaje */
+}
+
+.chat-container {
+  height: 50vh;
+  overflow-y: scroll;
+}
+
+.message-container {
+ 
+  align-items: flex-start; /* Alinea los mensajes hacia arriba */
+  margin-bottom: 10px;
+}
+
+.sender-message, .receiver-message {
+  display: flex;
+  align-items: flex-start; /* Alinea los mensajes hacia arriba */
+}
+
+.sender-message .message {
+  background-color: #f3f2e8; /* Color de fondo para mensajes del remitente */
+  margin-left: 100px;
+}
+
+.receiver-message .message {
+  background-color: #e2dfc7; /* Color de fondo para mensajes del destinatario */
+  margin-right: 100px;
+}
+
+.message {
+  border-radius: 10px;
+  padding: 10px;
+
+  flex-grow: 1; /* Permite que el mensaje ocupe todo el ancho disponible */
+}
+
+.message input[type="text"] {
+  width: calc(100% - 40px);
+  margin-right: 5px;
+}
+
+.message button {
+  width: 40px;
+}
+
+.container-profile {
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+}
+.time{
+  font-size: 0.8em;
+  color: gray;
+}
