@@ -21,8 +21,11 @@ public interface UserProfileService {
 	
 	public Long getUserProfileByUserId(Long userId);
 	
+<<<<<<< HEAD
 	public UserProfileResponse saveProfile(MultipartFile photo,String photoFileName,String location,String gender,String age,String likeGender,Integer maxAge,Integer minAge,Long userId);
 	
+=======
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	public UserProfileResponse updateUserProfileData(UserProfileRequest profile);
 	
 	public UserProfileResponse updateUserProfilePhoto(UserProfilePhotoRequest profileRequest);

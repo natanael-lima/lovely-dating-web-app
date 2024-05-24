@@ -29,6 +29,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,Long>{
 	
 	// Método para buscar perfiles de usuario que cumplan con las preferencias del usuario actual
 	@Query("SELECT up FROM UserProfile up WHERE up.gender = :likeGender AND up.age BETWEEN :minAge AND :maxAge")
+<<<<<<< HEAD
     List<UserProfile> findFilteredUserProfiless(@Param("likeGender") String likeGender, @Param("minAge") Integer minAge, @Param("maxAge") Integer maxAge);
 	
 	
@@ -41,6 +42,9 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,Long>{
 	                                               @Param("maxAge") Integer maxAge,
 	                                               @Param("currentUser") UserProfile currentUser,
 	                                               @Param("excludedActions") List<ActionType> excludedActions);
+=======
+    List<UserProfile> findFilteredUserProfiles(@Param("likeGender") String likeGender, @Param("minAge") Integer minAge, @Param("maxAge") Integer maxAge);
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	
 	
 	@Query("SELECT DISTINCT up.user FROM UserProfile up " +

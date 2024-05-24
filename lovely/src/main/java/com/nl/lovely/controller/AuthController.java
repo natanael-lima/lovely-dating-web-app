@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.nl.lovely.entity.User;
+<<<<<<< HEAD
 import com.nl.lovely.entity.UserProfile;
+=======
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.request.LoginRequest;
 import com.nl.lovely.request.RegisterRequest;
@@ -39,14 +42,22 @@ public class AuthController {
 	
     @Autowired
     private AuthService authService;
+<<<<<<< HEAD
     @Autowired
     private UserRepository userRepository;
 
     // API que autentica el usuario que se loguea.
+=======
+    
+    @Autowired
+    private UserRepository userRepository;
+    
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
     	return ResponseEntity.ok(authService.login(request));
     }
+<<<<<<< HEAD
     
     // API que registra un nuevo usuario.
     @PostMapping(value="registration-user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -86,6 +97,17 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(new AuthResponse("Error al procesar la imagen de perfil"));
             }
         }
+=======
+	 
+    @PostMapping(value="registration-user")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
+    {	if (userRepository.existsByUsername(request.getUsername())) {
+	        // El nombre de usuario ya está en uso, devolver un mensaje de error
+	        return ResponseEntity.badRequest().body(new AuthResponse("El nombre de usuario ya está en uso"));
+	    } else {
+	    	return ResponseEntity.ok(authService.register(request));
+    	   }
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     }
     
     

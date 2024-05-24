@@ -24,4 +24,13 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
 				.withSockJS();
 	}
 	
+	/*
+	@Override
+	public void configureMessageBroker(MessageBrokerRegistry registry) {
+		registry.enableSimpleBroker("/topic");
+		registry.setApplicationDestinationPrefixes("/app");
+	}*/
+	
+	
+	
 }

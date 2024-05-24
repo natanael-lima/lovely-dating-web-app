@@ -21,9 +21,13 @@ public interface UserService {
 
 	public Optional<User> findUserById(Long id);
 	
+<<<<<<< HEAD
 	public List<UserDTO> getUsersByMatch(Long userId);
 	
 	public UserCompleteDTO getUserDTO(Long id) throws Exception;
+=======
+	 public List<UserDTO> getUsersByMatch(Long userId);
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	
 	//public boolean checkEmail(String email);
 

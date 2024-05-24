@@ -35,8 +35,11 @@ export class MatchService {
     return this.http.get<any>(this.apiUrl+"/api/matches/byusers/"+userId1+"/"+userId2);
   }
 
+<<<<<<< HEAD
   checkForMatch(userId1: number, userId2: number): Observable<{ match: boolean }> {
     return this.http.get<{ match: boolean }>(`${this.apiUrl}/api/matches/check-match?profileId1=${userId1}&profileId2=${userId2}`);
   }
 
+=======
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 }

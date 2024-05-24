@@ -27,7 +27,10 @@ import com.nl.lovely.entity.User;
 import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.ActionType;
 import com.nl.lovely.exception.NotFoundException;
+<<<<<<< HEAD
 import com.nl.lovely.repository.UserProfileRepository;
+=======
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 import com.nl.lovely.service.ChatService;
 import com.nl.lovely.service.MatchService;
 import com.nl.lovely.service.UserProfileService;
@@ -52,6 +55,12 @@ public class MatchController {
     @PostMapping("/like/{targetId}")
     public ResponseEntity<Map<String, String>> ActionLike(@PathVariable Long targetId, Authentication authentication) {
     
+<<<<<<< HEAD
+=======
+    @PostMapping("/like/{targetId}")
+    public ResponseEntity<Map<String, String>> ActionLike(@PathVariable Long targetId, Authentication authentication) {
+    
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     	UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername(); // Si el username se utiliza para buscar el UserProfile
         UserProfile actor = userProfileService.findByUsername(username); // Método para buscar el UserProfile por nombre de usuario
@@ -61,7 +70,10 @@ public class MatchController {
         response.put("message", "El like se registro correctamente");
         return ResponseEntity.ok(response);
     }
+<<<<<<< HEAD
     // API que registra un dislike.
+=======
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @PostMapping("/dislike/{targetId}")
     public ResponseEntity<Map<String, String>> ActionDislike(@PathVariable Long targetId, Authentication authentication) {
     
@@ -76,7 +88,11 @@ public class MatchController {
     }
     
     
+<<<<<<< HEAD
     // API para obtener una lista de los match del usuario logueado.
+=======
+    //Metodo para obtener una lista de los match del usuario logueado
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @GetMapping("/{userId}")
     public ResponseEntity<List<MatchDTO>> findAll(@PathVariable Long userId) {
     
@@ -89,7 +105,11 @@ public class MatchController {
     	    return ResponseEntity.ok(matches); // Retorna la lista de Match encontrados
     }
     
+<<<<<<< HEAD
     // API para obtener el chat de un usuario especifico con matchid.
+=======
+    //Metodo para obtener el chat de un usuario especifico
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @GetMapping("/chat/{matchId}")
     public ResponseEntity<ChatDTO> findChatByMatchId(@PathVariable Long matchId) {
         try {
@@ -100,7 +120,11 @@ public class MatchController {
         }
     }
     
+<<<<<<< HEAD
     // API para obtener el match por 2 UserId
+=======
+    //Metodo para obtener el match by dos user id
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @GetMapping("/byusers/{userId1}/{userId2}")
     public ResponseEntity<MatchDTO> findMatchByUsersIds(@PathVariable Long userId1, @PathVariable Long userId2) {
     	try {
@@ -111,6 +135,7 @@ public class MatchController {
         }
     }
     
+<<<<<<< HEAD
     // API para confirmar match
     @GetMapping("/check-match")
     public ResponseEntity<Boolean> checkMatch(@RequestParam Long profileId1, @RequestParam Long profileId2) {
@@ -122,6 +147,8 @@ public class MatchController {
         boolean isMatch = matchService.confirmMatch(profile1, profile2);
         return ResponseEntity.ok(isMatch);
     }
+=======
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     
     /*@PostMapping("/like")
     public ResponseEntity<String> likeUser(@RequestParam Long likerId, @RequestParam Long targetId) {

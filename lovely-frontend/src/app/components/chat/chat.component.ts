@@ -110,6 +110,7 @@ export class ChatComponent implements OnInit {
     });
   }*/
 
+<<<<<<< HEAD
   formatTimestamp(timestamp: string): string {
     const date = new Date(timestamp);
     const day = date.getDate();
@@ -126,5 +127,8 @@ export class ChatComponent implements OnInit {
   }
   
   
+=======
+
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 
 }

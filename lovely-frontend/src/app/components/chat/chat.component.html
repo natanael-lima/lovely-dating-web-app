@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container-fluid">
   <div class="row mt-5 justify-content-center">
     <div class="col-lg-6 mx-auto container-profile bg-light">
@@ -51,3 +52,46 @@
     </div>
   </div>
 -->
+=======
+  <div class="container-fluid">
+    <div class="row mt-5 justify-content-center ">
+      <div class="col-lg-6 mx-auto container-profile bg-light">
+        <div class="chat-container border rounded p-5 bg-body" #chatContainer>
+          <div *ngFor="let item of messageList" class="message" [ngClass]="{'sender': item.isSender, 'receiver': !item.isSender}">
+            <p>{{ item.content }}</p>
+            <span class="time">{{item.timestamp}}</span>
+          </div>
+        </div>
+        <div class="input-group mt-3">
+          <input type="text" class="form-control rounded-pill px-3 m-1" placeholder="Escribir el mensaje..." [(ngModel)]="messageInput">
+          <button class="btn btn-primary rounded-pill px-3 m-1" (click)="sendMessage()">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--      <div class="message receiver">
+            <p>Hello, how can I help you?</p>
+            <span class="time">11:30 AM</span>
+          </div>
+          <div class="message sender" >
+            <input class="message_input" placeholder="Message..."/>
+            <span class="time">11:32 AM</span>
+          </div>
+          <div class="message sender" >
+            <p>Que haces amigo, prueba de mensaje tamaño si es largo el mensaje jajaja probando probando creo que es lo mas largo que escribira alguien creo xd</p>
+            <span class="time">11:32 AM</span>
+          </div>
+          <div class="message sender" >
+            <p>Hi, I am fine and you?</p>
+            <span class="time">11:32 AM</span>
+          </div>
+          <div class="message receiver" >
+            <p>Hi, I am fine and you?</p>
+            <span class="time">11:32 AM</span>
+          </div>
+          <div class="message sender" >
+            <p>Hi, I am fine and you?</p>
+            <span class="time">11:32 AM</span>
+          </div> -->
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074

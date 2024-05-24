@@ -42,7 +42,11 @@ public class AuthServiceImp implements AuthService {
 	private final AuthenticationManager authenticationManager;
 	
 	@Override
+<<<<<<< HEAD
 	public AuthResponse register(RegisterRequest request, UserProfile req) {
+=======
+	public AuthResponse register(RegisterRequest request) {
+>>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 		
 		// Construir el objeto User con la imagen y otros datos
 		User user = User.builder()
