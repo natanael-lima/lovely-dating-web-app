@@ -1,12 +1,8 @@
 package com.nl.lovely.service.imp;
 
-<<<<<<< HEAD
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-=======
-import java.util.ArrayList;
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -90,11 +86,7 @@ public class UserProfileServiceImp implements UserProfileService {
 				        
 		userProfileRepository.updateProfileImage(userProfile.getId(), userProfile.getPhoto(),userProfile.getPhotoFileName());
 
-<<<<<<< HEAD
 		 return new UserProfileResponse("El imagen se actualizo satisfactoriamente");
-=======
-		 return new UserProfileResponse("El imagen se registró satisfactoriamente");
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	}
 	
 	
@@ -197,7 +189,6 @@ public class UserProfileServiceImp implements UserProfileService {
 	            .minAge(userP.getMinAge())
 	            .build();
 	}
-<<<<<<< HEAD
 	
 	// Método para convertir UserProfileDTO a UserProfile
 	private UserProfile convertToEntity(UserProfileDTO userProfileDTO) {
@@ -298,43 +289,5 @@ public class UserProfileServiceImp implements UserProfileService {
 				}
 			}
 	
-=======
-
-	@Override
-	public UserProfileDTO getRandomProfile(Long userId) {
-	    // Verificar si el perfil de usuario actualmente logueado está disponible
-		if (userId == null) {
-            return null;
-        }
-
-		UserProfileDTO currentUserProfile = getUserProfile(userId);
-        if (currentUserProfile == null) {
-            return null;
-        }
-
-        Integer userMinAge = currentUserProfile.getMinAge();
-        Integer userMaxAge = currentUserProfile.getMaxAge();
-        String userLikeGender = currentUserProfile.getLikeGender();
-
-	    // Obtener la lista de todos los perfiles de usuario que cumplen con las preferencias del usuario actual
-	    List<UserProfile> filteredUserProfiles = userProfileRepository.findFilteredUserProfiles(userLikeGender,userMinAge, userMaxAge);
-
-	    // Verificar si hay perfiles de usuario que cumplen con las preferencias del usuario actual
-	    if (filteredUserProfiles.isEmpty()) {
-	        return null; // Devolver null si no hay perfiles de usuario que cumplan con las preferencias
-	    }
-
-	    // Obtener un índice aleatorio dentro del rango de la lista de perfiles de usuario filtrados
-	    Random random = new Random();
-	    int randomIndex = random.nextInt(filteredUserProfiles.size());
-
-	    // Obtener el perfil de usuario aleatorio en función del índice generado
-	    UserProfile randomUserProfile = filteredUserProfiles.get(randomIndex);
-
-	    // Convertir el perfil de usuario a un UserProfileDTO y devolverlo
-	    return convertToDTO(randomUserProfile);
-	}
-	
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	
 }

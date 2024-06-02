@@ -98,7 +98,6 @@
                     </select>
                 </div>
             </div>
-<<<<<<< HEAD
             <div class="d-grid gap-1 mt-2">
               <button type="submit" class="btn btn-danger rounded-pill px-3 btn-lg btn-block">Registrarme</button>
             </div>
@@ -113,27 +112,6 @@
             </div>
             <p class="mt-3 text-center"><a href="/user/login">Inicia Sesion Aquí</a></p> 
           }
-=======
-          </div>
-        <div class="d-grid gap-1 mt-2">
-          <button type="submit" class="btn btn-danger rounded-pill px-3 btn-lg btn-block" [disabled]="!userForm.form.valid">Registrarme</button>
-          <button type="button" class="btn btn-outline-danger rounded-pill px-3 btn-sm btn-block" (click)="newUser();userForm.reset()">Nuevo Usuario</button>
-        
-        </div>
-        <p class="mt-3 text-center">¿Ya tienes cuenta? <a href="/user/login">Inicia Sesion aquí</a></p>
-        </form>
-        @if(registerSuccessMessage){ 
-          <div class="alert alert-success mt-3" role="alert">
-            ¡Registro exitoso! ¡Bienvenido!
-          </div>
-        }@if(errorMessage){
-          <div class="alert alert-danger mt-3" role="alert" >
-            Error usuario ya existe con ese username!
-          </div>
-        }
-        
-      </div>
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     </div>
   </div>     
 </div>

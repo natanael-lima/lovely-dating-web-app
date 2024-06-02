@@ -47,6 +47,7 @@ export class ChatComponent implements OnInit {
     ).subscribe(
       (data: any) => {
         this.chatId = data.id; // Asumiendo que la respuesta del servicio contiene el ID del chat
+        this.joinChat();
       },
       (error) => {
         console.error('Error al obtener el ID del chat:', error);
@@ -56,8 +57,6 @@ export class ChatComponent implements OnInit {
     this.userService.getCurrentUser().subscribe(
       (user: UserRequest) => {
         this.currentUser = user;
-        
-        this.joinChat();
         this.loadInitialMessages(); // Cargar mensajes iniciales al cargar la página
         this.subscribeToMessages();
       },
@@ -87,13 +86,22 @@ export class ChatComponent implements OnInit {
 
   private loadInitialMessages() {
     this.chatService.getMessagesForChat(this.chatId);
-    console.log();
+    console.log("esperando los mensajes");
   }
 
   private subscribeToMessages() {
     this.chatService.getMessageSubject().subscribe((messages: Message[]) => {
       this.messageList = messages.map(this.formatMessage);
+      this.scrollToBottom();
     });
+  }
+
+  private scrollToBottom() {
+    setTimeout(() => {
+      if (this.chatContainer) {
+        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      }
+    }, 100);
   }
 
   private formatMessage = (message: Message) => ({
@@ -110,7 +118,6 @@ export class ChatComponent implements OnInit {
     });
   }*/
 
-<<<<<<< HEAD
   formatTimestamp(timestamp: string): string {
     const date = new Date(timestamp);
     const day = date.getDate();
@@ -127,8 +134,5 @@ export class ChatComponent implements OnInit {
   }
   
   
-=======
-
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 
 }

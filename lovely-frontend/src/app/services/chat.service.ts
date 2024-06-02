@@ -23,13 +23,21 @@ export class ChatService implements OnInit{
   }
 
   ngOnInit(): void {
+    this.initConnenctionSocket();
   }
 
   initConnenctionSocket() {
     const url = '//localhost:3000/chat-socket';
     const socket = new SockJS(url);
-    this.stompClient = Stomp.over(socket)
-    console.log('WebSocket connected');
+    //this.stompClient = Stomp.over(socket)
+    //console.log('WebSocket connected');
+
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.connect({}, (frame: any) => {
+      console.log('Connected: ' + frame);
+    }, (error: any) => {
+      console.error('Error connecting to WebSocket: ', error);
+    });
   }
 
   joinChat(chatId: number) {
@@ -51,6 +59,7 @@ export class ChatService implements OnInit{
     //  return;
     //}
     this.stompClient.send(`/app/chat/${chatId}/${userId}`, {}, JSON.stringify(message));
+    this.getMessagesForChat(chatId);
   }
 
   

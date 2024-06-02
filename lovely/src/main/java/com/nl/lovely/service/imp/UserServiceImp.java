@@ -102,7 +102,6 @@ public class UserServiceImp implements UserService{
                       .name(user.getName())
                       .build();
     }
-<<<<<<< HEAD
 	
 	private UserCompleteDTO convertDTO(Optional<UserProfile> userOptional) throws Exception {
 		if (userOptional.isPresent()) {
@@ -135,8 +134,5 @@ public class UserServiceImp implements UserService{
 		return convertDTO(user);
 	}
 	
-=======
-   
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 
 }

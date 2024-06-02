@@ -42,7 +42,6 @@ export class UserFormComponent {
 
 
   onSubmit() {
-<<<<<<< HEAD
     if (this.activeSection === 'user') {
        this.nextSection();
     } else {
@@ -99,26 +98,6 @@ export class UserFormComponent {
             this.selectedImageURL = event.target?.result as string;
         };
     }
-=======
-    this.userService.registerUser(this.user).pipe(
-      tap(response => {
-        // Registro exitoso, mostrar el mensaje
-        if (response) {
-          this.registerSuccessMessage = true;
-        }
-        
-      }),
-      catchError(error => {
-        
-          this.errorMessage = true;
-        
-          console.error('Error al registrar el usuario:', error);
-          // Puedes manejar otros tipos de errores aquí
-        
-        return throwError(error);
-      })
-    ).subscribe();
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
   }
   
   //this.router.navigate(['/registration-profile', response.id]);

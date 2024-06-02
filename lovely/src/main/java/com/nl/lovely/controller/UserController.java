@@ -1,10 +1,7 @@
 package com.nl.lovely.controller;
 
 import java.io.IOException;
-<<<<<<< HEAD
 import java.util.HashMap;
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,20 +27,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-<<<<<<< HEAD
 import com.nl.lovely.dto.UserCompleteDTO;
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.dto.UserProfileDTO;
 import com.nl.lovely.entity.User;
 import com.nl.lovely.entity.UserProfile;
-<<<<<<< HEAD
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.request.RegisterRequest;
 import com.nl.lovely.request.UserProfileCompleteRequest;
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 import com.nl.lovely.request.UserProfilePhotoRequest;
 import com.nl.lovely.request.UserProfileRequest;
 import com.nl.lovely.request.UserRequest;
@@ -63,7 +54,6 @@ public class UserController {
 	@Autowired
     private UserProfileService userProfileService;
 	
-<<<<<<< HEAD
 	@Autowired
     private UserRepository userRepository;
 
@@ -78,20 +68,12 @@ public class UserController {
     }
     
 	// API para obtener el usuario logueado actual.
-=======
-	
-	// Metodo para obtener el usuario logueado actual
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @GetMapping("/current")
 	public UserDetails getCurrentUser() {
 	        // Obtener los detalles del usuario actualmente autenticado
 	        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
-<<<<<<< HEAD
    // API para obtener el usuario by ID por paramaetro.
-=======
-   // Metodo para obtener el usuario by id por paramaetro
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	@GetMapping(value = "{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id)
     {
@@ -103,11 +85,7 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 	
-<<<<<<< HEAD
 	// API para obtener todos los usuarios con los que hizo match por id especifico.
-=======
-	// Metodo para obtener todos los usuarios de los matchs de un usuario en especifico
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	@GetMapping(value = "/all/{id}")
     public ResponseEntity<List<UserDTO>> getUsersByMatch(@PathVariable Long id)
     {
@@ -119,11 +97,7 @@ public class UserController {
         return ResponseEntity.ok(lista);
     }
 	
-<<<<<<< HEAD
 	// API para obtener un UserProfile by ID.
-=======
-	// Metodo para obtener un userProfile by Id
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	@GetMapping(value = "/profile/{id}")
     public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable Long id)
     {
@@ -135,11 +109,7 @@ public class UserController {
         return ResponseEntity.ok(userProfileDTO);
     }
 	
-<<<<<<< HEAD
 	// API para obtener un UserProfile by UserId logueado actualemtne.
-=======
-	// Metodo para obtener un userProfile by Id de user logueado actualemtne
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	@GetMapping(value = "/currentProfile/{id}")
     public ResponseEntity<UserProfileDTO> getIdByProfile(@PathVariable Long id)
     {
@@ -151,18 +121,13 @@ public class UserController {
 	    }
 	        return ResponseEntity.ok(userProfileDTO);
     }
-<<<<<<< HEAD
 	
 	// API para actualizar los datos del usuario.
-=======
-
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @PutMapping("/updateUser")
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest)
     {
         return ResponseEntity.ok(userService.updateUser(userRequest));
     }
-<<<<<<< HEAD
     
     // API que registra un nuevo profile.
     @PostMapping(value="registration-profile/{userId}")
@@ -189,9 +154,6 @@ public class UserController {
     
     
      // API para actualizar los datos del perfil.
-=======
-    
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @PutMapping("/updateProfile")
     public ResponseEntity<UserProfileResponse> updateUserProfileData(@RequestBody UserProfileRequest req)
     {
@@ -216,31 +178,6 @@ public class UserController {
         }
         // Si los IDs coinciden, entonces el usuario autenticado tiene permiso para actualizar su propio perfil
         return ResponseEntity.ok(userProfileService.updateUserProfileData(req));
-<<<<<<< HEAD
-=======
-    }
-    
-    //, consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    @PutMapping(value="/updateProfilePhoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserProfileResponse> updateUserProfilePhoto(@RequestPart UserProfilePhotoRequest req, @RequestPart(value = "photoFile", required = false) MultipartFile photoFile) {
-        // Tu lógica existente para cargar el archivo y actualizar el perfil
-    
-        if (!photoFile.isEmpty()) {
-            try {
-                // Obtener los bytes del archivo
-                byte[] pdfBytes = photoFile.getBytes();
-                // Guardar el contenido del archivo
-                req.setPhoto(pdfBytes);
-                // Establecer el nombre del archivo
-                req.setPhotoFileName(photoFile.getOriginalFilename());
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Manejar el error, por ejemplo, redirigiendo a una página de error
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new UserProfileResponse("No se puedo actualizar la img"));
-            }
-        }
-        return ResponseEntity.ok(userProfileService.updateUserProfilePhoto(req));
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     }
     
     // API para actualizar la foto de perfil del usuario.
@@ -248,7 +185,6 @@ public class UserController {
     public ResponseEntity<UserProfileResponse> updateUserProfilePhoto(@RequestPart UserProfilePhotoRequest req, @RequestPart(value = "photoFile", required = false) MultipartFile photoFile) {
         // Tu lógica existente para cargar el archivo y actualizar el perfil
     
-<<<<<<< HEAD
         if (!photoFile.isEmpty()) {
             try {
                 // Obtener los bytes del archivo
@@ -267,18 +203,12 @@ public class UserController {
     }
     
     // API para obtener perfiles de usuario aletorios, una lista.
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @GetMapping("/random-users")
     public ResponseEntity<List<UserProfileDTO>> getRandomUser() {
     	List<UserProfileDTO> randomUser = userProfileService.getRandomProfiles(3);
         return ResponseEntity.ok(randomUser);
     }
-<<<<<<< HEAD
     // API para obtener perfil de usuario aleatorio.
-=======
-    
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @GetMapping("/random-user")
     public ResponseEntity<UserProfileDTO> getRandomUsers() {
     	Long userId = getCurrentUserId();
@@ -294,11 +224,7 @@ public class UserController {
         }
     }
     
-<<<<<<< HEAD
     // Metodo para obtener el id del user logueado.
-=======
-    
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
@@ -313,16 +239,11 @@ public class UserController {
         return null;
     }
     
-<<<<<<< HEAD
     // API para eliminar un usuario.
-=======
-    
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
-<<<<<<< HEAD
     // prueba
     @GetMapping("/complete/{id}")
     public ResponseEntity <UserCompleteDTO> obtenerUser() throws Exception {
@@ -333,7 +254,4 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-=======
-    
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 }

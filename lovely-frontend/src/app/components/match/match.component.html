@@ -7,7 +7,6 @@
         <div class="user-list">
           
           <div class="list-group">
-<<<<<<< HEAD
             <a  *ngFor="let user of users" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" (click)="goToChat(user.id)">
               <div>
                 <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
@@ -22,12 +21,6 @@
                 </button>
               </div>
             </a> 
-=======
-            <a  *ngFor="let user of users" class="list-group-item list-group-item-action" (click)="goToChat(user.id)">
-              <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
-              {{ user.name }} <!-- Asume que MatchDTO tiene un campo profile2Nombre con el nombre del perfil -->
-            </a>
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 
             <!-- <a href="/chat/{{currentUser.id}}" class="list-group-item list-group-item-action">
               <img src="https://via.placeholder.com/40" alt="Usuario 1"> Pepito

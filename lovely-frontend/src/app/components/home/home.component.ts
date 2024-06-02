@@ -14,12 +14,8 @@ import { UserRequest } from '../../interfaces/userRequest';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-<<<<<<< HEAD
   selectedImageURL: SafeUrl | string | ArrayBuffer | null = null;
   showMatchNotification: boolean = false;
-=======
-  
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
   randomProfile: ProfileRequest={
     id:0,
     userId:0,
@@ -68,7 +64,6 @@ export class HomeComponent implements OnInit {
     this.userService.getRandomProfile().subscribe(
       (userProfile: ProfileRequest) => {
         this.randomProfile = userProfile;
-<<<<<<< HEAD
         if (this.randomProfile.photo) {
           // Se guarda la URL de la imagen y se la muestra en el perfil  
           this.selectedImageURL = this.getImageUrl(this.randomProfile.photo);
@@ -77,8 +72,6 @@ export class HomeComponent implements OnInit {
           this.selectedImageURL = 'this.defaultImageURL';
         }
        
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
         // Después de recibir el perfil aleatorio, obtén el usuario correspondiente
         this.userService.getUser(this.randomProfile.userId).subscribe(
           (user: UserRequest) => {
@@ -100,11 +93,8 @@ export class HomeComponent implements OnInit {
     this.matchService.likeUser(targetId).subscribe(
       response => {
         console.log(response.message); // Imprime el mensaje de éxito
-<<<<<<< HEAD
         console.log(this.checkForMatch(targetId));
         this.checkForMatch(targetId); // Verificar si hay un match después de dar like
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
         // Actualiza cualquier estado necesario en tu componente
       },
       error => {
@@ -131,7 +121,6 @@ export class HomeComponent implements OnInit {
     // Aquí puedes agregar la lógica para manejar el rechazo
     this.loadRandomProfile();
   }
-<<<<<<< HEAD
 
   checkForMatch(targetId: number) {
 
@@ -164,19 +153,6 @@ getImageUrl(imageData: ArrayBuffer): SafeUrl {
   } else {
     // Si los datos de la imagen no están en el formato correcto, devuelve una URL de imagen predeterminada o null
     return 'z';
-=======
-
-  getImageUrl2(imageData: File): SafeUrl | string{
-    // Verifica si hay datos de imagen
-    if (imageData) {
-      // Convierte los datos de imagen en una URL segura
-      const imageUrl = 'data:image/jpeg;base64,' + imageData;
-      return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
-    } else {
-      // Si no hay datos de imagen, puedes proporcionar una URL de imagen por defecto
-      return 'assets/default-profile-image.jpg';
-    }
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
   }
 }
 }

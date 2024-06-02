@@ -55,7 +55,6 @@
     right: 0;
     color:white;
     border-image: fill 0 linear-gradient(#0001,#000);
-<<<<<<< HEAD
   }
 
   /* match */
@@ -91,6 +90,3 @@
 .match-card button:hover {
   background-color: #45a049;
 }
-=======
-  }
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074

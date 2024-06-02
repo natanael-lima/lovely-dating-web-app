@@ -15,14 +15,9 @@ export class UserService {
   constructor(private http: HttpClient, private router:Router) { }
 
  // Método para registrar un usuario
-<<<<<<< HEAD
  registerUser(formData:FormData): Observable<User> { 
   
   return this.http.post<User>(this.apiUrl+'/auth/registration-user', formData).pipe(
-=======
- registerUser(user: User): Observable<User> { 
-  return this.http.post<User>(this.apiUrl+'/auth/registration-user', user).pipe(
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
   );
  }
  // Método para registrar un profile

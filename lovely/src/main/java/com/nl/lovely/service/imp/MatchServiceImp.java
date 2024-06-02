@@ -165,7 +165,6 @@ public class MatchServiceImp implements MatchService {
 		return  convertToDTO(match);
 	}
 
-<<<<<<< HEAD
 	@Override
 	public boolean confirmMatch(UserProfile profile1, UserProfile profile2) {
 		// Verificar si profile1 ha dado like a profile2
@@ -177,7 +176,5 @@ public class MatchServiceImp implements MatchService {
         return profile1LikesProfile2 && profile2LikesProfile1;
 	}
 
-=======
->>>>>>> a7f63b9c399c0f1b1d5f050b0b558954eb287074
 	
 }
