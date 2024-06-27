@@ -9,7 +9,7 @@ import com.nl.lovely.enums.ActionType;
 
 public interface MatchService {
 	
-	//public void confirmMatch(UserProfile profile1, UserProfile profile2);
+	public boolean confirmMatch(UserProfile profile1, UserProfile profile2);
 	
 	public void deleteMatch(Long id);
 	

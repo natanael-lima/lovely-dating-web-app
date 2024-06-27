@@ -27,6 +27,7 @@ import com.nl.lovely.entity.User;
 import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.ActionType;
 import com.nl.lovely.exception.NotFoundException;
+import com.nl.lovely.repository.UserProfileRepository;
 import com.nl.lovely.service.ChatService;
 import com.nl.lovely.service.MatchService;
 import com.nl.lovely.service.UserProfileService;
@@ -44,8 +45,10 @@ public class MatchController {
     private ChatService chatService;
     @Autowired
     private UserProfileService userProfileService;
+    @Autowired
+    private UserProfileRepository userProfileRepository;
 
-    
+    // API que registra un like.
     @PostMapping("/like/{targetId}")
     public ResponseEntity<Map<String, String>> ActionLike(@PathVariable Long targetId, Authentication authentication) {
     
@@ -58,6 +61,7 @@ public class MatchController {
         response.put("message", "El like se registro correctamente");
         return ResponseEntity.ok(response);
     }
+    // API que registra un dislike.
     @PostMapping("/dislike/{targetId}")
     public ResponseEntity<Map<String, String>> ActionDislike(@PathVariable Long targetId, Authentication authentication) {
     
@@ -72,7 +76,7 @@ public class MatchController {
     }
     
     
-    //Metodo para obtener una lista de los match del usuario logueado
+    // API para obtener una lista de los match del usuario logueado.
     @GetMapping("/{userId}")
     public ResponseEntity<List<MatchDTO>> findAll(@PathVariable Long userId) {
     
@@ -85,7 +89,7 @@ public class MatchController {
     	    return ResponseEntity.ok(matches); // Retorna la lista de Match encontrados
     }
     
-    //Metodo para obtener el chat de un usuario especifico
+    // API para obtener el chat de un usuario especifico con matchid.
     @GetMapping("/chat/{matchId}")
     public ResponseEntity<ChatDTO> findChatByMatchId(@PathVariable Long matchId) {
         try {
@@ -96,7 +100,7 @@ public class MatchController {
         }
     }
     
-    //Metodo para obtener el match by dos user id
+    // API para obtener el match por 2 UserId
     @GetMapping("/byusers/{userId1}/{userId2}")
     public ResponseEntity<MatchDTO> findMatchByUsersIds(@PathVariable Long userId1, @PathVariable Long userId2) {
     	try {
@@ -107,6 +111,17 @@ public class MatchController {
         }
     }
     
+    // API para confirmar match
+    @GetMapping("/check-match")
+    public ResponseEntity<Boolean> checkMatch(@RequestParam Long profileId1, @RequestParam Long profileId2) {
+        UserProfile profile1 = userProfileRepository.findById(profileId1)
+            .orElseThrow();
+        UserProfile profile2 = userProfileRepository.findById(profileId2)
+            .orElseThrow();
+
+        boolean isMatch = matchService.confirmMatch(profile1, profile2);
+        return ResponseEntity.ok(isMatch);
+    }
     
     /*@PostMapping("/like")
     public ResponseEntity<String> likeUser(@RequestParam Long likerId, @RequestParam Long targetId) {

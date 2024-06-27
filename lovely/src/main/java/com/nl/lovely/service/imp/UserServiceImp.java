@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nl.lovely.dto.UserCompleteDTO;
 import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.entity.User;
+import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.RoleType;
 import com.nl.lovely.exception.NotFoundException;
 import com.nl.lovely.repository.UserProfileRepository;
@@ -100,6 +102,37 @@ public class UserServiceImp implements UserService{
                       .name(user.getName())
                       .build();
     }
-   
+	
+	private UserCompleteDTO convertDTO(Optional<UserProfile> userOptional) throws Exception {
+		if (userOptional.isPresent()) {
+	        UserProfile user = userOptional.get(); // Extraer el objeto UserProfile de Optional
+	        return UserCompleteDTO.builder()
+	                  .id(user.getId())
+	                  .username(user.getUser().getUsername())
+	                  .lastname(user.getUser().getLastname())
+	                  .name(user.getUser().getName())
+	                  .photo(user.getPhoto())
+	                  .photoFileName(user.getPhotoFileName())
+	                  .location(user.getLocation())
+	                  .gender(user.getGender())
+	                  .age(user.getAge())
+	                  .likeGender(user.getLikeGender())
+	                  .maxAge(user.getMaxAge())
+	                  .minAge(user.getMinAge())
+	                  .build();
+	    } else {
+	        // Manejo de error si el usuario no está presente
+	        throw new Exception("User not found");
+	    }
+    }
+
+	@Override
+	public UserCompleteDTO getUserDTO(Long id) throws Exception {
+		// TODO Auto-generated method stub
+	   Optional<UserProfile> user = userProfileRepository.findById(id);
+	   
+		return convertDTO(user);
+	}
+	
 
 }

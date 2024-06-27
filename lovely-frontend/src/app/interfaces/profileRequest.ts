@@ -1,7 +1,7 @@
 export interface ProfileRequest {
     id:number;
     userId:number;
-    photo:ArrayBuffer | null;
+    photo: File | null;
     photoFileName:string;
     location: string;
     gender: string;

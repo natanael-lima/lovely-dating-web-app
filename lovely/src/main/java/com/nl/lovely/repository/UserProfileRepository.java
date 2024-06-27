@@ -1,5 +1,6 @@
 package com.nl.lovely.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,15 +12,30 @@ import org.springframework.stereotype.Repository;
 
 import com.nl.lovely.entity.User;
 import com.nl.lovely.entity.UserProfile;
+import com.nl.lovely.enums.ActionType;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfile,Long>{
 	@Query("SELECT u.profile FROM User u WHERE u.username = :username")
     UserProfile findByUsername(@Param("username") String username);
+	
 	Optional<UserProfile> findByUserId(Long userId);
+	
+	// Método para actualizar sin imagen 
 	@Modifying()
+	@Transactional
 	@Query("update UserProfile set location=:location, gender=:gender,  age=:age,  likeGender=:likeGender ,  maxAge=:maxAge ,  minAge=:minAge  where id = :id")
     void updateProfileData(@Param(value = "id") Long id,  @Param(value = "location") String location, @Param(value = "gender") String gender, @Param(value = "age") String age, @Param(value = "likeGender") String likeGender, @Param(value = "maxAge") Integer maxAge, @Param(value = "minAge") Integer minAge);
+
+	
+	// Método para actualizar con imagen
+	@Modifying
+	@Transactional
+	@Query("update UserProfile set photo=:photo, photoFileName=:photoFileName, location=:location, gender=:gender,  age=:age,  likeGender=:likeGender ,  maxAge=:maxAge ,  minAge=:minAge where  id = :id")
+    void updatePhotoAndProfile(@Param(value = "id") Long id, @Param("photo") byte[] photo, @Param("photoFileName") String photoFileName,  @Param(value = "location") String location, @Param(value = "gender") String gender, @Param(value = "age") String age, @Param(value = "likeGender") String likeGender, @Param(value = "maxAge") Integer maxAge, @Param(value = "minAge") Integer minAge);  
+
 
 	// Para actualizar la imagen del perfil
 	@Modifying
@@ -28,7 +44,18 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,Long>{
 	
 	// Método para buscar perfiles de usuario que cumplan con las preferencias del usuario actual
 	@Query("SELECT up FROM UserProfile up WHERE up.gender = :likeGender AND up.age BETWEEN :minAge AND :maxAge")
-    List<UserProfile> findFilteredUserProfiles(@Param("likeGender") String likeGender, @Param("minAge") Integer minAge, @Param("maxAge") Integer maxAge);
+    List<UserProfile> findFilteredUserProfiless(@Param("likeGender") String likeGender, @Param("minAge") Integer minAge, @Param("maxAge") Integer maxAge);
+	
+	
+	@Query("SELECT up FROM UserProfile up WHERE up.gender = :likeGender " +
+	           "AND up.age BETWEEN :minAge AND :maxAge " +
+	           "AND NOT EXISTS (SELECT ua FROM UserAction ua WHERE ua.liker = :currentUser " +
+	           "AND ua.target = up AND ua.actionType IN (:excludedActions))")
+	List<UserProfile> findFilteredUserProfiles(@Param("likeGender") String likeGender,
+	                                               @Param("minAge") Integer minAge,
+	                                               @Param("maxAge") Integer maxAge,
+	                                               @Param("currentUser") UserProfile currentUser,
+	                                               @Param("excludedActions") List<ActionType> excludedActions);
 	
 	
 	@Query("SELECT DISTINCT up.user FROM UserProfile up " +

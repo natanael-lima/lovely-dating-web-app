@@ -1,38 +1,86 @@
+
 /* Estilos adicionales */
+.btn-custom{
+  background:#FFA566; /* Degradado de colores rosas y morados */
+  color: white; /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 25px; /* Bordes redondeados */
+  padding: 0px 20px; /* Espaciado interno */
+  font-size: 1.1em; /* Tamaño de la fuente */
+  cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+  transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+}
+.btn-custom:hover{
+  background:#E38664; /* Degradado de colores rosas y morados */
+  color: white;
+  border: 0px;
+}
+.user-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Hace que la imagen sea circular */
+  margin-right: 5px; /* Espacio entre la imagen y el mensaje */
+  margin-left: 5px; /* Espacio entre la imagen y el mensaje */
+}
+
 .chat-container {
-    height: 50vh;
-    overflow-y: scroll;
-  }
+  height: 50vh;
+  overflow-y: scroll;
+}
 
-  .message {
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
+.message-container {
+ 
+  align-items: flex-start; /* Alinea los mensajes hacia arriba */
+  margin-bottom: 10px;
+}
 
-  .message.sender {
-    background-color: #f3f2e8;
-    text-align: right;
-    margin-left: 50px;
-  }
+.sender-message, .receiver-message {
+  display: flex;
+  align-items: flex-start; /* Alinea los mensajes hacia arriba */
+}
 
-  .message.receiver {
-    background-color: #e2dfc7;
-    text-align: left;
-    margin-right: 50px;
-  }
+.sender-message .message {
+  background-color: #f0e6e2; /* Color de fondo para mensajes del remitente */
+  margin-left: 100px;
+  border: 1px solid #e0d8d5; /* Color y grosor del borde */
+}
 
-  .message input[type="text"] {
-    width: calc(100% - 40px);
-    margin-right: 5px;
-  }
+.receiver-message .message {
+  background-color: #ffffff; /* Color de fondo para mensajes del destinatario */
+  margin-right: 100px;
+  border: 1px solid #e6e6e6; /* Color y grosor del borde */
+}
 
-  .message button {
-    width: 40px;
-  }
-  .container-profile {
-    padding: 40px;
+.message {
+  border-radius: 10px;
+  padding: 10px;
 
-    border-radius: 8px;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
-  }
+  flex-grow: 1; /* Permite que el mensaje ocupe todo el ancho disponible */
+}
+
+.message input[type="text"] {
+  width: calc(100% - 40px);
+  margin-right: 5px;
+}
+
+.message button {
+  width: 40px;
+}
+
+.container-profile {
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+}
+.time{
+  font-size: 0.8em;
+  color: #a3a1a1;
+}
+
+.icon-svg {
+  transition: transform 0.2s ease; /* Añade una transición suave al cambio de tamaño */
+}
+
+.icon-svg:hover {
+  transform: scale(1.2); /* Aumenta el tamaño del ícono en un 20% al pasar el mouse */
+}

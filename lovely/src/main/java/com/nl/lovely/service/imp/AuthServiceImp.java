@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.nl.lovely.dto.UserProfileDTO;
 import com.nl.lovely.entity.User;
 import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.RoleType;
@@ -41,7 +42,7 @@ public class AuthServiceImp implements AuthService {
 	private final AuthenticationManager authenticationManager;
 	
 	@Override
-	public AuthResponse register(RegisterRequest request) {
+	public AuthResponse register(RegisterRequest request, UserProfile req) {
 		
 		// Construir el objeto User con la imagen y otros datos
 		User user = User.builder()
@@ -54,10 +55,18 @@ public class AuthServiceImp implements AuthService {
 
 		// Guardar el usuario en la base de datos
 		userRepository.save(user);
-		// Crear un perfil de usuario inicial vacío para el nuevo usuario
+
+		// Construir el objeto UserProfile con los datos del registro
 	    UserProfile userProfile = UserProfile.builder()
-	    		// Establecer el ID del usuario en el perfil de usuario
 	            .user(user)
+	            .photo(req.getPhoto())
+	            .photoFileName(req.getPhotoFileName())
+	            .location(req.getLocation())
+	            .gender(req.getGender())
+	            .age(req.getAge())
+	            .likeGender(req.getLikeGender())
+	            .maxAge(req.getMaxAge())
+	            .minAge(req.getMinAge())
 	            .build();
 
 	    // Guardar el perfil de usuario en la base de datos

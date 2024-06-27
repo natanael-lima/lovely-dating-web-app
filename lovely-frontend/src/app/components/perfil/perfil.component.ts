@@ -10,6 +10,8 @@ import { UserRequest } from '../../interfaces/userRequest';
 import { ProfileRequest } from '../../interfaces/profileRequest';
 import { catchError, forkJoin, tap, throwError } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+//import * as bootstrap from 'bootstrap';
+declare var window: any;
 
 @Component({
   selector: 'app-perfil',
@@ -19,7 +21,11 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrl: './perfil.component.css'
 })
 export class PerfilComponent implements OnInit {
+  
+  countries : any [] = [];
   selectedImageURL: SafeUrl | string | ArrayBuffer | null = null;
+  uploadSuccess: boolean = false;
+  isLoggedIn: boolean = false;
   defaultImageURL: string = 'https://t3.ftcdn.net/jpg/05/87/76/66/360_F_587766653_PkBNyGx7mQh9l1XXPtCAq1lBgOsLl6xH.jpg';
   currentSection: string = 'perfil'; // Sección actual, inicialmente 'perfil'
   currentUserProfile: ProfileRequest={
@@ -41,8 +47,7 @@ export class PerfilComponent implements OnInit {
     username:''
   };
 
-
-  isLoggedIn: boolean = false;
+ 
 
   constructor(private userService:UserService, private formBuilder:FormBuilder,private http: HttpClient, private loginService:LoginService,private router:Router,private sanitizer: DomSanitizer ){
     
@@ -57,6 +62,7 @@ export class PerfilComponent implements OnInit {
           (userProfilee: ProfileRequest) => {
             // Asigna los datos del perfil actual a currentUserProfile
               this.currentUserProfile = userProfilee;
+              this.getAllCountries();
               // Verifica si hay una foto de perfil en el perfil actual
               if (this.currentUserProfile.photo) {
                 // Se guarda la URL de la imagen y se la muestra en el perfil  
@@ -78,7 +84,7 @@ export class PerfilComponent implements OnInit {
   }
 
 // Función para obtener la URL segura de la imagen
-getImageUrl(imageData: ArrayBuffer): SafeUrl {
+getImageUrl(imageData: File): SafeUrl {
   // Asegúrate de que los datos de la imagen estén en el formato correcto (base64)
   if (imageData && typeof imageData === 'string') {
     const imageUrl = 'data:image/jpeg;base64,' + imageData;
@@ -92,118 +98,161 @@ getImageUrl(imageData: ArrayBuffer): SafeUrl {
 changeSection(section: string): void {
     this.currentSection = section;
 }
+
 // Funcionar para cargar foto de perfil
 onFileSelect(event: any) {
     console.log(event);
     const file = event.target.files[0]; // Obtiene el archivo seleccionado
 
     if (file) {
+      this.currentUserProfile.photo = file;
+      this.currentUserProfile.photoFileName = file.name;
       const reader = new FileReader(); // Crea un FileReader para leer el archivo
       reader.onload = () => { // Se ejecuta cuando la lectura del archivo es completada
         // Actualizar el campo de la imagen con los datos binarios de la imagen
         this.selectedImageURL = reader.result as string;
-        // Llama a la función para actualizar el perfil con la foto
-        this.updateProfilePhoto(file);
-  
       };
       reader.readAsDataURL(file); // Lee el archivo como una URL de datos
     }
 }
-
-// Función para actualizar el perfil con la foto
-updateProfilePhoto(file: File){
-
-  if (file && file.size > 0) {
-    // Crea un objeto FormData
-  const formData = new FormData();
-
-  const profileDataJSON = JSON.stringify({
-    id: this.currentUserProfile.id,
-    userId: this.currentUserProfile.userId,
-    photo: null,
-    photoFileName: null
+showSuccessToast() {
+  // Luego puedes usar directamente las funciones de Bootstrap
+const toastElement = document.getElementById('profileUpdateToast');
+if (toastElement) {
+  const toast = new window.bootstrap.Toast(toastElement, {
+    autohide: true,
+    delay: 3000
   });
+  toast.show();
+}
+}
+updatePhoto() {
+  if (this.currentUserProfile.photo instanceof File) {
+    const formData = new FormData();
 
-  formData.append('req', profileDataJSON);
-  formData.append('photoFile', file, file.name);
+    formData.append('req', new Blob([JSON.stringify({
+      id: this.currentUserProfile.id,
+      userId: this.currentUserProfile.userId,
+      location: this.currentUserProfile.location,
+      gender: this.currentUserProfile.gender,
+      age: (this.currentUserProfile.age),  // Asegurarse de que age sea un número
+      likeGender: this.currentUserProfile.likeGender,
+      maxAge: this.currentUserProfile.maxAge,
+      minAge: this.currentUserProfile.minAge
+    })], {
+      type: 'application/json'
+    }));
+    // Verificar si hay una nueva imagen seleccionada para el user
+    if (this.currentUserProfile.photo instanceof File) {
+      // Agregar la nueva imagen al FormData
+      console.log("update photo");
+      formData.append('photoFile', this.currentUserProfile.photo, this.currentUserProfile.photoFileName);
+      formData.append('keepCurrentImage', 'false');
+  } 
 
-  console.log('Archivo file:',formData.get('photoFile'))
-  console.log('Archivo data:',formData.get('req'))
-
-  // Llama a la función del servicio para actualizar el perfil con la foto
-  this.userService.updateUserProfilePhoto(formData).pipe(
-    tap(response => {
-      // Lógica adicional después de actualizar la foto
-      alert("Actualizacion Photo");
-      console.log("Actualización de la foto exitosa", response);
-     }),
-     catchError(error => {
-      alert("error update photo");
-      // Puedes manejar el error aquí, por ejemplo, mostrar un mensaje de error
-      return throwError(error);
-    })
-  ).subscribe();
-  }    
+    this.userService.updatePhotoAndProfile(formData).pipe(
+      tap(response => {
+        console.log("Foto actualizada:", response);
+        //this.uploadSuccess = true;
+        this.showSuccessToast();
+      }),
+      catchError(error => {
+        console.log("Error update photo");
+        return throwError(() => error);
+      })
+    ).subscribe();
+  }
 }
 
 
-uploadFile(event: any) {
-  const file = event.target.files[0];
+uploadFileAndProfile() {
   const formData = new FormData();
-  formData.append('photoFile', file,file.name);
-  const profileDataJSON = JSON.stringify({
+  // Convertir el objeto JSON a una cadena JSON y agregarlo al FormData
+  formData.append('req', new Blob([JSON.stringify({
     id: this.currentUserProfile.id,
     userId: this.currentUserProfile.userId,
-    photo: null,
-    photoFileName: null
-  });
+    location: this.currentUserProfile.location,
+    gender: this.currentUserProfile.gender,
+    age: (this.currentUserProfile.age),  // Asegurarse de que age sea un número
+    likeGender: this.currentUserProfile.likeGender,
+    maxAge: this.currentUserProfile.maxAge,
+    minAge: this.currentUserProfile.minAge
+  })], {
+    type: 'application/json'
+  }));
+  // Agregar un parámetro indicando que se debe mantener la imagen actual
+  formData.append('keepCurrentImage', 'true');
 
-  formData.append('req', profileDataJSON);
-  this.http.put<any>('http://localhost:3000/api/user/updateProfilePhoto', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-  .subscribe(response => {
-    // Handle successful response
-    alert("Success");
-  }, error => {
-    // Handle error response
-    alert("Error");
-  });
-}    
 
-// Función para actualizar el perfil and user
-updateUserAndProfile()
-  {
-    this.userService.updateUser(this.currentUser).pipe(
+  console.log('Archivo:', formData.get('photoFile'));
+  console.log('Objeto:',formData.get('req'))
+  
+  this.userService.updatePhotoAndProfile(formData).pipe(
     tap(response => {
-      // Lógica adicional después de actualizar el usuario
-      alert("Actualizacion User");
+      // Lógica adicional después de actualizar el perfil
+      console.log("Respuesta del servidor userProfile:", response);
+      if (response) {
+        this.uploadSuccess = true;
+          setTimeout(() => {
+            this.uploadSuccess = false;
+          }, 2000); // Cerrar el modal después de 2 segundos
+        console.log("Se actualizo correcto userProfile:", response.message);
+      } else {
+        console.error('Error al actualizar la userProfile:', response.message);
+      }
+
     }),
     catchError(error => {
-      alert("error update user");
+      console.error('Error al actualizar la userProfile:', error.message);
+      return throwError(error);
+    })
+   ).subscribe();
+   this.userService.updateUser(this.currentUser).pipe(
+    tap(response => {
+      // Lógica adicional después de actualizar el usuario
+      console.log("Respuesta del servidor user:", response);
+      if (response) {
+        console.log("Se actualizo correcto user:", response.message);
+        this.uploadSuccess = true;
+          setTimeout(() => {
+            this.uploadSuccess = false;
+          }, 2000); // Cerrar el modal después de 2 segundos
+      } else {
+        console.error('Error al actualizar la user:', response.message);
+      }
+    }),
+    catchError(error => {
+      console.error('Error al actualizar la user:', error.message);
       // Puedes manejar el error aquí, por ejemplo, mostrar un mensaje de error
       return throwError(error);
     })
   ).subscribe();
-
-  this.userService.updateUserProfile(this.currentUserProfile).pipe(
-    tap(response => {
-      // Lógica adicional después de actualizar el perfil
-      alert("Actualizacion Perfil");
-    }),
-    catchError(error => {
-      alert("error update perfil");
-      return throwError(error);
-    })
-   ).subscribe();
-  }
+}    
 
   onLogout(): void {
     // Llamar al método logout() del servicio LoginService
     this.loginService.logoutUser();
-    this.router.navigateByUrl('/user/login');
+    this.router.navigateByUrl('/user/signin');
+}
+
+  getAllCountries(){
+    this.userService.getCountries().subscribe(
+      (data: any[]) => {
+        this.countries = data; // Almacena los paises en la variable
+        console.log("datos:"+ data)
+      },
+      (error) => {
+        console.error('Error', error);
+      }
+    );
   }
 
- 
-
-
+  getFlagEmoji(countryCode: string): string {
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  }
 
 }

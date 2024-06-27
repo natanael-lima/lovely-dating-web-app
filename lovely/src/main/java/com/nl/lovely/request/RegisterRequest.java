@@ -1,5 +1,6 @@
 package com.nl.lovely.request;
 
+import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,6 @@ public class RegisterRequest {
     private String password;
     private RoleType role;
     
+    // Datos del perfil
+    private UserProfile profile;
 }

@@ -165,5 +165,16 @@ public class MatchServiceImp implements MatchService {
 		return  convertToDTO(match);
 	}
 
+	@Override
+	public boolean confirmMatch(UserProfile profile1, UserProfile profile2) {
+		// Verificar si profile1 ha dado like a profile2
+        boolean profile1LikesProfile2 = userActionRepository.existsByLikerAndTargetAndActionType(profile1, profile2, ActionType.LIKE);
+
+        // Verificar si profile2 ha dado like a profile1
+        boolean profile2LikesProfile1 = userActionRepository.existsByLikerAndTargetAndActionType(profile2, profile1, ActionType.LIKE);
+
+        return profile1LikesProfile2 && profile2LikesProfile1;
+	}
+
 	
 }

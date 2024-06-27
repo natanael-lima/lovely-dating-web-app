@@ -1,41 +1,68 @@
-  <div class="container-fluid">
-    <div class="row mt-5 justify-content-center ">
-      <div class="col-lg-6 mx-auto container-profile bg-light">
-        <div class="chat-container border rounded p-5 bg-body" #chatContainer>
-          <div *ngFor="let item of messageList" class="message" [ngClass]="{'sender': item.isSender, 'receiver': !item.isSender}">
-            <p>{{ item.content }}</p>
-            <span class="time">{{item.timestamp}}</span>
+      <div class="chat-container border rounded p-4 bg-light" #chatContainer>
+        <div *ngFor="let item of messageList" class="message-container">
+          <div *ngIf="item.isSender" class="sender-message">
+            <div class="message">
+              <p>{{ item.content }}</p>
+              <span class="time">{{ formatTimestamp(item.timestamp) }}</span>
+            </div>
+            <div class="d-flex flex-column align-items-center">
+              <img class="user-image mb-2" src="../assets/sender.png" alt="User Image">
+             
+
+              <a class="link-danger icon-link link-underline-success link-underline-opacity-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash-fill icon-svg" viewBox="0 0 16 16">
+                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                </svg>
+              </a>
+
+            </div>
+          </div>
+          <div *ngIf="!item.isSender" class="receiver-message">
+            <img class="user-image" src="../assets/receiver.png" alt="User Image">
+            <div class="message">
+              <p>{{ item.content }}</p>
+              <span class="time">{{ formatTimestamp(item.timestamp) }}</span>
+            </div>
           </div>
         </div>
-        <div class="input-group mt-3">
-          <input type="text" class="form-control rounded-pill px-3 m-1" placeholder="Escribir el mensaje..." [(ngModel)]="messageInput">
-          <button class="btn btn-primary rounded-pill px-3 m-1" (click)="sendMessage()">Enviar</button>
+      </div>
+      <div class="input-group mt-2">
+        <input type="text" class="form-control rounded-pill px-3 me-1" placeholder="Escribir el mensaje..." [(ngModel)]="messageInput" (keydown)="handleKeydown($event)">
+        <button class="btn btn-custom rounded-pill" (click)="sendMessage()">Enviar</button>
+      </div>
+
+
+           
+   
+
+<!-- <div class="container-fluid">
+  <div class="row mt-5 justify-content-center">
+    <div class="col-lg-6 mx-auto container-profile bg-light">
+      <a class="btn btn-dark rounded-pill m-1" href="/match" >Volver</a>
+      <div class="chat-container border rounded p-4 bg-body" #chatContainer>
+        <div *ngFor="let item of messageList" class="message-container">
+          <div *ngIf="item.isSender" class="sender-message">
+            <div class="message">
+              <p>{{ item.content }}</p>
+              <span class="time">{{ formatTimestamp(item.timestamp) }}</span>
+            </div>
+            <img class="user-image" src="../assets/sender.png" alt="User Image">
+          </div>
+          <div *ngIf="!item.isSender" class="receiver-message">
+            <img class="user-image" src="../assets/receiver.png" alt="User Image">
+            <div class="message">
+              <p>{{ item.content }}</p>
+              <span class="time">{{ formatTimestamp(item.timestamp) }}</span>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="input-group mt-3">
+        <input type="text" class="form-control rounded-pill px-3 m-1" placeholder="Escribir el mensaje..." [(ngModel)]="messageInput">
+        <button class="btn btn-primary rounded-pill px-3 m-1" (click)="sendMessage()">Enviar</button>
       </div>
     </div>
   </div>
+</div>
 
-<!--      <div class="message receiver">
-            <p>Hello, how can I help you?</p>
-            <span class="time">11:30 AM</span>
-          </div>
-          <div class="message sender" >
-            <input class="message_input" placeholder="Message..."/>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message sender" >
-            <p>Que haces amigo, prueba de mensaje tamaño si es largo el mensaje jajaja probando probando creo que es lo mas largo que escribira alguien creo xd</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message sender" >
-            <p>Hi, I am fine and you?</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message receiver" >
-            <p>Hi, I am fine and you?</p>
-            <span class="time">11:32 AM</span>
-          </div>
-          <div class="message sender" >
-            <p>Hi, I am fine and you?</p>
-            <span class="time">11:32 AM</span>
-          </div> -->
+-->

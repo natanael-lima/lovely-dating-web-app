@@ -30,7 +30,7 @@ export class LoginComponent {
       this.loginService.loginUser(this.creds).pipe(
       tap(response => {
         // Registro exitoso, mostrar el mensaje
-        alert("Login Success");
+        //alert("Login Success");
         this.router.navigateByUrl('/perfil');
       }),
       catchError(error => {
