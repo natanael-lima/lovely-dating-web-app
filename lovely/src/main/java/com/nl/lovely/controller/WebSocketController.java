@@ -48,6 +48,7 @@ public class WebSocketController {
 	// API para chat en tiempo real usando websocket.
     @MessageMapping("/chat/{chatId}/{userId}")
     @SendTo("/topic/{chatId}")
+    @Transactional
     public MessageDTO  chat3(@DestinationVariable Long chatId, @DestinationVariable Long userId, MessageDTO messageDTO) {
         // Obtener el chat correspondiente al chatId
         Chat chat = chatService.findChatById(chatId);
@@ -69,7 +70,9 @@ public class WebSocketController {
     public ResponseEntity<List<MessageDTO>> getMessagesForChat(@PathVariable Long chatId) {
         //return messageService.findMessagesByChatId(chatId);
         try {
+        	
         	List<MessageDTO> messages = messageService.findMessagesByChatId(chatId);
+        	System.out.println("backend arraymjs:"+messages);
             return ResponseEntity.ok(messages);
         } catch (Exception e) {
             // Manejo de errores

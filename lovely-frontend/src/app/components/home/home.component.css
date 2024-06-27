@@ -5,48 +5,45 @@
     transform: translateX(-50%);
   }
   
-  .button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    margin: 5px;
-    
-  }
-  
-  .button svg {
-    width: 24px;
-    height: 24px;
+  .btn svg {
+    width: 20px;
+    height: 20px;
   }
   
   .rotate-btn {
-    color: #2b2b2b; /* Color de la flecha */
+    color: #181818; /* Color de la flecha */
     background-color: gainsboro;
     border-radius: 50%;
+    transition: ease-in 0.2s;
   }
   
   .like-btn {
-    color: #35be30; /* Color del corazón */
-    background-color: gainsboro;
+    color: white; /* Color del corazón */
+    background-color: #35be30;
     border-radius: 50%;
+    transition: ease-in 0.2s;
   }
   
   .reject-btn {
-    color: #df5656; /* Color de la X */
-    background-color: gainsboro;
+    color: white; /* Color de la X */
+    background-color: #df5656;
     border-radius: 50%;
+    transition: ease-in 0.2s;
   }
 
   .rotate-btn:hover {
-    background-color: rgb(182, 182, 182);
+    background-color: #cacaca;
+    color: #3b3b3b;
   }
   
   .like-btn:hover {
-    background-color:rgb(182, 182, 182);
+    background-color:#40a13d;
+    color: #d7ffd6;
   }
   
   .reject-btn:hover {
-    background-color:rgb(182, 182, 182);
+    background-color:#ac3e3e;
+    color: #ffcdcd;
   }
   .body-content-card{
     position: absolute;
@@ -54,39 +51,55 @@
     left: 0;
     right: 0;
     color:white;
-    border-image: fill 0 linear-gradient(#0001,#000);
+    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0),#000);
   }
 
-  /* match */
+/* match */
 
 .match-card {
   position: fixed;
-  top: 50%;
+  top: 33%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
-  border: 2px solid #4CAF50;
-  border-radius: 10px;
-  padding: 20px;
+  background-color:rgba(255, 255, 255, 0.9) ;
+  border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   z-index: 1000;
+  overflow: hidden;
+  padding: 12px;
+}
+.img-container {
+  position: relative;
 }
 
-.match-card p {
-  font-size: 1.5em;
-  margin: 0 0 10px;
+.img-container img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-.match-card button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
+.accept-btn {
+  position: absolute;
+  width: 80%;
+  top: 74%; /* Ajusta este valor para cambiar la posición vertical del botón */
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+.btn-custom-match {
+  background: linear-gradient(50deg, #84c06c,#90b460, #759e34); /* Degradado de colores rosas y morados */
+  color: white; /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 25px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de la fuente */
+  cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+  transition: background 0.5s ease-in-out; /* Transición suave para el fondo */
 }
 
-.match-card button:hover {
-  background-color: #45a049;
+.btn-custom-match:hover {
+  background: linear-gradient(50deg,#72a75d,#7c9e4f,#6c922f); /* Degradado de colores rosas y morados */
+
 }
+
+

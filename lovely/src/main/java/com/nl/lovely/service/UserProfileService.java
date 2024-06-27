@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
-
 import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.dto.UserProfileDTO;
 import com.nl.lovely.entity.User;
@@ -23,9 +22,13 @@ public interface UserProfileService {
 	
 	public UserProfileResponse saveProfile(MultipartFile photo,String photoFileName,String location,String gender,String age,String likeGender,Integer maxAge,Integer minAge,Long userId);
 	
-	public UserProfileResponse updateUserProfileData(UserProfileRequest profile);
+	public UserProfileResponse updateUserProfileDataOld(UserProfileRequest profile);
 	
-	public UserProfileResponse updateUserProfilePhoto(UserProfilePhotoRequest profileRequest);
+	public UserProfileResponse updateUserProfilePhotoOld(UserProfilePhotoRequest profileRequest);
+	
+	public UserProfileResponse updateProfileAndPhoto(UserProfileDTO profileRequest, MultipartFile file) throws Exception;
+	
+	public UserProfileResponse updateProfileDate(UserProfileDTO profileRequest) throws Exception;
 	
 	public void deleteUserProfile(Long id);
 	

@@ -1,0 +1,47 @@
+.full-screen-jumbotron {
+    height: 100vh; /* Ocupa toda la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background: linear-gradient(135deg, #f8e4ee, #ffcde4, #e7cdff);*/ 
+    background: linear-gradient(50deg,#fc9d5a, #E38664); /* Degradado de colores rosas y morados */
+    color: white;
+    text-align: center;
+  }
+
+.full-screen {
+    background: linear-gradient(225deg,#ffb179, #dd744d); /* Degradado de colores rosas y morados */
+    height: 100vh; /* Ocupa toda la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(0, 0, 0);
+    text-align: center;
+  }
+.imagen-mask{
+  mask-image: linear-gradient(to right,
+    black 70%, transparent
+  );
+
+  }
+.btn-custom{
+    background: linear-gradient(50deg,#fff8f4, #fff5f2); /* Degradado de colores rosas y morados */
+    /*color: rgb(119, 90, 63);  Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 25px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+}
+  
+.btn-custom:hover {
+    background: linear-gradient(50deg,#ffe5d1, #ffebe4); /* Degradado de colores rosas y morados */
+    
+}
+
+.bg-custom{
+  background: linear-gradient(50deg,#fffbf9, #fffbf9); /* Degradado de colores rosas y morados */
+}
+
+  

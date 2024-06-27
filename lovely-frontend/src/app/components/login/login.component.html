@@ -1,8 +1,11 @@
+<nav class="nav nav-pills nav-justified">
+    <img src="../../../assets/lovely-logo-full.png" class="d-block mx-lg-auto img-fluid m-5" alt="logo" width="250" height="250" loading="lazy">
+</nav>
  <div class="container ">
     <div class="row ">
       <div class="col-md-6 offset-md-3 "> 
         <form class="login-form" action="#">
-          <h2 class="text-center mb-4">Inicio de Sesión</h2>
+          <h1 class="text-center mb-4">Iniciar sesión</h1>
           <div class="form-floating mb-3">
             <input type="email" class="form-control rounded-3" id="username" name="username" [(ngModel)]="creds.username" placeholder="" required>
             <label for="floatingInput">Correo Electronico</label>
@@ -12,7 +15,7 @@
             <label for="floatingPassword">Password</label>
           </div>
           <div class="d-grid gap-1">
-            <button type="submit" class="btn btn-danger rounded-pill px-3 btn-lg btn-block" (click)="onLogin()">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-custom rounded-pill px-3 btn-lg btn-block" (click)="onLogin()">Iniciar Sesión</button>
           </div>
           @if(errorMessage){ 
             <div class="alert alert-danger mt-3" role="alert">

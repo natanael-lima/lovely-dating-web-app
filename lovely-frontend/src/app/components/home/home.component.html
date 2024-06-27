@@ -2,9 +2,13 @@
   <div class="card text-center mx-auto my-5 position-relative" style="max-width: 300px;">
     <div style="position: relative;">
     <!-- Imagen -->
-    
-      <img [src]="selectedImageURL" [alt]="randomProfile.photoFileName" class="card-img-top" alt="Imagen del perfil"  height="400">
-      <!--<img src="https://media.istockphoto.com/id/1480238742/es/foto/retrato-de-vista-de-perfil-de-un-joven-negro.webp?b=1&s=170667a&w=0&k=20&c=T403-J4qsGYYs05Iv2221DbwTQOVDRWRxZLxOVBkgjI=" class="card-img-top" alt="Imagen del perfil"  height="400">-->
+      @if(!randomProfile.photoFileName){
+        <img src="https://i.postimg.cc/7hsdHJL7/nofound2.png" class="card-img-top" alt="Imagen del perfil"  height="400">
+      }@else{
+        <img [src]="selectedImageURL" [alt]="randomProfile.photoFileName" class="card-img-top" alt="Imagen del perfil"  height="400">
+      }
+      
+      
       
        <!-- Contenido -->
         @if(randomProfile && randomUser){ 
@@ -22,8 +26,20 @@
 
     </div>
     <!-- Botones de iconos-->
-    <div class="buttons-container">
-      <button class="button rotate-btn" (click)="onReject()">
+    <div class="d-grid gap-2 d-flex justify-content-center m-4">
+      <button class="btn rotate-btn rounded-pill" type="button" (click)="onReject()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+      </svg></button>
+      <button class="btn like-btn rounded-pill" type="button" (click)="onLike(randomProfile.id)"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+      </svg></button>
+      <button class="btn reject-btn rounded-pill" type="button" (click)="onDislike(randomProfile.id)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+      </svg></button>
+    </div>
+    <!--<div class="buttons-container">
+      <button class="btn btn-secondary rounded-circle" (click)="onReject()">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
           <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
@@ -35,21 +51,24 @@
         </svg>
       </button>
       <button class="button reject-btn" (click)="onDislike(randomProfile.id)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+          <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+          <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
         </svg>
       </button>
     </div>
-  </div>
+  </div>-->
 
  <!-- Tarjeta de notificación de match -->
  @if(showMatchNotification){ 
-  <div class="match-card">
-    <p>Hiciste MATCH!</p>
-    <button (click)="closeMatchNotification()">Accept</button>
+  <div class="card text-center mx-auto my-5 match-card" style="max-width: 300px;">
+    <div class="img-container">
+      <img src="../assets/match.png" alt="">
+      <button class="btn  btn-custom-match accept-btn " (click)="closeMatchNotification()">Aceptar</button>
+    </div>
+   
   </div>
   }
- 
 
 </div>
 

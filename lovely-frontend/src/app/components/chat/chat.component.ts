@@ -1,8 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, Input, OnChanges, SimpleChanges, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
-import { BehaviorSubject, switchMap, zip } from 'rxjs';
+import { BehaviorSubject, Subscription, switchMap, zip } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import {FormControl, FormsModule} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import { Message } from '../../models/message';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
@@ -16,77 +16,107 @@ import { MatchService } from '../../services/match.service';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('chatContainer')
   chatContainer!: ElementRef;
+
   messageInput: string = '';
   messageList: any[] = [];
-
   chatId!: number;
+
   currentUser: UserRequest ={
     id:0,
     name:'',
     lastname:'',
     username:''
   };
+  private subscription: Subscription | null = null;
 
-  constructor(private chatService: ChatService, private matchService: MatchService,private route: ActivatedRoute, private userService:UserService){
+  @Input() currentUserId!: number;
+  @Input() targetUserId!: number;
+  @Input() key!: number;
+
+  constructor(private chatService: ChatService, private matchService: MatchService,private route: ActivatedRoute, private userService:UserService, private cdr: ChangeDetectorRef){
 
   }
 
   ngOnInit(): void {
-     // Esperar a que los parámetros de la ruta estén disponibles
-     this.route.paramMap.pipe(
-      switchMap(params => {
-        const userId1 = +params.get('userId1')!;
-        const userId2 = +params.get('userId2')!;
-        
-        // Obtener el ID del chat usando los IDs de los usuarios
-        return this.matchService.getMatchByIds(userId1, userId2);
-      })
-    ).subscribe(
-      (data: any) => {
-        this.chatId = data.id; // Asumiendo que la respuesta del servicio contiene el ID del chat
-        this.joinChat();
-      },
-      (error) => {
-        console.error('Error al obtener el ID del chat:', error);
-      }
-    );
-
-    this.userService.getCurrentUser().subscribe(
-      (user: UserRequest) => {
-        this.currentUser = user;
-        this.loadInitialMessages(); // Cargar mensajes iniciales al cargar la página
-        this.subscribeToMessages();
-      },
-      (error) => {
-        console.error('Error al obtener el usuario actual:', error);
-      }
-    );
+    console.log('ChatComponent initialized with:', this.currentUserId, this.targetUserId, this.key);
+    //this.initializeChat(); //genera duplex
+  }
+  ngOnDestroy(): void {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+    }
+  }
+  //Para detectar el cambio de chat y actualizar
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('ChatComponent changes:', changes);
+    if (changes['currentUserId'] || changes['targetUserId'] || changes['key']) {
+      console.log("Se cambio de chat:",this.chatId);
+      this.initializeChat(); //genera duplex
+    }
   }
 
-  sendMessage() {
-    const message = {
-      content: this.messageInput,
-      senderId: this.currentUser.id
-    } as Message
-    // Enviar el mensaje al servicio de chat
-    console.log('mjs:'+message.content)
-    console.log('objeto:'+this.chatId+'-'+ this.currentUser.id+'-'+message.content)
+private initializeChat(): void {
+    console.log('Inicializamos chat');
+
+    if (this.currentUserId && this.targetUserId) {
+      // Primero, obtenemos el ID del chat
+      this.matchService.getMatchByIds(this.currentUserId, this.targetUserId).subscribe(
+        (data: any) => {
+          this.chatId = data.id;
+          console.log('Chat ID obtenido:', this.chatId);
+          this.userService.getCurrentUser().subscribe(
+            (user: UserRequest) => {
+              this.currentUser = user;
+              // Ahora que tenemos el chatId y el usuario actual, podemos inicializar todo
+              this.joinChat();
+              this.loadInitialMessages();
+              this.subscribeToMessages();
+            },
+            (error) => {
+              console.error('Error al obtener el usuario actual:', error);
+            }
+          );
+        },
+        (error) => {
+          console.error('Error al obtener el ID del chat:', error);
+        }
+      );
+    }
+  }
+  
+sendMessage() {
+    if (this.messageInput.trim() !== '' && this.chatId) {
+      const message = {
+        content: this.messageInput,
+        senderId: this.currentUser.id
+      } as Message;
+    console.log('Sending message from component:', message);
     this.chatService.sendMessage(this.chatId, this.currentUser.id,message);
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     this.messageInput = ''; // Limpiar el campo de entrada después de enviar el mensaje
+    
+    }
   }
-
+  handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.sendMessage();
+    }
+  }
   private joinChat() {
-    this.chatService.joinChat(this.chatId);
-    this.chatService.getMessagesForChat(this.chatId);
+    if (this.chatId) {
+      console.log('Joining chat in component:', this.chatId);
+      this.chatService.joinChat(this.chatId);
+       this.chatService.getMessagesForChat(this.chatId);
+    }
   }
 
   private loadInitialMessages() {
+    console.log('Cargando mensajes:');
     this.chatService.getMessagesForChat(this.chatId);
-    console.log("esperando los mensajes");
+    
   }
 
   private subscribeToMessages() {
@@ -94,6 +124,15 @@ export class ChatComponent implements OnInit {
       this.messageList = messages.map(this.formatMessage);
       this.scrollToBottom();
     });
+
+    /*this.chatService.message$.subscribe(  // Aquí nos suscribimos al observable
+      (messages: Message[]) => {
+        console.log('Mensajes del servidor:', messages);
+        this.messageList = messages.map(this.formatMessage);
+        this.scrollToBottom();
+      }
+    );*/
+   
   }
 
   private scrollToBottom() {
@@ -109,14 +148,6 @@ export class ChatComponent implements OnInit {
     isSender: message.senderId === this.currentUser.id
   });
 
-  /*lisenerMessage() {
-    this.chatService.getMessageSubject().subscribe((messages: any) => {
-      this.messageList = messages.map((item: any)=> ({
-        ...item,
-        message_side: item.senderId === this.currentUser.id ? 'sender' : 'receiver'
-      }))
-    });
-  }*/
 
   formatTimestamp(timestamp: string): string {
     const date = new Date(timestamp);
@@ -129,10 +160,16 @@ export class ChatComponent implements OnInit {
     const formattedHours = hours < 10 ? '0' + hours : hours;
     const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
 
-  
     return `${day} ${month} ${year}, ${formattedHours}:${formattedMinutes}`;
   }
-  
+    /*lisenerMessage() {
+    this.chatService.getMessageSubject().subscribe((messages: any) => {
+      this.messageList = messages.map((item: any)=> ({
+        ...item,
+        message_side: item.senderId === this.currentUser.id ? 'sender' : 'receiver'
+      }))
+    });
+  }*/
   
 
 }

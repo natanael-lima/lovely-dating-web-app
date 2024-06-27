@@ -5,6 +5,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatchService } from '../../services/match.service';
 import { ProfileRequest } from '../../interfaces/profileRequest';
 import { UserRequest } from '../../interfaces/userRequest';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ export class HomeComponent implements OnInit {
   };
   userProfileCurrent!:ProfileRequest;
   userCurrent!:UserRequest;
-  constructor(private userService: UserService,private sanitizer: DomSanitizer, private matchService: MatchService) { }
+  constructor(private userService: UserService,private sanitizer: DomSanitizer, private matchService: MatchService, private router: Router) { }
 
   ngOnInit() {
     // Aquí puedes inicializar tu componente, por ejemplo, obteniendo el perfil del usuario actual
@@ -61,15 +62,17 @@ export class HomeComponent implements OnInit {
   }
 
   loadRandomProfile() {
+    
     this.userService.getRandomProfile().subscribe(
       (userProfile: ProfileRequest) => {
         this.randomProfile = userProfile;
+        console.log("es: ",);
         if (this.randomProfile.photo) {
           // Se guarda la URL de la imagen y se la muestra en el perfil  
           this.selectedImageURL = this.getImageUrl(this.randomProfile.photo);
         } else {
           // Si no hay foto de perfil, usa la URL de la imagen por defecto
-          this.selectedImageURL = 'this.defaultImageURL';
+          this.selectedImageURL = 'https://t3.ftcdn.net/jpg/05/70/71/06/360_F_570710660_Jana1ujcJyQTiT2rIzvfmyXzXamVcby8.jpg';
         }
        
         // Después de recibir el perfil aleatorio, obtén el usuario correspondiente
@@ -139,13 +142,14 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  closeMatchNotification() {
+closeMatchNotification() {
     this.showMatchNotification = false;
+    this.router.navigate(['/home']);
     this.loadRandomProfile();
   }
 
 // Función para obtener la URL segura de la imagen
-getImageUrl(imageData: ArrayBuffer): SafeUrl {
+getImageUrl(imageData: File): SafeUrl {
   // Asegúrate de que los datos de la imagen estén en el formato correcto (base64)
   if (imageData && typeof imageData === 'string') {
     const imageUrl = 'data:image/jpeg;base64,' + imageData;

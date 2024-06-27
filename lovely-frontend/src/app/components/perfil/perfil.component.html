@@ -1,59 +1,88 @@
-
 <div class="container">
   <div class="row mt-5 justify-content-center ">
       <!-- Primera columna -->
-      <div class="col-md-3 container-profile bg-light">
+      <div class="col-md-3 container-profile bg-body  me-2">
           <div class="text-center ">
-                <div class="profile-picture-container">
-                  
-                  <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
+              <!-- Toast Notification -->
+              <div class="toast-container position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11;" >
+                <div id="profileUpdateToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px;">
+                  <div class="d-flex">
+                    <div class="toast-body fs-5 p-3" >
+                      ¡Actualizaste tu foto de perfil!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                </div>
+              </div>
 
+              <!-- Foto de Perfil -->
+                <div class="profile-picture-container">
+                  <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
                   <div class="change-photo-icon">
                     <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
                       <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
                       <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
                     </svg></label>
-                    <input id="file-input" type="file" (change)="onFileSelect($event)" style="display: none;" accept="image/*">
+                    <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
                   </div>
-                  <input id="file-input" type="file" (change)="onFileSelect($event)" style="display: none;" accept="image/*">
+                  <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
                 </div>
- 
-              <h4 class="text-capitalize">{{currentUser.name}} {{currentUser.lastname}}</h4>
-              <p>Fecha de Registro: 01/01/2024</p>
-              <!--<input type="file" (change)="uploadFile($event)">-->
-          </div>
+                <h4 class="text-capitalize">{{currentUser.name}} {{currentUser.lastname}}</h4>
+                <p>Fecha de Registro: 01/01/2024</p>
 
+              <!-- Modal para cambiar la foto -->
+              <div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="changePhotoModalLabel">Cambiar foto de perfil</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form (ngSubmit)="updatePhoto()" #photoForm="ngForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                          <label for="photoFile" class="form-label">Seleccionar nueva foto</label>
+                          <input type="file" class="form-control" id="photoFile" (change)="onFileSelect($event)" accept="image/*">
+                        </div>
+                        <div *ngIf="selectedImageURL" class="mb-3">
+                          <img [src]="selectedImageURL" alt="Preview" class="img-thumbnail">
+                        </div>
+                        <button type="submit" class="btn btn-custom" [disabled]="!currentUserProfile.photo" data-bs-dismiss="modal">Actualizar</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Menu -->
+          </div>
               <div class="d-grid gap-2">
-                <button class="btn btn-light rounded-pill" (click)="changeSection('perfil')" [ngClass]="{ 'active': currentSection === 'perfil' }"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <button class="btn btn-custom-color" (click)="changeSection('perfil')" [ngClass]="{ 'active-btn': currentSection === 'perfil' }"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                   <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                   <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                 </svg> Perfil</button>
                 <hr class="linea">
-                <button class="btn btn-light rounded-pill" (click)="changeSection('password')" [ngClass]="{ 'active': currentSection === 'password' }"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
+                <button class="btn btn-custom-color" (click)="changeSection('password')" [ngClass]="{ 'active-btn': currentSection === 'password' }"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
                   <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5"/>
                   <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                 </svg> Password</button>
                 <hr class="linea">
-                <button class="btn btn-light rounded-pill" (click)="changeSection('account')" [ngClass]="{ 'active': currentSection === 'account' }"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-gear-wide" viewBox="0 0 16 16">
+                <button class="btn btn-custom-color" (click)="changeSection('account')" [ngClass]="{ 'active-btn': currentSection === 'account' }"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-gear-wide" viewBox="0 0 16 16">
                   <path d="M8.932.727c-.243-.97-1.62-.97-1.864 0l-.071.286a.96.96 0 0 1-1.622.434l-.205-.211c-.695-.719-1.888-.03-1.613.931l.08.284a.96.96 0 0 1-1.186 1.187l-.284-.081c-.96-.275-1.65.918-.931 1.613l.211.205a.96.96 0 0 1-.434 1.622l-.286.071c-.97.243-.97 1.62 0 1.864l.286.071a.96.96 0 0 1 .434 1.622l-.211.205c-.719.695-.03 1.888.931 1.613l.284-.08a.96.96 0 0 1 1.187 1.187l-.081.283c-.275.96.918 1.65 1.613.931l.205-.211a.96.96 0 0 1 1.622.434l.071.286c.243.97 1.62.97 1.864 0l.071-.286a.96.96 0 0 1 1.622-.434l.205.211c.695.719 1.888.03 1.613-.931l-.08-.284a.96.96 0 0 1 1.187-1.187l.283.081c.96.275 1.65-.918.931-1.613l-.211-.205a.96.96 0 0 1 .434-1.622l.286-.071c.97-.243.97-1.62 0-1.864l-.286-.071a.96.96 0 0 1-.434-1.622l.211-.205c.719-.695.03-1.888-.931-1.613l-.284.08a.96.96 0 0 1-1.187-1.186l.081-.284c.275-.96-.918-1.65-1.613-.931l-.205.211a.96.96 0 0 1-1.622-.434zM8 12.997a4.998 4.998 0 1 1 0-9.995 4.998 4.998 0 0 1 0 9.996z"/>
                 </svg> Configuracion</button>
                 <hr class="linea">
-                <button class="btn btn-light rounded-pill" (click)="onLogout()" ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                <button class="btn btn-custom-color" (click)="onLogout()" ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
                   <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
                 </svg> 
                 Cerrar Sesión</button>
-              </div>
-     
-              
-                      
+              </div>         
       </div>
       <!-- Segunda columna -->
-      <div class="col-md-7  container-profile bg-light">
-          @if(currentSection === 'perfil' ){ 
+      <div class="col-md-7  container-profile bg-body">
+          @if(currentSection === 'perfil' ){
           <div class="profile-info ">
               <h3>Perfil</h3>
-              <form #userForm="ngForm">
+              <form id="profile-form" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-4 mb-3">
                     <label for="username" class="form-label">Correo electrónico</label>
@@ -69,9 +98,14 @@
                     </div>
                 </div>
                 <div class="row">
-                  <div class="col-5 mb-3">
+                  <div class="col-4 mb-3">
                     <label for="location" class="form-label">Localidad</label>
-                    <input type="text" class="form-control" id="location" name="location" [(ngModel)]="currentUserProfile.location">
+                    <select class="form-control form-select-md mb-3" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
+                      <option selected disabled>Seleccionar</option>
+                      <option *ngFor="let country of countries" [value]="country.name.common">
+                        {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
+                      </option>
+                    </select>
                   </div>
                   <div class="col-3 mb-3">
                     <label for="age" class="form-label">Edad</label>
@@ -105,9 +139,20 @@
                     </select>
                 </div>
                 </div>
-                <button type="submit" class="btn btn-primary" (click)="updateUserAndProfile()">Actualizar perfil</button>
+                <div class="d-grid gap-3">
+                    <button type="submit" class="btn btn-custom">Actualizar perfil</button>
+                </div>
               </form>
-
+              @if(uploadSuccess){
+                <div class="alert alert-success d-flex align-items-center m-2" role="alert">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                  </svg> 
+                  <div class="ms-2">
+                     Perfil de usuario actualizado con éxito.
+                  </div>
+                </div>
+              }
           </div>
           }
           @if(currentSection === 'password' ){

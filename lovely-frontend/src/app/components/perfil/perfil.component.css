@@ -1,4 +1,7 @@
 /* Estilos adicionales */
+.bg-custom{
+    background-color: #d5dbd9;
+}
 .profile-image {
     width: 150px;
     height: 150px;
@@ -13,7 +16,6 @@
 }
 .container-profile {
     padding: 40px;
-    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
   }
@@ -35,7 +37,7 @@
     position: absolute;
     bottom: 5px;
     right: 5px;
-    background-color: rgba(255, 255, 255);
+    background-color: rgb(255, 246, 246);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -55,21 +57,58 @@
 }
 
 .change-photo-icon:hover {
-    background-color: #f5f0e5;
+    background-color: #fdfaf3;
 }
 .label-icon{
     cursor: pointer;
 }
 
 .btn-custom-color{
-    background-color: #351f07;
-    border: 0px;
+    color: black; /* Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 25px; /* Bordes redondeados */
+    padding: 6px 6px; /* Espaciado interno */
+    font-size: 18px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
 }
 .btn-custom-color:hover{
-    background-color: #645943;
+    background:#E38664; /* Degradado de colores rosas y morados */
     color: white;
     border: 0px;
 }
 .linea{
     margin: 0.1px;
 }
+.active-btn {
+    background:#FFA566; /* Degradado de colores rosas y morados */
+    color: white; /* Color del texto */
+  }
+
+.btn-custom{
+    background:#FFA566;
+    color: white; /* Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 25px; /* Bordes redondeados */
+    padding: 6px 6px; /* Espaciado interno */
+    font-size: 18px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+}
+.btn-custom:hover{
+    background:#E38664; /* Degradado de colores rosas y morados */
+    color: white;
+    border: 0px;
+}
+
+/* Ajustes para mostrar las imágenes correctamente */
+option img {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+option {
+    display: flex;
+    align-items: center;
+  }
+  

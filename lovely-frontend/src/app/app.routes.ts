@@ -7,15 +7,17 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { MatchComponent } from './components/match/match.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { authGuardGuard } from './guards/auth-guard.guard';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 export const routes: Routes = [
-    { path: 'user/login', component: LoginComponent },
+    { path: 'welcome', component: WelcomeComponent},
+    { path: 'user/signin', component: LoginComponent },
     { path: 'user/signup', component: UserFormComponent },
     { path: 'perfil',  canActivate: [authGuardGuard],component: PerfilComponent },
     { path: 'home', canActivate: [authGuardGuard], component: HomeComponent },
-    { path: 'match', canActivate: [authGuardGuard], component: MatchComponent },
-    { path: 'chat/:userId1/:userId2', component: ChatComponent },
-    { path: '', redirectTo: '/user/login', pathMatch: 'full' },
-    { path: '**', redirectTo: '/user/login' }
+    { path: 'match/:userId1/:userId2', canActivate: [authGuardGuard], component: MatchComponent },
+    //{ path: 'match/:userId1/:userId2', component: MatchComponent },
+    { path: '', redirectTo: '/welcome', pathMatch: 'full' },
+    { path: '**', redirectTo: '/welcome' }
   ];
  

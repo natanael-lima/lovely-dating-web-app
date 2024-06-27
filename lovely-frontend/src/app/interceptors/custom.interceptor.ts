@@ -1,19 +1,17 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 
 export const customInterceptor: HttpInterceptorFn = (req, next) => {
   const myToken = sessionStorage.getItem('token');
-  // Verificar si la solicitud es una carga de archivo
-  //const isFileUpload = req.headers.get('Content-Type') === 'multipart/form-data';
-  //&& !isFileUpload
   
-  if (myToken) {
+  if (myToken && myToken.length > 0) {
+
     let modifiedReq;
-    if (req.url.includes('/api/user/updateProfilePhoto')) {
+    if (req.body instanceof FormData) {
+      
       // Si la URL de la solicitud incluye '/api/user/updateProfilePhoto', cambia el tipo de contenido a multipart/form-data
       modifiedReq = req.clone({
         setHeaders: {
-          'Content-Type': 'multipart/form-data; charset=utf-8',
-          'Accept': 'multipart/form-data',
+          'Accept': 'application/json', // cambie a json porque envia un request json + file que seria multi
           'Authorization': `Bearer ${myToken}`
         }
       });

@@ -52,7 +52,7 @@ export class UserFormComponent {
         formData.append('lastname', this.user.lastname);
         formData.append('username', this.user.username);
         formData.append('password', this.user.password);
-
+        
         // Agregar campos de datos del perfil
         formData.append('profile.location', this.user.profile.location);
         formData.append('profile.gender', this.user.profile.gender);

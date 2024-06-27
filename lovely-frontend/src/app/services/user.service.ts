@@ -14,18 +14,17 @@ export class UserService {
 
   constructor(private http: HttpClient, private router:Router) { }
 
- // Método para registrar un usuario
+ // Método para registrar un usuario + profile
  registerUser(formData:FormData): Observable<User> { 
   
   return this.http.post<User>(this.apiUrl+'/auth/registration-user', formData).pipe(
   );
  }
- // Método para registrar un profile
+ // Método para checkear si existe username
  checkUsernameExists(username: string): Observable<any> { 
   return this.http.get<any>(`${this.apiUrl}/api/user/checkUsername?username=${username}`).pipe(
   );
  }
-
 
 // Método para obtener un usuario
  getUser(id:number):Observable<any>{
@@ -34,7 +33,7 @@ export class UserService {
   )
 }
 
-// Método para obtener un usuario
+// Método para obtener un profile
 getUserProfile(id:number):Observable<any>{
   return this.http.get<any>(this.apiUrl+"/api/user/profile/"+id).pipe(
     catchError(this.handleError)
@@ -55,39 +54,26 @@ getCurrentUserProfile(id:number): Observable<ProfileRequest> {
   );
 }
 
+// Método para actualizar un usuario
 updateUser(userRequest:UserRequest):Observable<any>
   {
     return this.http.put(this.apiUrl+'/api/user/updateUser', userRequest).pipe(
       catchError(this.handleError)
     )
   }
+
 // Método para obtener los datos del perfil actualmente logueado
-updateUserProfile(profileRequest:ProfileRequest): Observable<any> {
-  return this.http.put<ProfileRequest>(this.apiUrl+'/api/user/updateProfile',profileRequest).pipe(
-    catchError(this.handleError)
+updatePhotoAndProfile(formData:FormData): Observable<any> {
+  return this.http.put<any>(this.apiUrl+'/api/user/update-profile-image',formData).pipe(
+    catchError(error => {
+      if (error instanceof HttpErrorResponse) {
+        console.error('Error en la solicitud:', error);
+        console.error('Código de estado:', error.status);
+        console.error('Mensaje de error:', error.message);
+      }
+      return this.handleError(error);
+    })
   );
-}
-
-// Método para actualizar el perfil con la foto
-updateUserProfilePhoto(formData: FormData): Observable<HttpEvent<any>>  {
-  const _headers = new HttpHeaders({
-    'Content-Type': 'multipart/form-data'
-  });
-
-  // Mostrar el contenido del FormData en la consola
-  console.log('api formphotofile:',formData.get('photoFile'));
-  // Mostrar el contenido del FormData en la consola
-  console.log('api formreq:',formData.get('req'));
-  const req = new HttpRequest('PUT', this.apiUrl+'/api/user/updateProfilePhoto', formData, {
-    responseType: 'json',headers:_headers});
-
-  return this.http.request(req);
-}
-
-private handleError(error: any): Observable<never> {
-  console.error('Ocurrio un error:', error);
-// Puedes manejar el error aquí, por ejemplo, mostrar un mensaje de error
-  return throwError('Something bad happened; please try again later.');
 }
 
 getRandomProfiles(): Observable<ProfileRequest> {
@@ -102,4 +88,14 @@ getUsers(userId: number): Observable<UserRequest[]> {
    
 }
 
+getCountries(): Observable<any[]> {
+  return this.http.get<any[]>('https://restcountries.com/v3.1/all');
+   
+}
+
+private handleError(error: any): Observable<never> {
+  console.error('Ocurrio un error:', error);
+// Puedes manejar el error aquí, por ejemplo, mostrar un mensaje de error
+  return throwError('Something bad happened; please try again later.');
+}
 }

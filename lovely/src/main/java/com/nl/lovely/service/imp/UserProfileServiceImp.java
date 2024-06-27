@@ -1,6 +1,7 @@
 package com.nl.lovely.service.imp;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,14 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.dto.UserProfileDTO;
 import com.nl.lovely.entity.User;
@@ -46,7 +45,7 @@ public class UserProfileServiceImp implements UserProfileService {
     private UserService userService;
 	
 	@Transactional
-	public UserProfileResponse updateUserProfileData(UserProfileRequest profileRequest) {
+	public UserProfileResponse updateUserProfileDataOld(UserProfileRequest profileRequest) {
 		// TODO Auto-generated method stub
 		// Obtener el usuario asociado al perfil
 	    Optional<User> userOptional = userService.findUserById(profileRequest.getUserId());
@@ -69,9 +68,8 @@ public class UserProfileServiceImp implements UserProfileService {
 
 		 return new UserProfileResponse("El perfil se actualizo satisfactoriamente");
 	}
-	
 	@Transactional
-	public UserProfileResponse updateUserProfilePhoto(UserProfilePhotoRequest profileRequest) {
+	public UserProfileResponse updateUserProfilePhotoOld(UserProfilePhotoRequest profileRequest) {
 		// TODO Auto-generated method stub
 		// Obtener el usuario asociado al perfil
 	    Optional<User> userOptional = userService.findUserById(profileRequest.getUserId());
@@ -89,6 +87,90 @@ public class UserProfileServiceImp implements UserProfileService {
 		 return new UserProfileResponse("El imagen se actualizo satisfactoriamente");
 	}
 	
+	@Override
+	public UserProfileResponse updateProfileAndPhoto(UserProfileDTO profileRequest, MultipartFile file) throws Exception {
+		// TODO Auto-generated method stub
+		
+		UserProfile profileUser = userProfileRepository.findById(profileRequest.getId())
+	            .orElseThrow(() -> new Exception("UserProfile no encontrado"));
+		
+		// Obtener el usuario asociado al perfil
+	    //Optional<User> userOptional = userService.findUserById(profileRequest.getUserId());
+	    //User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+	   
+	
+	    // Actualización de campos del userprofile
+	    profileUser.setLocation(profileRequest.getLocation());
+	    profileUser.setGender(profileRequest.getGender());
+	    profileUser.setAge(profileRequest.getAge());
+	    profileUser.setLikeGender(profileRequest.getLikeGender());
+	    profileUser.setMaxAge(profileRequest.getMaxAge());
+	    profileUser.setMinAge(profileRequest.getMinAge());
+	    
+	    // Guardar la imagen nueva si se proporciona
+	    if (file != null && !file.isEmpty()) {
+	    	// Procesar la nueva imagen
+ 	   	    System.out.print("entre photo update");
+ 	   	    // Obtener los bytes del archivo
+             byte[] pdfBytes = file.getBytes();
+             // Guardar el contenido del archivo
+             profileUser.setPhoto(pdfBytes);
+             // Establecer el nombre del archivo
+             profileUser.setPhotoFileName(file.getOriginalFilename());
+	    }
+	    
+	 // Llamar al método de actualización del repositorio
+	 		userProfileRepository.updatePhotoAndProfile(
+	 				profileUser.getId(),
+	 				profileUser.getPhoto(),
+	 				profileUser.getPhotoFileName(),
+	 				profileUser.getLocation(),
+	 				profileUser.getGender(),
+	 				profileUser.getAge(),
+	 				profileUser.getLikeGender(),
+	 				profileUser.getMaxAge(),
+	 				profileUser.getMinAge()
+	    );
+	    
+	 		return new UserProfileResponse("El perfil se actualizo satisfactoriamente");
+	}
+	
+	
+	
+	@Override
+	public UserProfileResponse updateProfileDate(UserProfileDTO dto) throws Exception {
+		// TODO Auto-generated method stub
+		UserProfile profile = userProfileRepository.findById(dto.getId())
+	            .orElseThrow(() -> new Exception("UserProfile no encontrado"));
+		 
+	    // Actualización de campos del producto
+		profile.setLocation(dto.getLocation());
+		profile.setGender(dto.getGender());
+		profile.setAge(dto.getAge());
+		profile.setLikeGender(dto.getLikeGender());
+		profile.setMaxAge(dto.getMaxAge());
+		profile.setMinAge(dto.getMinAge());
+		
+		System.out.print("entre json update");
+	    // Actualización de la categoría si se proporciona
+	    //if (dto.getCategoria() != null && dto.getCategoria() != null) {
+	    //    Category categoria = categoryRepository.findByName(dto.getCategoria())
+	    //            .orElseThrow(() -> new Exception("La categoría con nombre " + dto.getCategoria() + " no existe"));
+	    //    producto.setCategoria(categoria);
+	    //}
+	    	    
+	    // Llamar al método de actualización del repositorio
+		userProfileRepository.updateProfileData(
+				profile.getId(),
+				profile.getLocation(),
+				profile.getGender(),
+				profile.getAge(),
+				profile.getLikeGender(),
+				profile.getMaxAge(),
+				profile.getMinAge()
+	    );
+	    return new UserProfileResponse("El Profile se actualizó satisfactoriamente");
+	}
 	
 	@Override
 	public UserProfileDTO getUserProfile(Long id) {
