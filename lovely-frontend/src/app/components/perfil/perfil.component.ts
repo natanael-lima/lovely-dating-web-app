@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { User } from '../../models/user';
@@ -21,7 +21,8 @@ declare var window: any;
   styleUrl: './perfil.component.css'
 })
 export class PerfilComponent implements OnInit {
-  
+  isMobile: boolean = false;
+  showMenu: boolean = true;
   countries : any [] = [];
   selectedImageURL: SafeUrl | string | ArrayBuffer | null = null;
   uploadSuccess: boolean = false;
@@ -50,7 +51,30 @@ export class PerfilComponent implements OnInit {
  
 
   constructor(private userService:UserService, private formBuilder:FormBuilder,private http: HttpClient, private loginService:LoginService,private router:Router,private sanitizer: DomSanitizer ){
-    
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+    this.showMenu = true;
+  }
+// Función para cambiar la sección actual
+  changeSection(section: string) {
+    this.currentSection = section;
+    if (this.isMobile) {
+      this.showMenu = false;
+    }
+  }
+
+  goBack() {
+    if (this.isMobile) {
+      this.showMenu = true;
+    }
   }
 
   ngOnInit(): void {
@@ -94,10 +118,7 @@ getImageUrl(imageData: File): SafeUrl {
     return this.defaultImageURL;
   }
 }
-// Función para cambiar la sección actual
-changeSection(section: string): void {
-    this.currentSection = section;
-}
+
 
 // Funcionar para cargar foto de perfil
 onFileSelect(event: any) {

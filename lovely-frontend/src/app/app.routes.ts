@@ -14,7 +14,7 @@ export const routes: Routes = [
     { path: 'user/signin', component: LoginComponent },
     { path: 'user/signup', component: UserFormComponent },
     { path: 'perfil',  canActivate: [authGuardGuard],component: PerfilComponent },
-    { path: 'home', canActivate: [authGuardGuard], component: HomeComponent },
+    { path: 'search', canActivate: [authGuardGuard], component: HomeComponent },
     { path: 'match/:userId1/:userId2', canActivate: [authGuardGuard], component: MatchComponent },
     //{ path: 'match/:userId1/:userId2', component: MatchComponent },
     { path: '', redirectTo: '/welcome', pathMatch: 'full' },

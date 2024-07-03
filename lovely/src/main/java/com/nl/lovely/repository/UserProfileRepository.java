@@ -38,15 +38,15 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,Long>{
 
 
 	// Para actualizar la imagen del perfil
-	@Modifying
-	@Query("UPDATE UserProfile SET photo=:photo, photoFileName=:photoFileName WHERE id = :id")
-	void updateProfileImage(@Param("id") Long id, @Param("photo") byte[] photo, @Param("photoFileName") String photoFileName);
+	//@Modifying
+	//@Query("UPDATE UserProfile SET photo=:photo, photoFileName=:photoFileName WHERE id = :id")
+	//void updateProfileImage(@Param("id") Long id, @Param("photo") byte[] photo, @Param("photoFileName") String photoFileName);
 	
 	// Método para buscar perfiles de usuario que cumplan con las preferencias del usuario actual
 	@Query("SELECT up FROM UserProfile up WHERE up.gender = :likeGender AND up.age BETWEEN :minAge AND :maxAge")
     List<UserProfile> findFilteredUserProfiless(@Param("likeGender") String likeGender, @Param("minAge") Integer minAge, @Param("maxAge") Integer maxAge);
 	
-	
+	// Método filtrar los perfiles por preferencia
 	@Query("SELECT up FROM UserProfile up WHERE up.gender = :likeGender " +
 	           "AND up.age BETWEEN :minAge AND :maxAge " +
 	           "AND NOT EXISTS (SELECT ua FROM UserAction ua WHERE ua.liker = :currentUser " +
@@ -57,7 +57,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,Long>{
 	                                               @Param("currentUser") UserProfile currentUser,
 	                                               @Param("excludedActions") List<ActionType> excludedActions);
 	
-	
+	// Método para buscar los match de un respectivo usuario con su id
 	@Query("SELECT DISTINCT up.user FROM UserProfile up " +
 	           "JOIN Match m ON up.id = m.profile1.id OR up.id = m.profile2.id " +
 	           "WHERE up.id != :userId AND (m.profile1.id = :userId OR m.profile2.id = :userId)")

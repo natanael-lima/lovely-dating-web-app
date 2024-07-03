@@ -40,16 +40,19 @@
 }
 
 .sender-message .message {
-  background-color: #f0e6e2; /* Color de fondo para mensajes del remitente */
-  margin-left: 100px;
-  border: 1px solid #e0d8d5; /* Color y grosor del borde */
+  background-color: #eeebff; /* Color de fondo para mensajes del remitente */
+  /* margin-left: 100px; */
+  border: 1px solid #ebeaf1; /* Color y grosor del borde */
 }
 
 .receiver-message .message {
   background-color: #ffffff; /* Color de fondo para mensajes del destinatario */
-  margin-right: 100px;
+  /*  margin-right: 100px;*/
   border: 1px solid #e6e6e6; /* Color y grosor del borde */
 }
+
+
+
 
 .message {
   border-radius: 10px;

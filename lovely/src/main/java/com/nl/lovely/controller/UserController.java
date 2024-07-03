@@ -160,68 +160,13 @@ public class UserController {
 			        }
      }
     
-    
-    //************************** API para actualizar los datos del perfil. **************************
-    @PutMapping("/updateProfile")
-    public ResponseEntity<UserProfileResponse> updateUserProfileData(@RequestBody UserProfileRequest req)
-    {
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        Optional<User> userOptional = userService.findByUsername(username);
-        User authenticatedUser = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-
-        // Obtener el ID del usuario autenticado
-        Long authenticatedUserId = authenticatedUser.getId();
-        System.out.println("ID del usuario autenticado: " + authenticatedUserId);
-
-        // Obtener el ID del usuario asociado al UserProfile que se está intentando actualizar
-        Long profileUserId = req.getUserId();
-        System.out.println("ID del usuario asociado al UserProfile: " + profileUserId);
-       
-        // Verificar si el ID del usuario autenticado coincide con el ID del usuario asociado al UserProfile
-        if (!authenticatedUserId.equals(profileUserId)) {
-            // Si los IDs no coinciden, devolvemos un mensaje de error indicando que el usuario no tiene permiso para actualizar el perfil de otro usuario
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new UserProfileResponse("No tienes permiso para actualizar el perfil de otro usuario"));
-        }
-        // Si los IDs coinciden, entonces el usuario autenticado tiene permiso para actualizar su propio perfil
-        return ResponseEntity.ok(userProfileService.updateUserProfileDataOld(req));
-    }
-    
-    
-    
-    //************************** API para actualizar la foto de perfil del usuario. **************************
-    @PutMapping(value="/updateProfilePhoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserProfileResponse> updateUserProfilePhoto(@RequestPart UserProfilePhotoRequest req, @RequestPart(value = "photoFile", required = false) MultipartFile photoFile) {
-        // Tu lógica existente para cargar el archivo y actualizar el perfil
-    
-        if (!photoFile.isEmpty()) {
-            try {
-                // Obtener los bytes del archivo
-                byte[] pdfBytes = photoFile.getBytes();
-                // Guardar el contenido del archivo
-                req.setPhoto(pdfBytes);
-                // Establecer el nombre del archivo
-                req.setPhotoFileName(photoFile.getOriginalFilename());
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Manejar el error, por ejemplo, redirigiendo a una página de error
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new UserProfileResponse("No se puedo actualizar la img"));
-            }
-        }
-        return ResponseEntity.ok(userProfileService.updateUserProfilePhotoOld(req));
-    }
-    
-
-    
-    
-    // API para obtener perfiles de usuario aletorios, una lista.
+    //************************** API para obtener perfiles de usuarios aletorios, una lista. **************************
     @GetMapping("/random-users")
     public ResponseEntity<List<UserProfileDTO>> getRandomUser() {
-    	List<UserProfileDTO> randomUser = userProfileService.getRandomProfiles(3);
+    	List<UserProfileDTO> randomUser = userProfileService.getRandomProfiles(5);
         return ResponseEntity.ok(randomUser);
     }
-    // API para obtener perfil de usuario aleatorio.
+    //************************** API para obtener perfil de usuario aleatorio.**************************
     @GetMapping("/random-user")
     public ResponseEntity<UserProfileDTO> getRandomUsers() {
     	Long userId = getCurrentUserId();
@@ -237,7 +182,24 @@ public class UserController {
         }
     }
     
-    // Metodo para obtener el id del user logueado.
+    //************************** API para obtener perfil de usuario aleatorio.**************************
+    @GetMapping("/filter-users")
+    public ResponseEntity<List<UserProfileDTO>> getFilterProfileUsers() {
+    	Long userId = getCurrentUserId();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<UserProfileDTO> listProfiles = userProfileService.getFilteredUserProfiles(userId);
+        if (listProfiles != null) {
+            return ResponseEntity.ok(listProfiles);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    
+    //************************** Metodo para obtener el id del user logueado.**************************
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
@@ -252,12 +214,13 @@ public class UserController {
         return null;
     }
     
-    // API para eliminar un usuario.
+    //************************** API para eliminar un usuario.**************************
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
-    // prueba
+    
+    //************************** prueba user+profile en uno solo
     @GetMapping("/complete/{id}")
     public ResponseEntity <UserCompleteDTO> obtenerUser() throws Exception {
     	UserCompleteDTO dto = userService.getUserDTO(getCurrentUserId());
@@ -269,13 +232,7 @@ public class UserController {
     }
     
     
-    /*public ResponseEntity<UserProfileResponse> registerProfile(@RequestBody UserProfileDTO req, @PathVariable Long userId)
-    {	
-    		UserProfileResponse response = userProfileService.saveProfile(req, userId);
-    		return ResponseEntity.ok()
-    							 .body(new UserProfileResponse("Profile saved successfully"));						 
-    							 
-    }
+    /*
       //************************** API que registra un nuevo profile. **************************
     @PostMapping(value="registration-profile/{userId}")
     public ResponseEntity<?> registerProfile(@RequestParam("photo") MultipartFile photo,

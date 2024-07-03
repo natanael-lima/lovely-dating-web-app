@@ -1,18 +1,14 @@
-.full-screen-jumbotron {
-    height: 100vh; /* Ocupa toda la pantalla */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*background: linear-gradient(135deg, #f8e4ee, #ffcde4, #e7cdff);*/ 
-    background: linear-gradient(50deg,#fc9d5a, #E38664); /* Degradado de colores rosas y morados */
-    color: white;
-    text-align: center;
-  }
+/*.full-screen-jumbotron {
+  background: linear-gradient(120deg,#e63c5e , #fce355 );
+  height: 100vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 0, 0);
+  text-align: center;
+}*/
 
 .full-screen {
-    background: linear-gradient(225deg,#ffb179, #dd744d); /* Degradado de colores rosas y morados */
-    height: 100vh; /* Ocupa toda la pantalla */
-    display: flex;
     justify-content: center;
     align-items: center;
     color: rgb(0, 0, 0);

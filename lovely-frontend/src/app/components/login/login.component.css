@@ -1,19 +1,19 @@
 body {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
   }
 .login-form {
     max-width: 400px;
     margin: 10px auto 0 ;
     padding: 40px;
-    background: linear-gradient(to bottom right, #fbfbff, #fafeff,#fffbfe);
+    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btn-custom{
-  background: #FFA566; /* Degradado de colores rosas y morados */
+  background: #f74b4b; /* Degradado de colores rosas y morados */
   color: white; /* Color del texto */
-  text-shadow: 1px 1px 2px #868686; /* Sombra de texto oscuro */
+  text-shadow: 1px 1px 2px #773528; /* Sombra de texto oscuro */
   border: none; /* Sin bordes */
   border-radius: 25px; /* Bordes redondeados */
   padding: 10px 20px; /* Espaciado interno */
@@ -23,6 +23,6 @@ body {
 }
 
 .btn-custom:hover {
-  background: #E38664; /* Degradado de colores rosas y morados */
+  background: #d33737; /* Degradado de colores rosas y morados */
   color: white;
 }

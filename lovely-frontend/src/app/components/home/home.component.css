@@ -1,3 +1,6 @@
+.main-content{
+  background-color: red;
+}
 .buttons-container {
     position: relative;
     margin: 5px;
@@ -101,5 +104,45 @@
   background: linear-gradient(50deg,#72a75d,#7c9e4f,#6c922f); /* Degradado de colores rosas y morados */
 
 }
+/*-------------------carousel de profiles*/
+.profile-card {
+ 
+  transition: transform 0.5s, opacity 0.9s;
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
 
+.hidden-card {
+  /*transform: translateX(-100%);*/
+  display: none; /* Oculta completamente la tarjeta */
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
 
+.next-card {
+  /*transform: translateX(0);*/
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.like-animation {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.dislike-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.reload-animation {
+  opacity: 0;
+  transform: translateX(0) !important;
+}
+
+.swipe-btn {
+  z-index: 10;
+}
