@@ -24,9 +24,9 @@ body {
 }
 
 .btn-custom{
-  background: #FFA566; /* Degradado de colores rosas y morados */
+  background: #f74b4b; /* Degradado de colores rosas y morados */
   color: white; /* Color del texto */
-  text-shadow: 1px 1px 2px #868686; /* Sombra de texto oscuro */
+  text-shadow: 1px 1px 2px #773528; /* Sombra de texto oscuro */
   border: none; /* Sin bordes */
   border-radius: 25px; /* Bordes redondeados */
   padding: 10px 20px; /* Espaciado interno */
@@ -36,6 +36,6 @@ body {
 }
 
 .btn-custom:hover {
-  background: #E38664; /* Degradado de colores rosas y morados */
+  background: #d33737; /* Degradado de colores rosas y morados */
   color: white;
 }

@@ -22,9 +22,9 @@ public interface UserProfileService {
 	
 	public UserProfileResponse saveProfile(MultipartFile photo,String photoFileName,String location,String gender,String age,String likeGender,Integer maxAge,Integer minAge,Long userId);
 	
-	public UserProfileResponse updateUserProfileDataOld(UserProfileRequest profile);
+	//public UserProfileResponse updateUserProfileDataOld(UserProfileRequest profile);
 	
-	public UserProfileResponse updateUserProfilePhotoOld(UserProfilePhotoRequest profileRequest);
+	//public UserProfileResponse updateUserProfilePhotoOld(UserProfilePhotoRequest profileRequest);
 	
 	public UserProfileResponse updateProfileAndPhoto(UserProfileDTO profileRequest, MultipartFile file) throws Exception;
 	
@@ -40,13 +40,11 @@ public interface UserProfileService {
 	
 	public UserProfileDTO getRandomProfile(Long userId);
 	
+	public List<UserProfileDTO> getFilteredUserProfiles(Long userId);
+	
 	//public List<UserProfile> getAllUsersByProfileId(Long userId);
 	
 	//public List<UserProfile> getRandomProfiles (int count);
-	
-	//public UserProfile getRandomProfile();
-
-	//public boolean checkUsername(String username);
 	
 	//public String getUserRole (String username);
 	

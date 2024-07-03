@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,50 +45,7 @@ public class UserProfileServiceImp implements UserProfileService {
 	private UserRepository userRepository;
 	@Autowired
     private UserService userService;
-	
-	@Transactional
-	public UserProfileResponse updateUserProfileDataOld(UserProfileRequest profileRequest) {
-		// TODO Auto-generated method stub
-		// Obtener el usuario asociado al perfil
-	    Optional<User> userOptional = userService.findUserById(profileRequest.getUserId());
-	    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-	    
-		UserProfile userProfile = UserProfile.builder()
-				        .id(profileRequest.getId())
-				        .user(user) // Establecer el usuario asociado al perfil
-				        //.photo(profileRequest.getPhoto())
-				        //.photoFileName(profileRequest.getPhotoFileName())
-				        .location(profileRequest.getLocation())
-				        .gender(profileRequest.getGender())
-				        .age(profileRequest.getAge())
-				        .likeGender(profileRequest.getLikeGender())
-				        .maxAge(profileRequest.getMaxAge())
-				        .minAge(profileRequest.getMinAge())
-				        .build();
-				        
-		userProfileRepository.updateProfileData(userProfile.getId(), userProfile.getLocation(), userProfile.getGender(),userProfile.getAge(),userProfile.getLikeGender(),userProfile.getMaxAge(),userProfile.getMinAge());
 
-		 return new UserProfileResponse("El perfil se actualizo satisfactoriamente");
-	}
-	@Transactional
-	public UserProfileResponse updateUserProfilePhotoOld(UserProfilePhotoRequest profileRequest) {
-		// TODO Auto-generated method stub
-		// Obtener el usuario asociado al perfil
-	    Optional<User> userOptional = userService.findUserById(profileRequest.getUserId());
-	    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-	    
-		UserProfile userProfile = UserProfile.builder()
-				        .id(profileRequest.getId())
-				        .user(user) // Establecer el usuario asociado al perfil
-				        .photo(profileRequest.getPhoto())
-				        .photoFileName(profileRequest.getPhotoFileName())
-				        .build();
-				        
-		userProfileRepository.updateProfileImage(userProfile.getId(), userProfile.getPhoto(),userProfile.getPhotoFileName());
-
-		 return new UserProfileResponse("El imagen se actualizo satisfactoriamente");
-	}
-	
 	@Override
 	public UserProfileResponse updateProfileAndPhoto(UserProfileDTO profileRequest, MultipartFile file) throws Exception {
 		// TODO Auto-generated method stub
@@ -334,6 +293,45 @@ public class UserProfileServiceImp implements UserProfileService {
 	    // Convertir el perfil de usuario a un UserProfileDTO y devolverlo
 	    return convertToDTO(randomUserProfile);
 	}
+	
+	// Método para obtener una lista de perfiles de usuario que cumplen con las preferencias del usuario actual
+	@Override
+	public List<UserProfileDTO> getFilteredUserProfiles(Long userId) {
+	    // Verificar si el perfil de usuario actualmente logueado está disponible
+	    if (userId == null) {
+	        return Collections.emptyList();
+	    }
+
+	    UserProfileDTO currentUserProfile = getUserProfile(userId);
+	    if (currentUserProfile == null) {
+	        return Collections.emptyList();
+	    }
+
+	    Integer userMinAge = currentUserProfile.getMinAge();
+	    Integer userMaxAge = currentUserProfile.getMaxAge();
+	    String userLikeGender = currentUserProfile.getLikeGender();
+
+	    UserProfile userFilt = convertToEntity(currentUserProfile);
+
+	    // Definir las acciones excluidas
+	    List<ActionType> excludedActions = Arrays.asList(ActionType.LIKE, ActionType.DISLIKE);
+
+	    // Obtener la lista de todos los perfiles de usuario que cumplen con las preferencias del usuario actual
+	    List<UserProfile> filteredUserProfiles = userProfileRepository.findFilteredUserProfiles(
+	            userLikeGender, userMinAge, userMaxAge, userFilt, excludedActions);
+ 
+		// Convertir la lista de UserProfile a una lista de UserProfileDTO usando un bucle for V1
+	    //List<UserProfileDTO> filteredUserProfilesDTO = new ArrayList<>();
+	    //for (UserProfile profile : filteredUserProfiles) {
+	    //    filteredUserProfilesDTO.add(convertToDTO(profile));
+	    //}
+		//return filteredUserProfilesDTO;
+
+	    // Convertir la lista de UserProfile a una lista de UserProfileDTO V2
+	    return filteredUserProfiles.stream()
+	                               .map(this::convertToDTO)
+	                               .collect(Collectors.toList());
+	}
 
 	@Override
 	public UserProfileResponse saveProfile(MultipartFile photo,
@@ -369,7 +367,7 @@ public class UserProfileServiceImp implements UserProfileService {
 				} catch (IOException e) {
 			throw new RuntimeException("Error al guardar la foto del perfil", e);
 				}
-			}
+	}
 	
 	
 }

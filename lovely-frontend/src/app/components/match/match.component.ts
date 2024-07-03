@@ -1,16 +1,16 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { UserRequest } from '../../interfaces/userRequest';
 import { ChatService } from '../../services/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { Subscription, forkJoin } from 'rxjs';
+import { Observable, Subscription, forkJoin, map } from 'rxjs';
 import { MatchService } from '../../services/match.service';
 import { Match } from '../../models/match';
 import { CommonModule } from '@angular/common';
 import { ProfileRequest } from '../../interfaces/profileRequest';
 import { ChatComponent } from '../chat/chat.component';
 import { Message } from '../../models/message';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-match',
@@ -20,6 +20,7 @@ import { Message } from '../../models/message';
   styleUrl: './match.component.css'
 })
 export class MatchComponent implements OnInit, OnDestroy {
+
   currentUser: UserRequest ={
     id:0,
     name:'',
@@ -31,17 +32,35 @@ export class MatchComponent implements OnInit, OnDestroy {
 
   currentUserProfile!: ProfileRequest;
   targetUserProfile!: ProfileRequest;
-
   selectedUserId: number | null = null;
   chatKey: number = 0; // Añade esta línea
+  
+  isMobile: boolean = false;
+  showUserList: boolean = true;
 
   private userSubscription: Subscription | undefined;
   private messageSubscription: Subscription | undefined;
   
-  constructor(private userService:UserService,private matchService:MatchService, private route: ActivatedRoute, private router: Router, private chatService: ChatService){
-
+  constructor(private breakpointObserver: BreakpointObserver, private userService:UserService,private matchService:MatchService, private route: ActivatedRoute, private router: Router, private chatService: ChatService){
   }
+
+  checkScreenSize() {
+    this.breakpointObserver.observe(['(max-width: 600px)','(max-width: 767px)'])
+      .subscribe(result => {
+        this.isMobile = result.matches;
+        this.showUserList = true;
+      });
+  }
+
+  goBack() {
+    if (this.isMobile) {
+      this.showUserList = true;
+      this.selectedUserId = null;
+    }
+  }
+
   ngOnInit(): void {
+    this.checkScreenSize();
     this.userService.getCurrentUser().subscribe(
       (user: UserRequest) => {
         this.currentUser = user;
@@ -84,6 +103,10 @@ export class MatchComponent implements OnInit, OnDestroy {
     );
   }
   goToChat(userId: number): void {
+    this.selectedUserId = userId;
+    if (this.isMobile) {
+      this.showUserList = false;
+    }
       // Obtener el perfil del usuario seleccionado y del usuario logueado
       console.log('Going to chat with user:', userId);
       forkJoin({

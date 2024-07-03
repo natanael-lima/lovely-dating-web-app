@@ -76,13 +76,15 @@ updatePhotoAndProfile(formData:FormData): Observable<any> {
   );
 }
 
-getRandomProfiles(): Observable<ProfileRequest> {
-    return this.http.get<any>(this.apiUrl+'/api/user/random-users');
+getFilterByPreference(): Observable<ProfileRequest[]> {
+  return this.http.get<ProfileRequest[]>(this.apiUrl+'/api/user/filter-users');
 }
 getRandomProfile(): Observable<ProfileRequest> {
   return this.http.get<any>(this.apiUrl+'/api/user/random-user');
 }
-
+getRandomProfiles(): Observable<ProfileRequest[]> {
+  return this.http.get<any[]>(this.apiUrl+'/api/user/random-users');
+}
 getUsers(userId: number): Observable<UserRequest[]> {
   return this.http.get<UserRequest[]>(this.apiUrl+'/api/user/all/'+userId);
    

@@ -3,7 +3,8 @@
   background: linear-gradient(to bottom right, #fcf5f7, #f7f4f2,#f7f2f8);
 }
 .btn-custom{
-  color: black; /* Color del texto */
+  background:#f74b4b;
+  color: white; /* Color del texto */
   border: none; /* Sin bordes */
   border-radius: 25px; /* Bordes redondeados */
   padding: 6px 6px; /* Espaciado interno */
@@ -12,10 +13,11 @@
   transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
 }
 .btn-custom:hover{
-  background:#d6a3b6; /* Degradado de colores rosas y morados */
+  background:#7e4b4b; /* Degradado de colores rosas y morados */
   color: white;
   border: 0px;
 }
+
 .search-input {
   padding-left: 2rem;
 }
@@ -34,14 +36,15 @@
 }
 
 .list-group-item.active {
-  background-color: #e7e7e7; /* Color verde, puedes cambiarlo al que prefieras */
-  border-color: #dddddd;
+  background-color: #c94848; /* Color verde, puedes cambiarlo al que prefieras */
+  border-color: #ffbdbd;
 }
 
 /* Si quieres cambiar también el color del texto cuando está activo */
 .list-group-item.active {
-  color: #888888;
+  color: #ffe7e7;
 }
+
  .user-list .list-group-item {
    cursor: pointer;
    text-align: left;
