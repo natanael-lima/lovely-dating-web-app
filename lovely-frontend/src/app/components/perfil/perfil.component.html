@@ -1,27 +1,9 @@
-<style>
-  .btn-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 20px; /* Ajusta este valor según tus necesidades */
-    }
-    .btn-text {
-      margin-bottom: 8px; /* Ajusta este valor según tus necesidades */
-      text-align: center;
-    }
-    .row-top, .row-bottom {
-      justify-content: space-around;
-    }
-    .row-middle {
-      justify-content: center;
-    }
-</style>
-  <div class="container-fluid d-flex flex-column " style="height: 800px;">
+  <div class="container-fluid d-flex flex-column">
     <div class="row flex-grow-1">
         <!-- Primera columna -->
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-flex  align-items-center py-5 bg-body border rounded" [ngClass]="{'d-none': isMobile && !showMenu}">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-flex align-items-center py-5 rounded" [ngClass]="{'d-none': isMobile && !showMenu}">
           <div class="d-flex flex-column flex-grow-1" >
-            <div class="bg-body p-1 rounded flex-grow-1 overflow-auto">
+            <div class="bg-body p-5 rounded flex-grow-1 overflow-auto">
               <div class="text-center ">
                 <!-- Toast Notification -->
                 <div class="toast-container position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11;" >
@@ -39,9 +21,9 @@
                   <div class="profile-picture-container">
                     <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
                     <div class="change-photo-icon">
-                      <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
-                        <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
-                        <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                      <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
                       </svg></label>
                       <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
                     </div>
@@ -75,105 +57,101 @@
                 </div>
               <!-- Menu -->
             </div>
-              <div class="container pt-5 pb-4">
-                <div class="row row-top mb-4">
-                  <div class="col text-center">
-                    <div class="btn-container">
-                      <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('perfil')" [ngClass]="{ 'active-btn': currentSection === 'perfil' }">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                          <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-                        </svg>
-                        <span class="visually-hidden">Dismiss</span>
-                      </button>
-                      <span class="btn-text text-body-tertiary">Editar</span>
-                    </div>
+            <div class="container pt-5 pb-4">
+              <div class="row row-top mb-4">
+                <div class="col text-center">
+                  <div class="btn-container">
+                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('perfil')" [ngClass]="{ 'active-btn': currentSection === 'perfil' }">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                      </svg>
+                      <span class="visually-hidden">Dismiss</span>
+                    </button>
+                    <span class="btn-text text-body-tertiary">Editar</span>
                   </div>
                 </div>
-                <div class="row row-middle mb-4">
-                  <div class="col text-center">
-                    <div class="btn-container">
-                      <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('account')" [ngClass]="{ 'active-btn': currentSection === 'account' }">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear-wide-connected" viewBox="0 0 16 16">
-                          <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
-                        </svg>
-                        <span class="visually-hidden">Dismiss</span>
-                      </button>
-                      <span class="btn-text text-body-tertiary">Configuración</span>
-                    </div>
-                  </div>
-                  <div class="col text-center">
-                    <div class="btn-container">
-                      <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('password')" [ngClass]="{ 'active-btn': currentSection === 'password' }">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                          <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                        </svg>
-                        <span class="visually-hidden">Dismiss</span>
-                      </button>
-                      <span class="btn-text text-body-tertiary">Password</span>
-                    </div>
+              </div>
+              <div class="row row-middle mb-4">
+                <div class="col text-center">
+                  <div class="btn-container">
+                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('account')" [ngClass]="{ 'active-btn': currentSection === 'account' }">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear-wide-connected" viewBox="0 0 16 16">
+                        <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
+                      </svg>
+                      <span class="visually-hidden">Dismiss</span>
+                    </button>
+                    <span class="btn-text text-body-tertiary">Configuración</span>
                   </div>
                 </div>
-                <div class="row row-bottom">
-                  <div class="col text-center">
-                    <div class="btn-container">
-                      <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="onLogout()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
-                          <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
-                        </svg>
-                        <span class="visually-hidden">Dismiss</span>
-                      </button>
-                      <span class="btn-text text-body-tertiary">Cerrar Sesion</span>
-                    </div>
+                <div class="col text-center">
+                  <div class="btn-container">
+                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('password')" [ngClass]="{ 'active-btn': currentSection === 'password' }">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
+                        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                      </svg>
+                      <span class="visually-hidden">Dismiss</span>
+                    </button>
+                    <span class="btn-text text-body-tertiary">Password</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row row-bottom">
+                <div class="col text-center">
+                  <div class="btn-container">
+                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="onLogout()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
+                        <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+                      </svg>
+                      <span class="visually-hidden">Dismiss</span>
+                    </button>
+                    <span class="btn-text text-body-tertiary">Cerrar Sesion</span>
                   </div>
                 </div>
               </div>
             </div>
+            </div>
           </div>
   
-            
-            
-  
-                 
         </div>
         <!-- Segunda columna -->
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 text-body-secondary" [ngClass]="{'d-none': isMobile && showMenu}">
-          <div class="bg-body p-3 rounded border">
-            <div class="bg-light p-3 rounded ">
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 d-flex  py-5 rounded" [ngClass]="{'d-none': isMobile && showMenu}">
+          <div class="d-flex flex-column flex-grow-1">
+            <div class="bg-body rounded flex-grow-1 overflow-auto p-4 ">
   
-                <button *ngIf="isMobile" class="btn btn-secondary mb-3" (click)="goBack()">Volver</button>
+                <button *ngIf="isMobile" class="btn btn-custom rounded-pill mb-3" (click)="goBack()">Volver</button>
                 @if(currentSection === 'perfil' ){
                 <div class="profile-info ">
                     <h3>Perfil</h3>
                     <form id="profile-form" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
                       <div class="row">
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
                           <label for="username" class="form-label">Correo electrónico</label>
                           <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentUser.username" disabled>
                         </div>
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
                           <label for="name" class="form-label">Nombre de usuario</label>
                           <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentUser.name">
                         </div>
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
                             <label for="lastname" class="form-label">Apellido de usuario</label>
                             <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentUser.lastname">
                           </div>
                       </div>
                       <div class="row">
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-6 mb-2">
                           <label for="location" class="form-label">Localidad</label>
-                          <select class="form-control form-select-md mb-3" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
+                          <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
                             <option selected disabled>Seleccionar</option>
                             <option *ngFor="let country of countries" [value]="country.name.common">
                               {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
                             </option>
                           </select>
                         </div>
-                        <div class="col-3 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-6 mb-2">
                           <label for="age" class="form-label">Edad</label>
                           <input type="number" class="form-control" id="age" name="age" [(ngModel)]="currentUserProfile.age" >
                         </div>
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
                           <label for="gender" class="form-label">Genero</label>
                           <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example" [(ngModel)]="currentUserProfile.gender">
                             <option selected disabled>Seleccionar</option>
@@ -184,15 +162,15 @@
                       </div>
                       <h3>Prefencias</h3>
                       <div class="row">
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
                           <label for="maxAge" class="form-label">Edad Maxima</label>
                           <input type="te" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="currentUserProfile.maxAge">
                         </div>
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
                           <label for="minAge" class="form-label">Edad Minima</label>
                           <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="currentUserProfile.minAge">
                         </div>
-                        <div class="col-4 mb-3">
+                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
                           <label for="likeGender" class="form-label">Genero</label>
                           <select class="form-control form-select-md mb-3" id="likeGender" name="likeGender" aria-label="Large select example"  [(ngModel)]="currentUserProfile.likeGender">
                             <option selected disabled >Seleccionar</option>

@@ -1,3 +1,27 @@
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Botones y etiquetas */
+button, label, a {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Otros elementos */
+p,  li, span {
+  font-family: 'OpenSans', sans-serif;
+}
+
 /*.full-screen-jumbotron {
   background: linear-gradient(120deg,#e63c5e , #fce355 );
   height: 100vh; 

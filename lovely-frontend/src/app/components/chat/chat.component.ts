@@ -101,8 +101,9 @@ sendMessage() {
     }
   }
   handleKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !event.repeat) {
       this.sendMessage();
+      event.preventDefault(); // Prevent default action of Enter key to avoid form submission or other side effects
     }
   }
   private joinChat() {

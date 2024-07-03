@@ -1,6 +1,37 @@
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Estilos generales */
 body {
-    background-color: #f8f9fa;
-  }
+  font-family: 'OpenSans', sans-serif;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+/* Botones y etiquetas */
+button, label {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Otros elementos */
+p, a, li, span {
+  font-family: 'OpenSans', sans-serif;
+}
+
 .login-form {
     max-width: 650px;
     margin: 50px auto 0 ;

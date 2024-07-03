@@ -58,7 +58,7 @@ public class WebSocketController {
         UserProfile sender = userProfileService.findUserById(userId);
         messageDTO.setSenderId(sender.getId());
         messageDTO.setTimestamp(LocalDateTime.now());
-        System.out.println("backend message:"+messageDTO.getContent());
+        System.out.println("backend message content: "+messageDTO.getContent());
         // Guardar el mensaje en la base de datos
         messageService.saveMessage(messageDTO);
         // Devolver el mensaje para enviarlo al topic correspondiente al chatId
@@ -72,7 +72,7 @@ public class WebSocketController {
         try {
         	
         	List<MessageDTO> messages = messageService.findMessagesByChatId(chatId);
-        	System.out.println("backend arraymjs:"+messages);
+        	System.out.println("backend arraymjs: "+messages);
             return ResponseEntity.ok(messages);
         } catch (Exception e) {
             // Manejo de errores

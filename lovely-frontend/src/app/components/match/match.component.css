@@ -1,3 +1,38 @@
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Estilos generales */
+body {
+  font-family: 'OpenSans', sans-serif;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+/* Botones y etiquetas */
+button, label {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Otros elementos */
+p, a, li, span {
+  font-family: 'OpenSans', sans-serif;
+}
+
+ 
  /* Personaliza los estilos según sea necesario */
  .bg-custom{
   background: linear-gradient(to bottom right, #fcf5f7, #f7f4f2,#f7f2f8);
