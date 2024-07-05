@@ -33,19 +33,32 @@ p, a, li, span {
 }
 
 
-/* Estilos adicionales */
-.btn-custom{
-  background:#FFA566; /* Degradado de colores rosas y morados */
-  color: white; /* Color del texto */
-  border: none; /* Sin bordes */
+/* BTNs */
+.btn-custom-v1{
+  background: linear-gradient(to bottom right, #9eb8ce, #aaaed1 ,  #c3afd6, #d8b2cb);
+  color: #ffffff;
   border-radius: 25px; /* Bordes redondeados */
-  padding: 0px 20px; /* Espaciado interno */
-  font-size: 1.1em; /* Tamaño de la fuente */
   cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
   transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+  box-shadow: 0 0.2rem 0.35rem rgba(0, 0, 0, 0.2); /* Sombras sutiles */
 }
-.btn-custom:hover{
-  background:#E38664; /* Degradado de colores rosas y morados */
+.btn-custom-v1:hover{
+  color: #efedf3; /* Color del texto */
+  background: linear-gradient(to bottom right, #475561, #5b5e79 ,  #61546d, #6b5464); 
+}
+
+.btn-custom-v2{
+  background:#f1f1f1;
+  color: #979797; /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 25px; /* Bordes redondeados */
+   font-size: 18px; /* Tamaño de la fuente */
+  cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+  transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+  box-shadow: 0 0.2rem 0.35rem rgba(0, 0, 0, 0.1); /* Sombras sutiles */
+}
+.btn-custom-v2:hover{
+  background:#222222; /* Degradado de colores rosas y morados */
   color: white;
   border: 0px;
 }
@@ -58,8 +71,15 @@ p, a, li, span {
 }
 
 .chat-container {
-  height: 50vh;
+  height: 67vh;
   overflow-y: scroll;
+}
+
+@media (min-width: 768px) {
+  .chat-container {
+    height: 80vh;
+  }
+
 }
 
 .message-container {

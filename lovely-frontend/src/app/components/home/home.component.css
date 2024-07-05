@@ -32,9 +32,7 @@ p, a, li, span {
   font-family: 'OpenSans', sans-serif;
 }
 
-.main-content{
-  background-color: red;
-}
+
 .buttons-container {
     position: relative;
     margin: 5px;
@@ -179,4 +177,52 @@ p, a, li, span {
 
 .swipe-btn {
   z-index: 10;
+}
+
+/*--------------------*/
+.profile-header {
+  background: linear-gradient(to bottom right, #8fccff, #ff8fda);
+  height: 150px;
+  position: relative;
+  border-radius: 20px 20px 0 0px;
+}
+
+.profile-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color:#f6fbfd ;
+}
+
+.profile-header p {
+  font-size: 1.2rem;
+  color:#f7eaff ;
+}
+
+@media (max-width: 768px) {
+  .profile-header h1 {
+    font-size: 1.7rem;
+  }
+  
+  .profile-header p {
+    font-size: 1rem;
+    
+  }
+}
+.profile-content {
+  padding-top: 40px;
+  background-color: #ffffff;
+  border-radius: 0 0 20px 20px;
+  min-height: calc(90vh - 150px);
+}
+
+
+@media (min-width: 768px) {
+  .profile-header {
+      height: 200px;
+  }
+
+
+  .profile-content {
+      padding-top: 60px;
+  }
 }

@@ -1,252 +1,266 @@
-  <div class="container-fluid d-flex flex-column">
-    <div class="row flex-grow-1">
-        <!-- Primera columna -->
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-flex align-items-center py-5 rounded" [ngClass]="{'d-none': isMobile && !showMenu}">
-          <div class="d-flex flex-column flex-grow-1" >
-            <div class="bg-body p-5 rounded flex-grow-1 overflow-auto">
-              <div class="text-center ">
-                <!-- Toast Notification -->
-                <div class="toast-container position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11;" >
-                  <div id="profileUpdateToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px;">
-                    <div class="d-flex">
-                      <div class="toast-body fs-5 p-3" >
-                        ¡Actualizaste tu foto de perfil!
-                      </div>
-                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                  </div>
-                </div>
-  
-                <!-- Foto de Perfil -->
-                  <div class="profile-picture-container">
-                    <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
-                    <div class="change-photo-icon">
-                      <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-                        <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
-                      </svg></label>
-                      <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
-                    </div>
-                    <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
-                  </div>
-                  <h4 class="text-capitalize">{{currentUser.name}} {{currentUser.lastname}}</h4>
-                  <p>Fecha de Registro: 01/01/2024</p>
-  
-                <!-- Modal para cambiar la foto -->
-                <div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="changePhotoModalLabel">Cambiar foto de perfil</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <form (ngSubmit)="updatePhoto()" #photoForm="ngForm" enctype="multipart/form-data">
-                          <div class="mb-3">
-                            <label for="photoFile" class="form-label">Seleccionar nueva foto</label>
-                            <input type="file" class="form-control" id="photoFile" (change)="onFileSelect($event)" accept="image/*">
-                          </div>
-                          <div *ngIf="selectedImageURL" class="mb-3">
-                            <img [src]="selectedImageURL" alt="Preview" class="img-thumbnail">
-                          </div>
-                          <button type="submit" class="btn btn-custom" [disabled]="!currentUserProfile.photo" data-bs-dismiss="modal">Actualizar</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <!-- Menu -->
-            </div>
-            <div class="container pt-5 pb-4">
-              <div class="row row-top mb-4">
-                <div class="col text-center">
-                  <div class="btn-container">
-                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('perfil')" [ngClass]="{ 'active-btn': currentSection === 'perfil' }">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-                      </svg>
-                      <span class="visually-hidden">Dismiss</span>
-                    </button>
-                    <span class="btn-text text-body-tertiary">Editar</span>
-                  </div>
-                </div>
-              </div>
-              <div class="row row-middle mb-4">
-                <div class="col text-center">
-                  <div class="btn-container">
-                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('account')" [ngClass]="{ 'active-btn': currentSection === 'account' }">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear-wide-connected" viewBox="0 0 16 16">
-                        <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
-                      </svg>
-                      <span class="visually-hidden">Dismiss</span>
-                    </button>
-                    <span class="btn-text text-body-tertiary">Configuración</span>
-                  </div>
-                </div>
-                <div class="col text-center">
-                  <div class="btn-container">
-                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="changeSection('password')" [ngClass]="{ 'active-btn': currentSection === 'password' }">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                      </svg>
-                      <span class="visually-hidden">Dismiss</span>
-                    </button>
-                    <span class="btn-text text-body-tertiary">Password</span>
-                  </div>
-                </div>
-              </div>
-              <div class="row row-bottom">
-                <div class="col text-center">
-                  <div class="btn-container">
-                    <button class="btn btn-custom-color rounded-circle p-3 lh-1" type="button" (click)="onLogout()">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
-                        <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
-                      </svg>
-                      <span class="visually-hidden">Dismiss</span>
-                    </button>
-                    <span class="btn-text text-body-tertiary">Cerrar Sesion</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </div>
+<section class="container-fluid p-0">
+  <div class="profile-header position-relative">
+    <!-- Toast Notification -->
+    <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3" style="z-index: 11;" >
+      <div id="profileUpdateToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px;">
+        <div class="d-flex">
+          <div class="toast-body fs-5 p-3" >
+            ¡Actualizaste tu foto de perfil!
           </div>
-  
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <!-- Segunda columna -->
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 d-flex  py-5 rounded" [ngClass]="{'d-none': isMobile && showMenu}">
-          <div class="d-flex flex-column flex-grow-1">
-            <div class="bg-body rounded flex-grow-1 overflow-auto p-4 ">
-  
-                <button *ngIf="isMobile" class="btn btn-custom rounded-pill mb-3" (click)="goBack()">Volver</button>
-                @if(currentSection === 'perfil' ){
-                <div class="profile-info ">
-                    <h3>Perfil</h3>
-                    <form id="profile-form" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
-                          <label for="username" class="form-label">Correo electrónico</label>
-                          <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentUser.username" disabled>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
-                          <label for="name" class="form-label">Nombre de usuario</label>
-                          <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentUser.name">
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
-                            <label for="lastname" class="form-label">Apellido de usuario</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentUser.lastname">
-                          </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-6 mb-2">
-                          <label for="location" class="form-label">Localidad</label>
-                          <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
-                            <option selected disabled>Seleccionar</option>
-                            <option *ngFor="let country of countries" [value]="country.name.common">
-                              {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
-                            </option>
-                          </select>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 mb-2">
-                          <label for="age" class="form-label">Edad</label>
-                          <input type="number" class="form-control" id="age" name="age" [(ngModel)]="currentUserProfile.age" >
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                          <label for="gender" class="form-label">Genero</label>
-                          <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example" [(ngModel)]="currentUserProfile.gender">
-                            <option selected disabled>Seleccionar</option>
-                            <option [value]="'Femenino'">Femenino</option>
-                            <option [value]="'Masculino'">Masculino</option>
-                          </select>
-                        </div>
-                      </div>
-                      <h3>Prefencias</h3>
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                          <label for="maxAge" class="form-label">Edad Maxima</label>
-                          <input type="te" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="currentUserProfile.maxAge">
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                          <label for="minAge" class="form-label">Edad Minima</label>
-                          <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="currentUserProfile.minAge">
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                          <label for="likeGender" class="form-label">Genero</label>
-                          <select class="form-control form-select-md mb-3" id="likeGender" name="likeGender" aria-label="Large select example"  [(ngModel)]="currentUserProfile.likeGender">
-                            <option selected disabled >Seleccionar</option>
-                            <option [value]="'Femenino'">Femenino</option>
-                            <option [value]="'Masculino'">Masculino</option>
-                          </select>
-                      </div>
-                      </div>
-                      <div class="d-grid gap-3">
-                          <button type="submit" class="btn btn-custom">Actualizar perfil</button>
-                      </div>
-                    </form>
-                    @if(uploadSuccess){
-                      <div class="alert alert-success d-flex align-items-center m-2" role="alert">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                        </svg> 
-                        <div class="ms-2">
-                          Perfil de usuario actualizado con éxito.
-                        </div>
-                      </div>
-                    }
-                </div>
-                }
-                @if(currentSection === 'password' ){
-                  <div>
-                    <!-- Contenido para cambiar contraseña -->
-                    <h3>Cambiar Contraseña</h3>
-                    <form>
-                      <div class="col-6 mb-3">
-                        <label for="nombre" class="form-label">Actual Password</label>
-                        <input type="password" class="form-control" id="password" >
-                      </div>
-                      <div class="row">
-                        <div class="col-6 mb-3">
-                            <label for="apellido" class="form-label">Nuevo Password</label>
-                            <input type="password" class="form-control" id="password" >
-                        </div>
-                        <div class="col-6 mb-3">
-                          <label for="apellido" class="form-label">Confirmar Nuevo Password</label>
-                          <input type="password" class="form-control" id="password" >
-                      </div>
-                        </div>
-                        
-                      <button type="button" class="btn btn-primary" >Actualizar password</button>
-                    </form>
-                </div>
-                }
-                @if(currentSection === 'account' ){
-                  <div>
-                    <!-- Contenido para configuración de cuenta -->
-                    <h3>Configuración de Cuenta</h3>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                      <label class="form-check-label" for="flexCheckDefault">
-                        Cuenta Activa
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                      <label class="form-check-label" for="flexCheckChecked">
-                        Cuenta Desbloqueda
-                      </label>
-                    </div>
-                    <button type="button" class="mt-3 btn btn-primary" >Actualizar setting</button>
-                </div>
-                }
-                @if(currentSection === 'logout' ){
-                  <!-- Contenido para configuración de cuenta -->
-                  <h3>Cerro Sesion</h3>
-                }     
-                
-            </div>
+      </div>
+    </div>
+    <!-- Foto de Perfil -->
+    <div class="profile-picture-wrapper">
+      <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
+      <div class="change-photo-icon">
+        <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+          <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+          <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
+        </svg></label>
+        <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
+      </div>
+      <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
+    </div>
+    <!-- Modal para cambiar la foto -->
+    <div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="changePhotoModalLabel">Cambiar foto de perfil</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          
-          
+          <div class="modal-body text-center">
+            <form (ngSubmit)="updatePhoto()" #photoForm="ngForm" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="photoFile" class="form-label">Seleccionar nueva foto</label>
+                <input type="file" class="form-control" id="photoFile" (change)="onFileSelect($event)" accept="image/*">
+              </div>
+              <div *ngIf="selectedImageURL" class="mb-3">
+                <img [src]="selectedImageURL" alt="Preview" class="img-thumbnail">
+              </div>
+              <button type="submit" class="btn btn-custom" [disabled]="!currentUserProfile.photo" data-bs-dismiss="modal">Actualizar</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
   </div>
+  
+  <div class="profile-content">
+    <div class="profile-info text-center">
+      <h2 class="mb-0 text-capitalize">{{currentUser.name}} {{currentUser.lastname}}</h2>
+      <p class="text-muted">{{emailTest}}</p>
+      <p class="text-muted text-body-tertiary"><i class="bi bi-calendar-event"></i> Joined {{ currentUserProfile.timestamp | date: 'mediumDate' }}</p>
+    </div>
+    
+    <div class="profile-actions mt-5">
+      <div class="row g-4">
+        <div class="col-6">
+          <!-- Button trigger modal -->
+          <button class="btn  btn-custom-v2 btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalProfile" >
+            <i class="bi bi-person"></i>
+            <span>Editar</span>
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn   btn-custom-v2 btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalSetting">
+            <i class="bi bi-gear"></i>
+            <span>Configuración</span>
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-custom-v2  btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalPassword">
+            <i class="bi bi-shield-lock"></i>
+            <span>Password</span>
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn   btn-custom-v2  btn-square w-100" (click)="onLogout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal Setting -->
+<div class="modal fade" id="modalSetting" tabindex="-1" aria-labelledby="modalSettingLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalSettingLabel">Configuracion</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-4">
+          <h6 class="mb-3">Estado de la Cuenta</h6>
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="accountActive" checked>
+            <label class="form-check-label" for="accountActive">Cuenta Activa</label>
+          </div>
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="accountUnlocked" checked>
+            <label class="form-check-label" for="accountUnlocked">Cuenta Desbloqueada</label>
+          </div>
+          <button type="button" class="btn btn-primary rounded-pill">UPDATE STATUS</button>
+        </div>
+        <hr>
+        <div class="mt-4">
+          <h6 class="text-danger mb-3">Eliminar Cuenta</h6>
+          <p class="text-muted">Eliminar tu cuenta y todos los datos relacionados de tu organización. Ten cuidado, esta acción es irreversible.</p>
+          <button type="button" class="btn btn-danger rounded-pill">
+            <i class="bi bi-trash me-2"></i>ELIMINAR CUENTA
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-custom-v1 rounded-pill">Save changes</button>
+  
+      </div>
+    </div>
+  </div>
+</div> 
+<!-- Modal Password -->
+<div class="modal fade" id="modalPassword" tabindex="-1" aria-labelledby="modalPasswordLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalPasswordLabel">Change password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          
+            <!-- Contenido para cambiar contraseña -->
+            <div class="alert alert-info" role="alert">
+              <i class="bi bi-info-circle me-2"></i>
+              Changing your password will end all logged sessions.
+            </div>
+            <form id="changePasswordForm">
+              <div class="mb-3">
+                <label for="newPassword" class="form-label">Current password</label>
+                <input type="password" class="form-control" id="currentPassword" placeholder="Minimum 6 characters" required>
+              </div>
+              <div class="mb-3">
+                <label for="newPassword" class="form-label">New password</label>
+                <input type="password" class="form-control" id="newPassword" placeholder="Minimum 6 characters" required>
+              </div>
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm new password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Minimum 6 characters" required>
+              </div>
+             
+            </form>
+    
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> 
+  
+<!-- Modal Profile -->
+<div class="modal fade" id="modalProfile" tabindex="-1" aria-labelledby="modalProfileLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalProfileLabel">Edit Profile</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+          <h6 class="mb-3">Profile Data</h6>
+          <form id="changeProfileForm" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                <label for="username" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentUser.username" disabled>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                <label for="name" class="form-label">Nombre de usuario</label>
+                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentUser.name">
+              </div>
+              
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                <label for="lastname" class="form-label">Apellido de usuario</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentUser.lastname">
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
+                <label for="location" class="form-label">Localidad</label>
+                <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
+                  <option selected disabled>Seleccionar</option>
+                  <option *ngFor="let country of countries" [value]="country.name.common">
+                    {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
+                <label for="age" class="form-label">Edad</label>
+                <input type="number" class="form-control" id="age" name="age" [(ngModel)]="currentUserProfile.age" >
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 mb-3">
+                <label for="gender" class="form-label">Genero</label>
+                <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example" [(ngModel)]="currentUserProfile.gender">
+                  <option selected disabled>Seleccionar</option>
+                  <option [value]="'Femenino'">Femenino</option>
+                  <option [value]="'Masculino'">Masculino</option>
+                </select>
+              </div>
+            </div>
+            <hr>
+            <h6 class="mb-3">Preference</h6>
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
+                <label for="maxAge" class="form-label">Edad Maxima</label>
+                <input type="te" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="currentUserProfile.maxAge">
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
+                <label for="minAge" class="form-label">Edad Minima</label>
+                <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="currentUserProfile.minAge">
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
+                <label for="likeGender" class="form-label">Genero</label>
+                <select class="form-control form-select-md mb-3" id="likeGender" name="likeGender" aria-label="Large select example"  [(ngModel)]="currentUserProfile.likeGender">
+                  <option selected disabled >Seleccionar</option>
+                  <option [value]="'Femenino'">Femenino</option>
+                  <option [value]="'Masculino'">Masculino</option>
+                </select>
+              </div>
+            </div>
+            <!--<div class="d-grid gap-3">
+                <button type="submit" class="btn btn-custom">Actualizar perfil</button>
+            </div>-->
+          </form>
+          @if(uploadSuccess){
+            <div class="alert alert-success d-flex align-items-center m-2" role="alert">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+              </svg> 
+              <div class="ms-2">
+                Perfil de usuario actualizado con éxito.
+              </div>
+            </div>
+          }
+      </div>
+   
+      <div class="modal-footer">
+        <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changeProfileForm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>  
+</section>
+   
+
+
+
+

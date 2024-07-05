@@ -1,5 +1,6 @@
 package com.nl.lovely.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.CascadeType;
@@ -17,6 +18,8 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,6 +47,8 @@ public class UserProfile {
     private String likeGender;
     private Integer maxAge;
     private Integer minAge;
+ 	@Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime timestamp;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -45,9 +45,9 @@ p,  li, span {
 
   }
 .btn-custom{
-    background: linear-gradient(50deg,#fff8f4, #fff5f2); /* Degradado de colores rosas y morados */
+    background: linear-gradient(50deg,#d3d3d300, #e4e4e400); /* Degradado de colores rosas y morados */
     /*color: rgb(119, 90, 63);  Color del texto */
-    border: none; /* Sin bordes */
+    border: solid 1px #cccccc; /* Sin bordes */
     border-radius: 25px; /* Bordes redondeados */
     padding: 10px 20px; /* Espaciado interno */
     font-size: 16px; /* Tamaño de la fuente */
@@ -56,12 +56,12 @@ p,  li, span {
 }
   
 .btn-custom:hover {
-    background: linear-gradient(50deg,#ffe5d1, #ffebe4); /* Degradado de colores rosas y morados */
+    background: linear-gradient(50deg,#e7e7e7, #e7e7e7); /* Degradado de colores rosas y morados */
     
 }
 
 .bg-custom{
-  background: linear-gradient(50deg,#fffbf9, #fffbf9); /* Degradado de colores rosas y morados */
+  background: linear-gradient(50deg, #8fccff, #ff8fda); /* Degradado de colores rosas y morados */
 }
 
   

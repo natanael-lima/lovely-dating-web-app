@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
 @font-face {
     font-family: 'OpenSans';
     src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
@@ -5,7 +6,7 @@
     font-style: normal;
   }
 
-  @font-face {
+@font-face {
     font-family: 'Roboto';
     src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
     font-weight: normal;
@@ -42,7 +43,68 @@ p, a, li, span {
 .bg-custom {
     background-color: #d5dbd9;
 }
+
 /*BUTTONS PROFILE*/
+.btn-custom-v1{
+    background: linear-gradient(to bottom right, #9eb8ce, #aaaed1 ,  #c3afd6, #d8b2cb);
+    color: #ffffff;
+    border-radius: 25px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+    box-shadow: 0 0.2rem 0.35rem rgba(0, 0, 0, 0.2); /* Sombras sutiles */
+}
+.btn-custom-v1:hover{
+    color: #efedf3; /* Color del texto */
+    background: linear-gradient(to bottom right, #475561, #5b5e79 ,  #61546d, #6b5464); 
+}
+
+.btn-custom-v2{
+    background:#f1f1f1;
+    color: #979797; /* Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 25px; /* Bordes redondeados */
+    font-size: 18px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+    box-shadow: 0 0.2rem 0.35rem rgba(0, 0, 0, 0.1); /* Sombras sutiles */
+}
+.btn-custom-v2:hover{
+    background:#222222; /* Degradado de colores rosas y morados */
+    color: white;
+    border: 0px;
+}
+.active-btn {
+    background:#807171; /* Degradado de colores rosas y morados */
+    color: #f5f5f5; /* Color del texto */
+}
+.btn-outline-primary {
+    color: #FFA500;
+    border-color: #FFA500;
+  }
+  
+.btn-outline-primary:hover {
+    color: white;
+    background-color: #FFA500;
+  }
+  
+.btn-square {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+  
+.btn-square i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+.btn-square span {
+    font-size: 0.8rem;
+  }
+/*Buton circulares*/
 .btn-container {
     display: flex;
     flex-direction: column;
@@ -65,24 +127,34 @@ p, a, li, span {
 .row-middle {
     justify-content: center;
 }
-
+/*Buton circulares fin*/
 /*IMAGE PROFILE*/
-.profile-picture-container {
+.profile-header {
+    background: linear-gradient(to bottom right, #8fccff, #ff8fda);
+    height: 150px;
     position: relative;
-    display: inline-block;
+    border-radius: 20px 20px 0 0px;
+}
 
+.profile-picture-wrapper {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .profile-picture {
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    border: 3px solid rgb(255, 255, 255);
     object-fit: cover;
 }
+
 .change-photo-icon {
     position: absolute;
     bottom: 5px;
     right: 5px;
-    background: linear-gradient(to bottom right,#f74b4b ,#c54444  );
+    background: linear-gradient(to bottom right, #717fcf, #9d6cbd);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -98,57 +170,56 @@ p, a, li, span {
     height: 24px;
     color: white;
 }
+
 .change-photo-icon:hover {
-    background: linear-gradient(to bottom right, #d14141 ,#a53636 );
-    color:#f5f5f5;
+    background: linear-gradient(to bottom right, #6572b9, #734b8d);
+    color: #f5f5f5;
 }
-.label-icon{
+
+.label-icon {
     cursor: pointer;
 }
-
-.btn-custom-color{
-    color: #afafaf; /* Color del texto */
-    background-color: #f5f5f5;
-    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
-    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
-    box-shadow: 0 0.25rem 0.55rem rgba(0, 0, 0, 0.150); /* Sombras sutiles */
-}
-.btn-custom-color:hover{
-    background:#f74b4b; /* Degradado de colores rosas y morados */
-    color: white;  
+.profile-content {
+    padding-top: 60px;
+    background-color: #ffffff;
+    border-radius: 0 0 20px 20px;
+    min-height: calc(90vh - 150px);
 }
 
-.active-btn {
-    background:#a8a5a5; /* Degradado de colores rosas y morados */
-    color: #f5f5f5; /* Color del texto */
-  }
+.profile-info {
+    margin-bottom: 20px;
+}
 
-.btn-custom{
-    background:#f74b4b;
-    color: white; /* Color del texto */
-    border: none; /* Sin bordes */
-    border-radius: 25px; /* Bordes redondeados */
-    padding: 6px 6px; /* Espaciado interno */
-    font-size: 18px; /* Tamaño de la fuente */
-    cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
-    transition: background 0.3s ease-in-out; /* Transición suave para el fondo */
+.profile-actions {
+    max-width: 250px;
+    margin: 0 auto;
 }
-.btn-custom:hover{
-    background:#c54444; /* Degradado de colores rosas y morados */
-    color: white;
-    border: 0px;
+
+
+@media (min-width: 768px) {
+    .profile-header {
+        height: 200px;
+    }
+
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+    }
+
+    .profile-content {
+        padding-top: 100px;
+    }
 }
+
 
 /* Ajustes para mostrar las imágenes correctamente */
 option img {
     display: inline-block;
     vertical-align: middle;
-  }
-  
+}
+
 option {
     display: flex;
     align-items: center;
-  }
-  
+}
 
-  
