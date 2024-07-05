@@ -9,4 +9,5 @@ export interface ProfileRequest {
     likeGender: string;
     maxAge: number;
     minAge: number;
+    timestamp: Date;
 }

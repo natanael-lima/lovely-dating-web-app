@@ -61,6 +61,10 @@
                     </select>
                 </div>
                 <div class="col-12 col-md-4 col-sm-12 mb-2">
+                  <label for="age">Edad</label>
+                  <input type="number" class="form-control" id="age" name="age" [(ngModel)]="user.profile.age" [ngModelOptions]="{standalone: true}" required>
+                </div>
+                <div class="col-12 col-md-4 col-sm-12 mb-2">
                   <label for="day">Día</label>
                   <input type="number" class="form-control" id="day" name="day" required min="1" max="31">
                 </div>

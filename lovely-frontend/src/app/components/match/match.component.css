@@ -1,3 +1,67 @@
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Estilos generales */
+body {
+  font-family: 'OpenSans', sans-serif;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+/* Botones y etiquetas */
+button, label {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Otros elementos */
+p, a, li, span {
+  font-family: 'OpenSans', sans-serif;
+}
+
+/*contenedor*/
+/*
+.chat-header {
+  background: linear-gradient(to bottom right, #f8cfa6, #ff9f9f);
+  height: 150px;
+  position: relative;
+  border-radius: 20px 20px 0 0px;
+}
+.chat-content {
+  padding-top: 60px;
+  background-color: #d8d8d8;
+  border-radius: 0 0 20px 20px;
+  min-height: calc(90vh - 150px);
+}*/
+.column-size{
+  min-height: calc(105vh - 150px);
+}
+@media (min-width: 768px) {
+  /*.chat-header {
+      height: 200px;
+  }
+  .chat-content {
+      padding-top: 100px;
+  }*/
+  .column-size{
+    min-height: calc(110vh - 150px);
+  }
+
+}
+ 
  /* Personaliza los estilos según sea necesario */
  .bg-custom{
   background: linear-gradient(to bottom right, #fcf5f7, #f7f4f2,#f7f2f8);

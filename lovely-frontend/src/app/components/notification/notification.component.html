@@ -1,0 +1,53 @@
+<section class="container-fluid p-0">
+    <!-- HEADER -->
+    <div class="profile-header">
+      <div class="container">
+        <h1 class="text-center mb-0 py-4">
+            Notificaciones
+        </h1>
+        <p class="text-center  mb-0 pb-3">    
+            Gestiona tus notificaciones
+        </p>
+      </div>
+    </div>
+    <!-- CONTENT -->
+    <div class="profile-content">
+        <div class="container">
+            <div class=" mt-0">
+                <div class="row justify-content-center">
+                  <div class="col-md-8">
+                    
+                    <div class="notification-list border rounded">
+                        @for (notification of notifications; track notification.id) {
+                          <a href="#" 
+                             class="notification" 
+                             [class.unread]="notification.isUnread"
+                             (click)="markAsRead(notification); $event.preventDefault()">
+                            <div class="notification-avatar">
+                              <img [src]="notification.avatar" alt="Avatar" class="rounded-circle">
+                            </div>
+                            <div class="notification-content">
+                              <span *ngIf="notification.content === 'Tienes un nuevo match con'">
+                                <p>{{ notification.content }}<strong> {{ notification.name }}</strong></p>
+                                <small class="text-muted">{{ notification.time }}</small>
+                              </span>
+                              <span *ngIf="notification.content !== 'Tienes un nuevo match con'">
+                                <p><strong>{{ notification.name }}</strong> {{ notification.content }}</p>
+                                <small class="text-muted">{{ notification.time }}</small>
+                              </span>
+                              
+                            </div>
+                            @if (notification.isUnread) {
+                              <span class="badge rounded-pill bg-primary new-badge">Nuevo</span>
+                            }
+                          </a>
+                        }
+                      </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+
+ </section>
+

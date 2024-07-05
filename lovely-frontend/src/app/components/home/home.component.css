@@ -1,6 +1,38 @@
-.main-content{
-  background-color: red;
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Estilos generales */
+body {
+  font-family: 'OpenSans', sans-serif;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+/* Botones y etiquetas */
+button, label {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Otros elementos */
+p, a, li, span {
+  font-family: 'OpenSans', sans-serif;
+}
+
+
 .buttons-container {
     position: relative;
     margin: 5px;
@@ -145,4 +177,52 @@
 
 .swipe-btn {
   z-index: 10;
+}
+
+/*--------------------*/
+.profile-header {
+  background: linear-gradient(to bottom right, #8fccff, #ff8fda);
+  height: 150px;
+  position: relative;
+  border-radius: 20px 20px 0 0px;
+}
+
+.profile-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color:#f6fbfd ;
+}
+
+.profile-header p {
+  font-size: 1.2rem;
+  color:#f7eaff ;
+}
+
+@media (max-width: 768px) {
+  .profile-header h1 {
+    font-size: 1.7rem;
+  }
+  
+  .profile-header p {
+    font-size: 1rem;
+    
+  }
+}
+.profile-content {
+  padding-top: 40px;
+  background-color: #ffffff;
+  border-radius: 0 0 20px 20px;
+  min-height: calc(90vh - 150px);
+}
+
+
+@media (min-width: 768px) {
+  .profile-header {
+      height: 200px;
+  }
+
+
+  .profile-content {
+      padding-top: 60px;
+  }
 }

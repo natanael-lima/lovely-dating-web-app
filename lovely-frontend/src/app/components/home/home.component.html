@@ -1,6 +1,93 @@
-<div class="container-fluid">
+<section class="container-fluid p-0">
+  <!-- HEADER -->
+  <div class="profile-header">
+    <div class="container">
+      <h1 class="text-center mb-0 py-4">
+        Encuentra tu conexión especial
+      </h1>
+      <p class="text-center  mb-0 pb-3">
+        Descubre el amor a un clic de distancia
+      </p>
+    </div>
+  </div>
+  <!-- CONTENT -->
+  <div class="profile-content">
+    <div class="container-fluid">
+      <div class="card text-center mx-auto position-relative" style="max-width: 380px;">
+        <!-- Card 1 -->
+        <div *ngIf="filterProfilesWithImages.length > 0" [ngClass]="{'hidden-card': currentCard !== 1}" id="card1" class="profile-card">
+          <div style="position: relative;">
+            @if(!filterProfilesWithImages[currentProfileIndex].photoFileName){
+              <img src="https://i.postimg.cc/7hsdHJL7/nofound2.png" class="card-img-top" alt="Imagen del perfil">
+            }@else{
+              <img [src]="filterProfilesWithImages[currentProfileIndex].imageUrl" [alt]="filterProfilesWithImages[currentProfileIndex].photoFileName" class="card-img-top">
+            }
+            <!-- Contenido -->
+            <div class="card-body body-content-card">
+              <h5 class="text-capitalize">{{ filterProfilesWithImages[currentProfileIndex].name }} {{ filterProfilesWithImages[currentProfileIndex].lastname }}</h5>
+              <p class="card-text">{{ filterProfilesWithImages[currentProfileIndex].age }} años</p>
+              <p class="card-text"><small>{{ filterProfilesWithImages[currentProfileIndex].location }}</small></p>
+            </div>
+          </div>
+          <!-- Botones de iconos-->
+          <div class="d-grid gap-2 d-flex justify-content-center m-4">
+            <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+              <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+              <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+            </svg></button>
+            <button class="btn like-btn rounded-pill" type="button" (click)="like()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+            </svg></button>
+            <button class="btn reject-btn rounded-pill" type="button" (click)="dislike()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+            </svg></button>
+          </div>
+        </div>
+        <!-- Card 2 -->
+            <div *ngIf="filterProfilesWithImages.length > 1" [ngClass]="{'hidden-card': currentCard !== 2}" id="card2" class="profile-card">
+              <div style="position: relative;">
+                <img [src]="filterProfilesWithImages[nextProfileIndex()].imageUrl" [alt]="filterProfilesWithImages[nextProfileIndex()].photoFileName" class="card-img-top">
+                <!-- Contenido -->
+                <div class="card-body body-content-card">
+                  <h5 class="text-capitalize">{{ filterProfilesWithImages[nextProfileIndex()].name }} {{ filterProfilesWithImages[nextProfileIndex()].lastname }}</h5>
+                  <p class="card-text">{{ filterProfilesWithImages[nextProfileIndex()].age }} años</p>
+                  <p class="card-text"><small>{{ filterProfilesWithImages[nextProfileIndex()].location }}</small></p>
+                </div>
+              </div>
+              
+              <!-- Botones de iconos-->
+              <div class="d-grid gap-2 d-flex justify-content-center m-4">
+                <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                  <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                </svg></button>
+                <button class="btn like-btn rounded-pill" type="button" (click)="like()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                </svg></button>
+                <button class="btn reject-btn rounded-pill" type="button" (click)="dislike()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                </svg></button>
+              </div>
+            </div>
+
+            <!-- Tarjeta de notificación de match -->
+            @if(showMatchNotification){ 
+              <div class="card text-center mx-auto my-5 match-card" style="max-width: 300px;">
+                <div class="img-container">
+                  <img src="../assets/match.png" alt="">
+                  <button class="btn  btn-custom-match accept-btn " (click)="closeMatchNotification()">Aceptar</button>
+                </div>
+              </div>
+            }
+        </div>
+    </div>
+   
+  </div>
+</section>
+
+<!--<div class="container-fluid">
   <div class="card text-center mx-auto my-5 position-relative" style="max-width: 380px;">
-    <!-- Card 1 -->
+    
     <div *ngIf="filterProfilesWithImages.length > 0" [ngClass]="{'hidden-card': currentCard !== 1}" id="card1" class="profile-card">
       <div style="position: relative;">
         @if(!filterProfilesWithImages[currentProfileIndex].photoFileName){
@@ -8,14 +95,14 @@
         }@else{
           <img [src]="filterProfilesWithImages[currentProfileIndex].imageUrl" [alt]="filterProfilesWithImages[currentProfileIndex].photoFileName" class="card-img-top">
         }
-        <!-- Contenido -->
+  
         <div class="card-body body-content-card">
           <h5 class="text-capitalize">{{ filterProfilesWithImages[currentProfileIndex].name }} {{ filterProfilesWithImages[currentProfileIndex].lastname }}</h5>
           <p class="card-text">{{ filterProfilesWithImages[currentProfileIndex].age }} años</p>
           <p class="card-text"><small>{{ filterProfilesWithImages[currentProfileIndex].location }}</small></p>
         </div>
       </div>
-      <!-- Botones de iconos-->
+     
       <div class="d-grid gap-2 d-flex justify-content-center m-4">
         <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
           <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
@@ -29,11 +116,11 @@
         </svg></button>
       </div>
     </div>
-    <!-- Card 2 -->
+ 
         <div *ngIf="filterProfilesWithImages.length > 1" [ngClass]="{'hidden-card': currentCard !== 2}" id="card2" class="profile-card">
           <div style="position: relative;">
             <img [src]="filterProfilesWithImages[nextProfileIndex()].imageUrl" [alt]="filterProfilesWithImages[nextProfileIndex()].photoFileName" class="card-img-top">
-            <!-- Contenido -->
+         
             <div class="card-body body-content-card">
               <h5 class="text-capitalize">{{ filterProfilesWithImages[nextProfileIndex()].name }} {{ filterProfilesWithImages[nextProfileIndex()].lastname }}</h5>
               <p class="card-text">{{ filterProfilesWithImages[nextProfileIndex()].age }} años</p>
@@ -41,7 +128,7 @@
             </div>
           </div>
           
-          <!-- Botones de iconos-->
+      
           <div class="d-grid gap-2 d-flex justify-content-center m-4">
             <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
               <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
@@ -57,7 +144,7 @@
         </div>
         
    
-        <!-- Tarjeta de notificación de match -->
+    
         @if(showMatchNotification){ 
           <div class="card text-center mx-auto my-5 match-card" style="max-width: 300px;">
             <div class="img-container">
@@ -67,5 +154,5 @@
           </div>
         }
     </div>
-</div>
+</div> -->
 

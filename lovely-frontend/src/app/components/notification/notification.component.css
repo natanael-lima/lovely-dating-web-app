@@ -1,0 +1,98 @@
+
+  .notification-list {
+    max-height: 630px;
+    overflow-y: auto;
+  }
+
+  .notification {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .notification:hover {
+    background-color: #d1e8ff;
+    text-decoration: none;
+  }
+
+  .notification.unread {
+    background-color: #e8f0fe;
+  }
+
+  .notification-avatar {
+    margin-right: 15px;
+  }
+
+  .notification-avatar img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .notification-content {
+    flex-grow: 1;
+  }
+
+  .notification-content p {
+    margin-bottom: 0;
+  }
+
+  .badge {
+    margin-left: 10px;
+    
+  }
+  .bg-primary {
+    background: linear-gradient(to bottom right, #57649c, #965496) !important;
+    color: #e6e6e6;
+  }
+
+  .profile-header {
+    background: linear-gradient(to bottom right, #8fccff, #ff8fda);
+    height: 150px;
+    position: relative;
+    border-radius: 20px 20px 0 0px;
+  }
+  
+  .profile-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color:#f6fbfd ;
+  }
+  
+  .profile-header p {
+    font-size: 1.2rem;
+    color:#f7eaff ;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-header h1 {
+      font-size: 1.7rem;
+    }
+    
+    .profile-header p {
+      font-size: 1rem;
+      
+    }
+  }
+  .profile-content {
+    padding-top: 40px;
+    background-color: #ffffff;
+    border-radius: 0 0 20px 20px;
+    min-height: calc(90vh - 150px);
+  }
+  
+  
+  @media (min-width: 768px) {
+    .profile-header {
+        height: 200px;
+    }
+  
+  
+    .profile-content {
+        padding-top: 60px;
+    }
+  }

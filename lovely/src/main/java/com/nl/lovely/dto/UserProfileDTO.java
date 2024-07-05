@@ -1,5 +1,9 @@
 package com.nl.lovely.dto;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +24,5 @@ public class UserProfileDTO {
     String likeGender;
     Integer maxAge;
     Integer minAge;
+    LocalDateTime timestamp;
 }

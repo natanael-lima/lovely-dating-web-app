@@ -12,10 +12,11 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { LoginComponent } from './components/login/login.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { NotificationComponent } from './components/notification/notification.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ CommonModule,RouterOutlet, HeaderComponent, FooterComponent, ChatComponent, PerfilComponent, HomeComponent,HttpClientModule,FormsModule, UserFormComponent,LoginComponent,WelcomeComponent],
+  imports: [ CommonModule,RouterOutlet, HeaderComponent, FooterComponent, ChatComponent, PerfilComponent, HomeComponent,HttpClientModule,FormsModule, UserFormComponent,LoginComponent,WelcomeComponent,NotificationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

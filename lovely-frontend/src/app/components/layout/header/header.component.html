@@ -1,15 +1,20 @@
 @if(isLoggedIn){ 
   <nav class="menu-container d-flex flex-row flex-md-column justify-content-around fixed-bottom fixed-md-top ">
-    <div id="menu-item-1" class="menu-item rounded-3">
+    <div id="menu-item-1" class="menu-item rounded-3 d-none d-md-block p-0">
       <a href="/search" class="d-flex flex-column align-items-center">
+        <img src="../../../../assets/lovely-full-dark.png" alt="" width="137" height="35">
+      </a>
+    </div>
+    <div id="menu-item-1" class="menu-item rounded-3 " routerLinkActive="active-btn">
+      <a routerLink="/search"  class="d-flex flex-column align-items-center"  >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16">
           <path d="M6.5 13a6.47 6.47 0 0 0 3.845-1.258h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1A6.47 6.47 0 0 0 13 6.5 6.5 6.5 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13m0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018"/>
         </svg>
-        <span class="d-none d-md-block">Buscar</span>
+        <span class="d-none d-md-block">Explorar</span>
       </a>
     </div>
-    <div id="menu-item-2" class="menu-item rounded-3">
-      <a href="/match/99999/9999" class="d-flex flex-column align-items-center position-relative">
+    <div id="menu-item-2" class="menu-item rounded-3" routerLinkActive="active-btn" >
+      <a routerLink="/match/99999/9999"  class="d-flex flex-column align-items-center position-relative" >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
           <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
         </svg>
@@ -19,22 +24,25 @@
         <span class="d-none d-md-block">Chat</span>
       </a>
     </div>
-    <div id="menu-item-3" class="menu-item rounded-3">
-      <a href="/perfil" class="d-flex flex-column align-items-center">
+    <div id="menu-item-3" class="menu-item rounded-3" routerLinkActive="active-btn">
+      <a routerLink="/perfil"  class="d-flex flex-column align-items-center" >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
           <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
         </svg>
         <span class="d-none d-md-block">Perfil</span>
       </a>
       
-        <div class="d-none d-md-block"></div>
+      <div class="d-none d-md-block"></div>
     </div>
-      <div id="menu-item-4" class="menu-item rounded-3">
-        <a href="#" class="d-flex flex-column align-items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
-            <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+      <div id="menu-item-4" class="menu-item rounded-3" routerLinkActive="active-btn" >
+        <a routerLink="/notification"  class="d-flex flex-column align-items-center position-relative"  >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
           </svg>
-          <span class="d-none d-md-block">Salir</span>
+          <span class="position-absolute top-0 start-10 translate-middle p-1 bg-danger border border-light rounded-circle">
+            <span class="visually-hidden">New alerts</span>
+          </span>
+          <span class="d-none d-md-block">Notificationes</span>
         </a>
       </div>
    

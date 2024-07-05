@@ -151,6 +151,7 @@ public class UserProfileServiceImp implements UserProfileService {
             .likeGender(userP.getLikeGender())
             .maxAge(userP.getMaxAge())
             .minAge(userP.getMinAge())
+            .timestamp(userP.getTimestamp())
             .build();
             return userProfileDTO;
         }
@@ -228,6 +229,7 @@ public class UserProfileServiceImp implements UserProfileService {
 	            .likeGender(userP.getLikeGender())
 	            .maxAge(userP.getMaxAge())
 	            .minAge(userP.getMinAge())
+	            .timestamp(userP.getTimestamp())
 	            .build();
 	}
 	
@@ -247,6 +249,7 @@ public class UserProfileServiceImp implements UserProfileService {
 	    userProfile.setLikeGender(userProfileDTO.getLikeGender());
 	    userProfile.setMaxAge(userProfileDTO.getMaxAge());
 	    userProfile.setMinAge(userProfileDTO.getMinAge());
+	    userProfile.setTimestamp(userProfileDTO.getTimestamp());
 	    
 	    return userProfile;
 	}

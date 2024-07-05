@@ -21,6 +21,7 @@ declare var window: any;
   styleUrl: './perfil.component.css'
 })
 export class PerfilComponent implements OnInit {
+  emailTest: string = 'mandy@com';
   isMobile: boolean = false;
   showMenu: boolean = true;
   countries : any [] = [];
@@ -39,7 +40,8 @@ export class PerfilComponent implements OnInit {
     age: 0,
     likeGender: '',
     maxAge: 0,
-    minAge: 0
+    minAge: 0,
+    timestamp:new Date()
   };
   currentUser: UserRequest ={
     id:0,
@@ -63,7 +65,7 @@ export class PerfilComponent implements OnInit {
     this.isMobile = window.innerWidth < 768;
     this.showMenu = true;
   }
-// Función para cambiar la sección actual
+  // Función para cambiar la sección actual
   changeSection(section: string) {
     this.currentSection = section;
     if (this.isMobile) {
@@ -142,7 +144,7 @@ const toastElement = document.getElementById('profileUpdateToast');
 if (toastElement) {
   const toast = new window.bootstrap.Toast(toastElement, {
     autohide: true,
-    delay: 3000
+    delay: 5000
   });
   toast.show();
 }

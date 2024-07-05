@@ -1,6 +1,7 @@
 package com.nl.lovely.service.imp;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -67,6 +68,7 @@ public class AuthServiceImp implements AuthService {
 	            .likeGender(req.getLikeGender())
 	            .maxAge(req.getMaxAge())
 	            .minAge(req.getMinAge())
+	            .timestamp(LocalDateTime.now())
 	            .build();
 
 	    // Guardar el perfil de usuario en la base de datos

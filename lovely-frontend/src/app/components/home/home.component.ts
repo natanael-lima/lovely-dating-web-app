@@ -41,7 +41,8 @@ export class HomeComponent implements OnInit {
     age: 0,
     likeGender: '',
     maxAge: 0,
-    minAge: 0
+    minAge: 0,
+    timestamp:new Date()
   };
   randomUser: UserRequest ={
     id:0,
