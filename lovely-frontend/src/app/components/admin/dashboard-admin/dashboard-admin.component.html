@@ -1,0 +1,756 @@
+<main class="main-content">
+     
+
+    <div class="container-fluid">
+        
+        <div class="row">
+         <!-- Sidebar -->
+         <nav id="sidebar" class="col-lg-2 d-lg-block sidebar collapse">
+            <div class="position-sticky">
+                <div class="sidebar-heading text-center py-4">
+                    <img src="../../assets/lovely-fullwhite.png" alt="Logo" class="img-fluid" width="144">
+                </div>
+                <div class="close-btn" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                    &times;
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="#analytics" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('analytics')" [ngClass]="{'active-btn' : currentSection === 'analytics'}"><i class="bi bi-bar-chart-fill"></i>Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#users" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('users')" [ngClass]="{'active-btn' : currentSection === 'users'}"><i class="bi bi-people-fill"></i>Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('settings')" [ngClass]="{'active-btn' : currentSection === 'settings'}"><i class="bi bi-gear-fill"></i>Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#messages" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('messages')" [ngClass]="{'active-btn' : currentSection === 'messages'}"><i class="bi bi-envelope-fill"></i>Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#media" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('media')" [ngClass]="{'active-btn' : currentSection === 'media'}"><i class="bi bi-camera-video-fill"></i>Media</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#support" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('support')" [ngClass]="{'active-btn' : currentSection === 'support'}"><i class="bi bi-question-circle-fill"></i>Support</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#moderation" class="nav-link" data-bs-toggle="collapse" (click)="changeSection('moderation')" [ngClass]="{'active-btn' : currentSection === 'moderation'}"><i class="bi bi-eye-slash-fill"></i>Moderation</a>
+                    </li>
+               
+                    
+                </ul>
+                <div class="logout">
+                    <hr>
+                    <div class="dropdown " >
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                          <strong class="text-white">natitopro</strong>
+                        </a>
+                        <ul class="dropdown-menu  text-small shadow">
+                          <li><a class="dropdown-item "  data-bs-toggle="modal" data-bs-target="#profileModal">Profile</a></li>
+                          <li><a class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#settingModal">Settings</a></li>
+                          <li><a class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#projectModal">Security</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="/admin">Sign out</a></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </nav>
+        <!-- Botón de hamburguesa -->
+        <nav class="navbar navbar-dark  d-block d-lg-none" >
+            <button style=" background-color: #141414;" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+            <!-- Contenido principal -->
+            <main class="container-main col-md-12 ml-sm-auto col-lg-12 px-md-4 vh-50">
+                <!-- Modal 1: Configuración de Cuenta -->
+                <div class="modal fade" id="settingModal" tabindex="-1" aria-labelledby="settingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title  fs-5" id="settingModalLabel">Setting Modal</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group mb-2">
+                                        <label for="adminLanguage">Idioma de la Interfaz</label>
+                                        <select class="form-control" id="adminLanguage">
+                                            <option>Español</option>
+                                            <option>English</option>
+                                            <option>Français</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="adminTimezone">Zona Horaria</label>
+                                        <select class="form-control" id="adminTimezone">
+                                            <option>GMT-5 (Eastern Time)</option>
+                                            <option>GMT-6 (Central Time)</option>
+                                            <option>GMT-7 (Mountain Time)</option>
+                                            <option>GMT-8 (Pacific Time)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="adminNotifications">Notificaciones</label>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="emailNotif">
+                                            <label class="form-check-label" for="emailNotif">Recibir notificaciones por correo</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="smsNotif">
+                                            <label class="form-check-label" for="smsNotif">Recibir notificaciones por SMS</label>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                   
+                                    <div class="form-group mb-2">
+                                        <p class="text-danger">¡Atención! Si elimina su cuenta, todos sus datos serán eliminados permanentemente.</p>
+                                        <button class="btn btn-danger rounded-pill" type="button">ELIMINAR CUENTA</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Modal 2: Edición de Perfil -->
+                <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="profileModalLabel">Profile Modal</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group mb-2">
+                                        <label for="adminName">Nombre Completo</label>
+                                        <input type="text" class="form-control" id="adminName" placeholder="Ingrese su nombre completo">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="adminEmail">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="adminEmail" placeholder="Ingrese su correo electrónico">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="adminPhone">Número de Teléfono</label>
+                                        <input type="tel" class="form-control" id="adminPhone" placeholder="Ingrese su número de teléfono">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <div class="mb-3">
+                                            <label for="formFile" class="form-label">Foto de Perfil</label>
+                                            <input class="form-control" type="file" id="formFile">
+                                          </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Modal 3: Gestión de Seguridad -->
+                <div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="projectModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="projectModalLabel">Security Modal</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group mb-2">
+                                        <label for="currentPassword">Contraseña Actual</label>
+                                        <input type="password" class="form-control" id="currentPassword" placeholder="Ingrese su contraseña actual">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="newPassword">Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="newPassword" placeholder="Ingrese su nueva contraseña">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirme su nueva contraseña">
+                                    </div>
+                                    <hr>
+                                    <div class="form-group mb-2">
+                                        <label for="sessionManagement">Gestión de Sesiones</label>
+                                        <div class="">
+                                            <button class="btn btn-dark rounded-pill me-2" type="button"><i class="bi bi-arrow-repeat"></i></button>
+                                            <label class="form-check-label" for="twoFactor">Cerrar Todas las Sesiones Activas</label>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido dinámico según la sección seleccionada -->
+                <!-- <div class="panel-container panel-heading">
+                    <h2 class="panel-title">Panel de Control</h2>
+                </div>-->
+                @if(currentSection === 'users'){
+                    <div id="users" class="panel-container active">
+                    
+                        <h2>Gestión de Usuarios</h2>
+                        <p>Aquí puedes ver y gestionar los usuarios.</p>
+
+                        <div class="container-fluid border rounded-4 p-4">
+                            <div class="row mb-4">
+                                <div class="col-3">
+                                    <form class="d-flex" role="search">
+                                        <input class="form-control me-2" type="search" placeholder="Ingrese ID o correo electrónico" aria-label="Search">
+                                        <button class="btn btn-primary" type="submit">Buscar</button>
+                                    </form>
+                                </div>
+                                <div class="col-2">
+
+                                </div>
+                                <div class="col-7">
+                                    <form>
+                                        <div class="row align-items-center">
+                                            <div class="col-5">
+                                                <div class="form-group">
+                                                    <select class="form-select" id="reportType">
+                                                        <option selected disabled>Estado del Usuario</option>
+                                                        <option>Activo</option>
+                                                        <option>Suspendido</option>
+                                                        <option>Bloqueado</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-5">
+                                                <div class="form-group">
+                                                    <select class="form-select" id="userType">
+                                                        <option selected disabled>Tipo de Usuario</option>
+                                                        <option>Estándar</option>
+                                                        <option>Premium</option>
+                                                        <option>Moderador</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary">Generar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                            </div>
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col-12 table-responsive ">
+                                    <table class="table table-hover caption-top text-center align-middle">
+                                        <caption>List of users</caption>
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Action</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <th scope="row">1</th>
+                                            <td><img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar"></td>
+                                            <td>Usuario 1</td>
+                                            <td>usuario1example.com</td>
+                                            <td><p class="text-success fw-bold">Active</p></td>
+                                            <td><div class="user-actions">
+                                                    <button class="btn btn-sm btn-primary">Ver Historial</button>
+                                                    <button class="btn btn-sm btn-secondary">Suspender Cuenta</button>
+                                                    <button class="btn btn-sm btn-danger">Eliminar Cuenta</button>
+                                                </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">2</th>
+                                            <td><img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar"></td>
+                                            <td>Usuario 2</td>
+                                            <td>usuario1example.com</td>
+                                            <td><p class="text-success fw-bold">Active</p></td>
+                                            <td><div class="user-actions">
+                                                <button class="btn btn-sm btn-primary">Ver Historial</button>
+                                                <button class="btn btn-sm btn-secondary">Suspender Cuenta</button>
+                                                <button class="btn btn-sm btn-danger">Eliminar Cuenta</button>
+                                                </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">3</th>
+                                            <td><img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar"></td>
+                                            <td>Usuario 3</td>
+                                            <td>usuario1example.com</td>
+                                            <td><p class="text-success fw-bold">Active</p></td>
+                                            <td><div class="user-actions">
+                                                <button class="btn btn-sm btn-primary">Ver Historial</button>
+                                                <button class="btn btn-sm btn-secondary">Suspender Cuenta</button>
+                                                <button class="btn btn-sm btn-danger">Eliminar Cuenta</button>
+                                                </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">4</th>
+                                            <td><img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar"></td>
+                                            <td>Usuario 1</td>
+                                            <td>usuario1example.com</td>
+                                            <td><p class="text-success fw-bold">Active</p></td>
+                                            <td><div class="user-actions">
+                                                <button class="btn btn-sm btn-primary">Ver Historial</button>
+                                                <button class="btn btn-sm btn-secondary">Suspender Cuenta</button>
+                                                <button class="btn btn-sm btn-danger">Eliminar Cuenta</button>
+                                                </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">5</th>
+                                            <td><img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar"></td>
+                                            <td>Usuario 1</td>
+                                            <td>usuario1example.com</td>
+                                            <td><p class="text-success fw-bold">Active</p></td>
+                                            <td><div class="user-actions">
+                                                <button class="btn btn-sm btn-primary">Ver Historial</button>
+                                                <button class="btn btn-sm btn-secondary">Suspender Cuenta</button>
+                                                <button class="btn btn-sm btn-danger">Eliminar Cuenta</button>
+                                                </div>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="user-list">
+                            <!-- Usuario 1 
+                            <div class="user-list-item">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar">
+                                    <div class="user-details">
+                                        <strong>Usuario 1</strong><br>
+                                        Email: usuario1example.com<br>
+                                        Rol: Usuario
+                                    </div>
+                                    <div class="user-actions">
+                                        <button class="btn btn-sm btn-primary">Editar</button>
+                                        <button class="btn btn-sm btn-danger">Suspender</button>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                }
+                
+                @if(currentSection === 'settings'){
+                    <div id="settings" class="panel-container">
+                        <h2>Configuración</h2>
+                        <p>Aquí puedes ver y configurar la aplicacion.</p>
+                        <div class="container-fluid border rounded-4 p-4">
+                            <form>
+                              <div class="row mb-4">
+                                <div class="col-4">
+                                  <div class="form-group">
+                                    <label for="appName">Nombre de la Aplicación</label>
+                                    <input type="text" class="form-control" id="appName" placeholder="Ingrese el nombre de la aplicación">
+                                  </div>
+                                </div>
+                                <div class="col-4">
+                                  <div class="form-group">
+                                    <label for="matchingAlgorithm">Algoritmo de Emparejamiento</label>
+                                    <select class="form-control" id="matchingAlgorithm">
+                                      <option>Basado en localización</option>
+                                      <option>Basado en intereses</option>
+                                      <option>Híbrido</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="col-4">
+                                  <div class="form-group">
+                                    <label for="maxDistance">Distancia Máxima de Búsqueda (km)</label>
+                                    <input type="number" class="form-control" id="maxDistance" placeholder="Ingrese la distancia máxima">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <label for="ageRange">Rango de Edad Permitido</label>
+                                    <div class="row">
+                                      <div class="col">
+                                        <input type="number" class="form-control" id="minAge" placeholder="Mínimo">
+                                      </div>
+                                      <div class="col">
+                                        <input type="number" class="form-control" id="maxAge" placeholder="Máximo">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-6 d-flex align-items-end">
+                                  <button class="btn btn-primary">Guardar Configuración</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                    </div>
+                }
+                
+                @if(currentSection === 'messages'){
+                    <div id="messages" class="panel-container">
+                        <h2>Mensajes</h2>
+                        <p>Aquí puedes ver y administrar los mensajes de los usuarios.</p>
+                        <div class="container-fluid border rounded-4 p-4">
+                            <div class="row">
+                              <div class="col-6">
+                                <h4>Mensajes Reportados</h4>
+                                <ul class="list-group">
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Mensaje de Usuario1
+                                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Mensaje de Usuario2
+                                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Mensaje de Usuario3
+                                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="col-6 table-responsive">
+                                <h4>Actividad Reciente</h4>
+                                <table class="table table-hover table-hover caption-top text-center align-middle">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Usuario</th>
+                                      <th scope="col">Mensaje</th>
+                                      <th scope="col">Hora</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>Usuario4</td>
+                                      <td>Hola, ¿cómo estás?</td>
+                                      <td>10:45 AM</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Usuario5</td>
+                                      <td>¿Qué planes para hoy?</td>
+                                      <td>11:00 AM</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Usuario6</td>
+                                      <td>Nos vemos más tarde</td>
+                                      <td>11:15 AM</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                }
+                
+                @if(currentSection === 'media'){
+                    <div id="media" class="panel-container">
+                        <h2>Media</h2>
+                        <p>Aquí puedes administrar el contenido multimedia.</p>
+                        <div class="container-fluid border rounded-4 p-4">
+                          <div class="row">
+                            <div class="col-6">
+                              <h4>Fotos Reportadas</h4>
+                              <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Foto de Usuario1
+                                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Foto de Usuario2
+                                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Foto de Usuario3
+                                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="col-6">
+                              <h4>Videos Reportados</h4>
+                              <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Video de Usuario4
+                                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Video de Usuario5
+                                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Video de Usuario6
+                                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                }
+                
+                @if(currentSection === 'analytics'){
+                    <div id="analytics" class="panel-container">
+                        <h2>Analytics</h2>
+                        <p>Aquí puedes ver y analizar los datos de la aplicación.</p>
+                        
+                        <div class="container-fluid border rounded-4 p-4">
+                            <div class="row mb-4">
+                                <div class="col-3">
+                                    <form class="d-flex" role="search">
+                                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-primary" type="submit">Search</button>
+                                    </form>
+                                </div>
+                                <div class="col-2">
+
+                                </div>
+                                <div class="col-7">
+                                    <form>
+                                        <div class="row align-items-center">
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    
+                                                    <select class="form-select" id="reportType">
+                                                        <option selected disabled>Tipo de Reporte</option>
+                                                        <option>Usuarios Activos</option>
+                                                        <option>Matches Realizados</option>
+                                                        <option>Ingresos por Suscripciones</option>
+                                                        <option>Reportes de Abuso</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <!--<label for="dateRange">Rango de Fechas</label>-->
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <input type="date" class="form-control" id="startDate">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input type="date" class="form-control" id="endDate">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                   
+                                                    <select class="form-select" id="chartType">
+                                                        <option>Gráfico de Barras</option>
+                                                        <option>Gráfico de Líneas</option>
+                                                        <option>Gráfico Circular</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary">Generar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                            </div>
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                    <table class="table table-hover caption-top text-center align-middle">
+                                        <caption>List of users</caption>
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">Handle</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>mdo</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">2</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>fat</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">3</th>
+                                            <td>Larry</td>
+                                            <td>the Bird</td>
+                                            <td>twitter</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">3</th>
+                                            <td>Larry</td>
+                                            <td>the Bird</td>
+                                            <td>twitter</td>
+                                          </tr>
+                                          <tr>
+                                            <th scope="row">3</th>
+                                            <td>Larry</td>
+                                            <td>the Bird</td>
+                                            <td>twitter</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                @if(currentSection === 'support'){
+                    <div id="support" class="panel-container">
+                        <h2>Soporte y Atención al Cliente</h2>
+                        <p>Aquí puedes dar soporte y atencion al cliente de la aplicación.</p>
+                        <div class="container-fluid border rounded-4 p-4">
+                            <div class="support-list">
+                                <!-- Ticket 1 -->
+                                <div class="ticket-list-item">
+                                    <strong>Ticket #1</strong><br>
+                                    Usuario: Usuario1<br>
+                                    Descripción: Problema técnico<br>
+                                    Estado: Abierto<br>
+                                    <button class="btn btn-sm btn-info">Resolver</button>
+                                </div>
+            
+                                <!-- Ticket 2 -->
+                                <div class="ticket-list-item">
+                                    <strong>Ticket #2</strong><br>
+                                    Usuario: Usuario2<br>
+                                    Descripción: Queja sobre servicio<br>
+                                    Estado: Abierto<br>
+                                    <button class="btn btn-sm btn-info">Resolver</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <h4>Tickets de Soporte</h4>
+                                <ul class="list-group">
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                      <strong>Ticket #1</strong><br>
+                                      Usuario: Usuario1<br>
+                                      Descripción: Problema técnico<br>
+                                      Estado: Abierto<br>
+                                    </div>
+                                    <button class="btn btn-sm btn-info">Resolver</button>
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                      <strong>Ticket #2</strong><br>
+                                      Usuario: Usuario2<br>
+                                      Descripción: Queja sobre servicio<br>
+                                      Estado: Abierto<br>
+                                    </div>
+                                    <button class="btn btn-sm btn-info">Resolver</button>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                }
+                
+                @if(currentSection === 'moderation'){
+                    <div id="moderation" class="panel-container">
+                        <h2>Moderación de Contenido</h2>
+                        <p>Aquí puedes moderar el contenido de la aplicación.</p>
+                        <div class="container-fluid border rounded-4 p-4">
+                          <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-hover caption-top text-center align-middle">
+                                    <caption>Contenido para Moderar</caption>
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Usuario</th>
+                                        <th scope="col">Contenido</th>
+                                        <th scope="col">Acciones</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar">
+                                            <div class="content-details">
+                                              <strong>Usuario1</strong>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <img src="https://via.placeholder.com/100" alt="Contenido" class="content-image">
+                                        </td>
+                                        <td>
+                                          <div class="content-actions">
+                                            <button class="btn btn-sm btn-success m-2">Verificado</button>
+                                            <button class="btn btn-sm btn-danger m-2">Eliminar</button>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/50" alt="Avatar" class="user-avatar">
+                                            <div class="content-details">
+                                              <strong>Usuario2</strong>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <img src="https://via.placeholder.com/100" alt="Contenido" class="content-image">
+                                        </td>
+                                        <td>
+                                          <div class="content-actions">
+                                            <button class="btn btn-sm btn-success m-2">Verificado</button>
+                                            <button class="btn btn-sm btn-danger m-2">Eliminar</button>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                }
+            </main>
+        </div>
+      </div>
+    
+    
+    
+    
+</main>

@@ -1,162 +1,85 @@
-<section class="container-fluid p-0">
-  <div class="chat-header">
-    <!-- banner -->
-    <div class="row flex-grow-1">
-      <!-- Columna de usuarios -->
-      @if (!isMobile || (isMobile && showUserList)) {
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-flex flex-column column-size" >
-          <div class="bg-body p-3 d-flex flex-column flex-grow-1" style="border-radius: 20px;">
-            <h3>Conversaciones ({{users.length}})</h3>
-            
-            <div class="user-list bg-body p-1 rounded flex-grow-1 overflow-auto">
-              <div>
-                <form>
-                  <div class="input-group mb-3 position-relative search-container ">
-                    <input type="text" class="form-control search-input rounded-pill  focus-ring focus-ring-secondary border" placeholder="Buscar..." aria-label="Buscar..." >
-                    <span class="search-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                      </svg>
-                    </span>
-                  </div>
-                </form>
-              </div>  
-              <div class="list-group">
-                <a *ngFor="let user of users"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                  (click)="goToChat(user.id)"
-                  [ngClass]="{'active': selectedUserId === user.id}">
-                  <div>
-                    <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
-                    {{ user.name }} {{ user.lastname }}
-                  </div>
-                  <div>
-                    <div class="btn-group dropup">
-                      <button type="button" class="p-1 border rounded-circle link-dark btn btn-light icon-link  link-underline-opacity-0" data-bs-toggle="dropdown" aria-expanded="false">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                      </svg>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                        <li><a class="dropdown-item" href="#">Bloquear</a></li>
-                        <li><a class="dropdown-item" href="#">Otra opción</a></li>
-                      </ul>
+<main class="main-content">
+  <section class="container-fluid p-0">
+    <div class="chat-header">
+      <!-- banner -->
+      <div class="row flex-grow-1">
+        <!-- Columna de usuarios -->
+        @if (!isMobile || (isMobile && showUserList)) {
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-flex flex-column column-size" >
+            <div class="bg-body p-3 d-flex flex-column flex-grow-1" style="border-radius: 20px;">
+              <h3>Conversaciones ({{users.length}})</h3>
+              
+              <div class="user-list bg-body p-1 rounded flex-grow-1 overflow-auto">
+                <div>
+                  <form>
+                    <div class="input-group mb-3 position-relative search-container ">
+                      <input type="text" class="form-control search-input rounded-pill  focus-ring focus-ring-secondary border" placeholder="Buscar..." aria-label="Buscar..." >
+                      <span class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                      </span>
                     </div>
-                  </div>
-                </a>
+                  </form>
+                </div>  
+                <div class="list-group">
+                  <a *ngFor="let user of users"
+                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                    (click)="goToChat(user.id)"
+                    [ngClass]="{'active': selectedUserId === user.id}">
+                    <div>
+                      <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
+                      {{ user.name }} {{ user.lastname }}
+                    </div>
+                    <div>
+                      <div class="btn-group dropup">
+                        <button type="button" class="p-1 border rounded-circle link-dark btn btn-light icon-link  link-underline-opacity-0" data-bs-toggle="dropdown" aria-expanded="false">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                        </svg>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                          <li><a class="dropdown-item" href="#">Bloquear</a></li>
+                          <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      }
-      
-  
-      <!-- Columna de mensajes -->
-      @if (!isMobile || (isMobile && !showUserList)) {
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 d-flex flex-column column-size">
-          <div class="bg-body p-3 d-flex flex-column flex-grow-1 " style="border-radius: 20px;">
-            <h3>Chat</h3>
-            @if (isMobile) {
-              <button class="btn btn-custom mb-3 " (click)="goBack()">Volver</button>
-            }
-            <div class="chat-box bg-body p-3 rounded">
-                <app-chat *ngIf="selectedUserId && currentUserProfile?.userId && targetUserProfile?.userId" 
-                [currentUserId]="currentUserProfile!.userId"
-                [targetUserId]="targetUserProfile!.userId"
-                [key]="chatKey">
-                </app-chat>
-            <div *ngIf="!selectedUserId" class="text-center text-muted">
-              Selecciona un usuario para iniciar un chat
-            </div>    
-          </div>
-        </div>
-      </div>
-      }
-    </div>
+        }
+        
     
-  </div>
-  
-  <div class="chat-content">
-    
-  </div>
-</section>
-<!--
-  <div class="container-fluid d-flex flex-column">
-    <div class="row flex-grow-1">
-       Columna de usuarios 
-      @if (!isMobile || (isMobile && showUserList)) {
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-flex flex-column" >
-          <div class="bg-body p-3 rounded border  d-flex flex-column flex-grow-1">
-            <h3>Conversaciones ({{users.length}})</h3>
-            
-            <div class="user-list bg-body p-1 rounded flex-grow-1 overflow-auto">
-              <div>
-                <form>
-                  <div class="input-group mb-3 position-relative search-container ">
-                    <input type="text" class="form-control search-input rounded-pill  focus-ring focus-ring-secondary border" placeholder="Buscar..." aria-label="Buscar..." >
-                    <span class="search-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                      </svg>
-                    </span>
-                  </div>
-                </form>
-              </div>  
-              <div class="list-group">
-                <a *ngFor="let user of users"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                  (click)="goToChat(user.id)"
-                  [ngClass]="{'active': selectedUserId === user.id}">
-                  <div>
-                    <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
-                    {{ user.name }} {{ user.lastname }}
-                  </div>
-                  <div>
-                    <div class="btn-group dropup">
-                      <button type="button" class="p-1 border rounded-circle link-dark btn btn-light icon-link  link-underline-opacity-0" data-bs-toggle="dropdown" aria-expanded="false">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                      </svg>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                        <li><a class="dropdown-item" href="#">Bloquear</a></li>
-                        <li><a class="dropdown-item" href="#">Otra opción</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </a>
-              </div>
+        <!-- Columna de mensajes -->
+        @if (!isMobile || (isMobile && !showUserList)) {
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 d-flex flex-column column-size">
+            <div class="bg-body p-3 d-flex flex-column flex-grow-1 " style="border-radius: 20px;">
+              <h3>Chat</h3>
+              @if (isMobile) {
+                <button class="btn btn-custom mb-3 " (click)="goBack()">Volver</button>
+              }
+              <div class="chat-box bg-body p-3 rounded">
+                  <app-chat *ngIf="selectedUserId && currentUserProfile?.userId && targetUserProfile?.userId" 
+                  [currentUserId]="currentUserProfile!.userId"
+                  [targetUserId]="targetUserProfile!.userId"
+                  [key]="chatKey">
+                  </app-chat>
+              <div *ngIf="!selectedUserId" class="text-center text-muted">
+                Selecciona un usuario para iniciar un chat
+              </div>    
             </div>
           </div>
         </div>
-      }
-      
-  
-       Columna de mensajes 
-      @if (!isMobile || (isMobile && !showUserList)) {
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 d-flex flex-column">
-          <div class="bg-body p-3 rounded border">
-            <h3>Chat</h3>
-            @if (isMobile) {
-              <button class="btn btn-custom mb-3 " (click)="goBack()">Volver</button>
-            }
-            <div class="chat-box bg-body p-3 rounded" style="height: 668px; overflow-y: auto;">
-                <app-chat *ngIf="selectedUserId && currentUserProfile?.userId && targetUserProfile?.userId" 
-                [currentUserId]="currentUserProfile!.userId"
-                [targetUserId]="targetUserProfile!.userId"
-                [key]="chatKey">
-                </app-chat>
-            <div *ngIf="!selectedUserId" class="text-center text-muted">
-              Selecciona un usuario para iniciar un chat
-            </div>    
-          </div>
-        </div>
+        }
       </div>
-      }
+      
     </div>
-  </div>
--->
-
-  
+    
+    <div class="chat-content">
+      
+    </div>
+  </section>
+</main>

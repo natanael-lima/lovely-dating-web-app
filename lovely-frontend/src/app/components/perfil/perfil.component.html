@@ -1,266 +1,628 @@
-<section class="container-fluid p-0">
-  <div class="profile-header position-relative">
-    <!-- Toast Notification -->
-    <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3" style="z-index: 11;" >
-      <div id="profileUpdateToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px;">
-        <div class="d-flex">
-          <div class="toast-body fs-5 p-3" >
-            ¡Actualizaste tu foto de perfil!
+<!-- CSS for Image Upload Buttons -->
+<style>
+  .image-upload-wrapper {
+  position: relative;
+  width: 80px;
+  height: 100px;
+  border: 2px dashed #6c757d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.image-upload-wrapper input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.image-upload-wrapper label {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-upload-wrapper i {
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.image-upload-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+</style>
+<main class="main-content">
+  <section class="container-fluid p-0">
+    <div class="profile-header position-relative">
+      <!-- Toast Notification -->
+      <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3" style="z-index: 11;" >
+        <div id="profileUpdateToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px;">
+          <div class="d-flex">
+            <div class="toast-body fs-5 p-3" >
+              ¡Actualizaste tu foto de perfil!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
       </div>
-    </div>
-    <!-- Foto de Perfil -->
-    <div class="profile-picture-wrapper">
-      <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
-      <div class="change-photo-icon">
-        <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
-          <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-          <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
-        </svg></label>
+      <!-- Foto de Perfil -->
+      <div class="profile-picture-wrapper">
+        <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
+        <div class="change-photo-icon">
+          <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+            <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+            <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
+          </svg></label>
+          <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
+        </div>
         <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
       </div>
-      <button id="file-input" type="submit" data-bs-toggle="modal" data-bs-target="#changePhotoModal" style="display: none;" accept="image/*"></button>
-    </div>
-    <!-- Modal para cambiar la foto -->
-    <div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="changePhotoModalLabel">Cambiar foto de perfil</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <form (ngSubmit)="updatePhoto()" #photoForm="ngForm" enctype="multipart/form-data">
-              <div class="mb-3">
-                <label for="photoFile" class="form-label">Seleccionar nueva foto</label>
-                <input type="file" class="form-control" id="photoFile" (change)="onFileSelect($event)" accept="image/*">
-              </div>
-              <div *ngIf="selectedImageURL" class="mb-3">
-                <img [src]="selectedImageURL" alt="Preview" class="img-thumbnail">
-              </div>
-              <button type="submit" class="btn btn-custom" [disabled]="!currentUserProfile.photo" data-bs-dismiss="modal">Actualizar</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="profile-content">
-    <div class="profile-info text-center">
-      <h2 class="mb-0 text-capitalize">{{currentUser.name}} {{currentUser.lastname}}</h2>
-      <p class="text-muted">{{emailTest}}</p>
-      <p class="text-muted text-body-tertiary"><i class="bi bi-calendar-event"></i> Joined {{ currentUserProfile.timestamp | date: 'mediumDate' }}</p>
-    </div>
-    
-    <div class="profile-actions mt-5">
-      <div class="row g-4">
-        <div class="col-6">
-          <!-- Button trigger modal -->
-          <button class="btn  btn-custom-v2 btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalProfile" >
-            <i class="bi bi-person"></i>
-            <span>Editar</span>
-          </button>
-        </div>
-        <div class="col-6">
-          <button class="btn   btn-custom-v2 btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalSetting">
-            <i class="bi bi-gear"></i>
-            <span>Configuración</span>
-          </button>
-        </div>
-        <div class="col-6">
-          <button class="btn btn-custom-v2  btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalPassword">
-            <i class="bi bi-shield-lock"></i>
-            <span>Password</span>
-          </button>
-        </div>
-        <div class="col-6">
-          <button class="btn   btn-custom-v2  btn-square w-100" (click)="onLogout()">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Cerrar Sesión</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- Modal Setting -->
-<div class="modal fade" id="modalSetting" tabindex="-1" aria-labelledby="modalSettingLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalSettingLabel">Configuracion</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-4">
-          <h6 class="mb-3">Estado de la Cuenta</h6>
-          <div class="form-check form-switch mb-2">
-            <input class="form-check-input" type="checkbox" id="accountActive" checked>
-            <label class="form-check-label" for="accountActive">Cuenta Activa</label>
-          </div>
-          <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="accountUnlocked" checked>
-            <label class="form-check-label" for="accountUnlocked">Cuenta Desbloqueada</label>
-          </div>
-          <button type="button" class="btn btn-primary rounded-pill">UPDATE STATUS</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <h6 class="text-danger mb-3">Eliminar Cuenta</h6>
-          <p class="text-muted">Eliminar tu cuenta y todos los datos relacionados de tu organización. Ten cuidado, esta acción es irreversible.</p>
-          <button type="button" class="btn btn-danger rounded-pill">
-            <i class="bi bi-trash me-2"></i>ELIMINAR CUENTA
-          </button>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-custom-v1 rounded-pill">Save changes</button>
-  
-      </div>
-    </div>
-  </div>
-</div> 
-<!-- Modal Password -->
-<div class="modal fade" id="modalPassword" tabindex="-1" aria-labelledby="modalPasswordLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalPasswordLabel">Change password</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          
-            <!-- Contenido para cambiar contraseña -->
-            <div class="alert alert-info" role="alert">
-              <i class="bi bi-info-circle me-2"></i>
-              Changing your password will end all logged sessions.
+      <!-- Modal para cambiar la foto -->
+      <div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="changePhotoModalLabel">Cambiar foto de perfil</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="changePasswordForm">
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">Current password</label>
-                <input type="password" class="form-control" id="currentPassword" placeholder="Minimum 6 characters" required>
-              </div>
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">New password</label>
-                <input type="password" class="form-control" id="newPassword" placeholder="Minimum 6 characters" required>
-              </div>
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm new password</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Minimum 6 characters" required>
-              </div>
-             
-            </form>
-    
-      
+            <div class="modal-body text-center">
+              <form (ngSubmit)="updatePhoto()" #photoForm="ngForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="photoFile" class="form-label">Seleccionar nueva foto</label>
+                  <input type="file" class="form-control" id="photoFile" (change)="onFileSelect($event)" accept="image/*">
+                </div>
+                <div *ngIf="selectedImageURL" class="mb-3">
+                  <img [src]="selectedImageURL" alt="Preview" class="img-thumbnail">
+                </div>
+                <button type="submit" class="btn btn-custom-v1" [disabled]="!currentUserProfile.photo" data-bs-dismiss="modal">Actualizar</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+    </div>
+    
+    <div class="profile-content">
+      <div class="profile-info text-center">
+        <h2 class="mb-0 text-capitalize">{{currentUser.name}} {{currentUser.lastname}}
+            <a type="button" class="icon-link link-underline-success link-underline-opacity-0'" style="color: rgb(90, 52, 126); transition: color 0.3s ease; cursor: pointer;" onmouseover="this.style.color='blueviolet'" onmouseout="this.style.color='rgb(90, 52, 126)'" data-bs-toggle="modal" data-bs-target="#modalProfile">
+               <small><i class="bi bi-pencil-fill"></i>
+              </small>
+            </a>
+        </h2>
+        
+        <p class="text-muted">{{emailTest}}</p>
+        <p class="text-muted text-body-tertiary"><i class="bi bi-calendar-event"></i> Joined {{ currentUserProfile.timestamp | date: 'mediumDate' }}</p>
+      </div>
+      
+      <div class="profile-actions mt-5">
+        <div class="row g-4">
+          <div class="col-6">
+            <!-- Button trigger modal -->
+            <button class="btn  btn-custom-v2 btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalEditProfile" >
+              <i class="bi bi-person"></i>
+              <span>Editar</span>
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn  btn-custom-v2  btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalPreference">
+              <i class="bi bi-sliders"></i>
+              <span>Preference</span>
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn   btn-custom-v2 btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalSetting">
+              <i class="bi bi-gear"></i>
+              <span>Configuración</span>
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn btn-custom-v2  btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalPassword">
+              <i class="bi bi-shield-lock"></i>
+              <span>Privacidad</span>
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn  btn-custom-v2  btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalFAQ">
+              <i class="bi bi-info-circle-fill"></i>
+              <span>FAQ</span>
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn   btn-custom-v2  btn-square w-100" (click)="onLogout()">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Cerrar Sesión</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  <!-- Modal Setting -->
+  <div class="modal fade" id="modalSetting" tabindex="-1" aria-labelledby="modalSettingLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalSettingLabel">Configuracion</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Contenido para configuracion-->
+          <div class="mt-1">
+            <h6 class="text-danger mb-3">Eliminar Cuenta</h6>
+            <p class="text-muted">Eliminar tu cuenta y todos los datos relacionados de tu organización. Ten cuidado, esta acción es irreversible.</p>
+            <button type="button" class="btn btn-danger rounded-pill">
+              <i class="bi bi-trash me-2"></i>ELIMINAR CUENTA
+            </button>
+          </div>
+          <hr>
+          <div>
+            <h6 class=" mb-3">Configuración de privacidad</h6>
+              <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="accountActive" >
+                <label class="form-check-label" for="accountActive">Ocultar mi perfil</label>
+              </div>
+              <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="unlockActive" checked disabled>
+                <label class="form-check-label" for="accountActive">Cancelar suscripción</label>
+              </div>
+            <button type="button" class="btn btn-primary rounded-pill">
+              <i class="bi bi-trash me-2"></i>UPDATE CUENTA
+            </button>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill">Save changes</button>
+    
+        </div>
+      </div>
+    </div>
+  </div> 
+  <!-- Modal Privacidad -->
+  <div class="modal fade" id="modalPassword" tabindex="-1" aria-labelledby="modalPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalPasswordLabel">Privacidad</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+              <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                Changing your password will end all logged sessions.
+              </div>
+              <form id="changePasswordForm">
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">Current password</label>
+                  <input type="password" class="form-control" id="currentPassword" placeholder="Minimum 6 characters" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">New password</label>
+                  <input type="password" class="form-control" id="newPassword" placeholder="Minimum 6 characters" required>
+                </div>
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">Confirm new password</label>
+                  <input type="password" class="form-control" id="confirmPassword" placeholder="Minimum 6 characters" required>
+                </div>
+               
+              </form>
+              
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+    
+  <!-- Modal Profile Original-->
+  <div class="modal fade" id="modalProfile" tabindex="-1" aria-labelledby="modalProfileLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalProfileLabel">Edit Profile</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <h6 class="mb-3">Profile Data</h6>
+            <form id="changeProfileForm" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <label for="username" class="form-label">Correo electrónico</label>
+                  <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentUser.username" disabled>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <label for="name" class="form-label">Nombre de usuario</label>
+                  <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentUser.name">
+                </div>
+                
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <label for="lastname" class="form-label">Apellido de usuario</label>
+                  <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentUser.lastname">
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
+                  <label for="location" class="form-label">Localidad</label>
+                  <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
+                    <option selected disabled>Seleccionar</option>
+                    <option *ngFor="let country of countries" [value]="country.name.common">
+                      {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
+                  <label for="age" class="form-label">Edad</label>
+                  <input type="number" class="form-control" id="age" name="age" [(ngModel)]="currentUserProfile.age" >
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-3">
+                  <label for="gender" class="form-label">Genero</label>
+                  <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example" [(ngModel)]="currentUserProfile.gender">
+                    <option selected disabled>Seleccionar</option>
+                    <option [value]="'Femenino'">Femenino</option>
+                    <option [value]="'Masculino'">Masculino</option>
+                  </select>
+                </div>
+              </div>
+              <hr>
+              <h6 class="mb-3">Preference</h6>
+              <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
+                  <label for="maxAge" class="form-label">Edad Maxima</label>
+                  <input type="te" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="currentUserProfile.maxAge">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
+                  <label for="minAge" class="form-label">Edad Minima</label>
+                  <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="currentUserProfile.minAge">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
+                  <label for="likeGender" class="form-label">Genero</label>
+                  <select class="form-control form-select-md mb-3" id="likeGender" name="likeGender" aria-label="Large select example"  [(ngModel)]="currentUserProfile.likeGender">
+                    <option selected disabled >Seleccionar</option>
+                    <option [value]="'Femenino'">Femenino</option>
+                    <option [value]="'Masculino'">Masculino</option>
+                  </select>
+                </div>
+              </div>
+              <!--<div class="d-grid gap-3">
+                  <button type="submit" class="btn btn-custom">Actualizar perfil</button>
+              </div>-->
+            </form>
+            @if(uploadSuccess){
+              <div class="alert alert-success d-flex align-items-center m-2" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg> 
+                <div class="ms-2">
+                  Perfil de usuario actualizado con éxito.
+                </div>
+              </div>
+            }
+        </div>
+     
+        <div class="modal-footer">
+          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changeProfileForm">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
-</div> 
-  
-<!-- Modal Profile -->
-<div class="modal fade" id="modalProfile" tabindex="-1" aria-labelledby="modalProfileLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalProfileLabel">Edit Profile</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        
-          <h6 class="mb-3">Profile Data</h6>
-          <form id="changeProfileForm" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                <label for="username" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentUser.username" disabled>
+    
+  <!-- Modal Edit Profile -->
+  <div class="modal fade" id="modalEditProfile" tabindex="-1" aria-labelledby="modalEditProfileLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalEditProfileLabel">Edit Profile</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+              <div class="form-group mb-3">
+                <label for="profileName">Firt Name</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Tu nombre" value="Pedro">
               </div>
-              <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                <label for="name" class="form-label">Nombre de usuario</label>
-                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentUser.name">
+              <div class="form-group mb-3">
+                <label for="profileName">Last Name</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Tu apellido" value="Gomez">
+              </div>
+              <div class="form-group mb-3">
+                <label for="profileName">Email</label>
+                <input type="email" class="form-control" id="profileName" placeholder="Tu email" value="pedro@gmail.com">
+              </div>
+              <div class="form-group mb-3">
+                <label for="profileName">Phone</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Tu nombre" value="+44 123 456 678">
+              </div>
+              <div class="form-group mb-3">
+                <label for="gender">Gender</label>
+                  <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example">
+                    <option selected disabled>Seleccionar</option>
+                    <option [value]="'Femenino'">Femenino</option>
+                    <option [value]="'Masculino'">Masculino</option>
+                  </select>
+              </div>
+              <div class="form-group mb-3">
+                <label for="profileBirthday">Fecha de nacimiento</label>
+                <input type="date" class="form-control" id="profileBirthday">
+              </div>
+              <div class="form-group mb-3">
+                <label for="profileBio">Descripcion</label>
+                <textarea class="form-control" id="profileBio" rows="3" placeholder="Cuéntanos sobre ti"></textarea>
+              </div>
+              <div class="form-group mb-3">
+                <label for="profileJob">Trabajo</label>
+                <input type="text" class="form-control" id="profileJob" placeholder="Tu trabajo actual">
               </div>
               
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                <label for="lastname" class="form-label">Apellido de usuario</label>
-                <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentUser.lastname">
+            
+              <!-- Add Photos Section -->
+              <div class="form-group mb-3">
+                <label for="profilePhotos">Fotos de perfil</label>
+                <button type="button" class="btn btn-custom-v1 m-2" data-bs-toggle="modal" data-bs-target="#addPhotosModal"><i class="bi bi-plus-lg"></i>
+                  <span>Add Photos</span>
+                </button>
               </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
-                <label for="location" class="form-label">Localidad</label>
-                <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
-                  <option selected disabled>Seleccionar</option>
-                  <option *ngFor="let country of countries" [value]="country.name.common">
-                    {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
-                <label for="age" class="form-label">Edad</label>
-                <input type="number" class="form-control" id="age" name="age" [(ngModel)]="currentUserProfile.age" >
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 mb-3">
-                <label for="gender" class="form-label">Genero</label>
-                <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example" [(ngModel)]="currentUserProfile.gender">
-                  <option selected disabled>Seleccionar</option>
-                  <option [value]="'Femenino'">Femenino</option>
-                  <option [value]="'Masculino'">Masculino</option>
-                </select>
-              </div>
-            </div>
-            <hr>
-            <h6 class="mb-3">Preference</h6>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                <label for="maxAge" class="form-label">Edad Maxima</label>
-                <input type="te" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="currentUserProfile.maxAge">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                <label for="minAge" class="form-label">Edad Minima</label>
-                <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="currentUserProfile.minAge">
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                <label for="likeGender" class="form-label">Genero</label>
-                <select class="form-control form-select-md mb-3" id="likeGender" name="likeGender" aria-label="Large select example"  [(ngModel)]="currentUserProfile.likeGender">
-                  <option selected disabled >Seleccionar</option>
-                  <option [value]="'Femenino'">Femenino</option>
-                  <option [value]="'Masculino'">Masculino</option>
-                </select>
-              </div>
-            </div>
-            <!--<div class="d-grid gap-3">
-                <button type="submit" class="btn btn-custom">Actualizar perfil</button>
-            </div>-->
-          </form>
-          @if(uploadSuccess){
-            <div class="alert alert-success d-flex align-items-center m-2" role="alert">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-              </svg> 
-              <div class="ms-2">
-                Perfil de usuario actualizado con éxito.
-              </div>
-            </div>
-          }
-      </div>
-   
-      <div class="modal-footer">
-        <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changeProfileForm">Save changes</button>
+              
+            </form>
+              
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changeProfileForm">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
-</div>  
-</section>
-   
 
+<!-- Modal for Adding Photos -->
+<div class="modal fade" id="addPhotosModal" tabindex="-1" aria-labelledby="addPhotosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addPhotosModalLabel">Add Your Photos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Image Previewer -->
+        <div class="mb-3">
+          <label for="imagePreview" class="form-label">Image Preview</label>
+          <img id="imagePreview" class="img-fluid border" src="https://via.placeholder.com/300" alt="Image Preview">
+        </div>
+        <!-- Image Upload Buttons -->
+        <div class="d-flex justify-content-between">
+          <div class="image-upload-wrapper" *ngFor="let photo of photos; let i = index">
+            <input type="file" class="form-control-file" id="photo{{i}}" accept="image/*" (change)="onFileSelected($event, i)">
+            <label for="photo{{i}}" class="image-upload-label">
+              <ng-container *ngIf="photo">
+                <img [src]="photo" alt="Image Preview">
+              </ng-container>
+              <ng-container *ngIf="!photo">
+                <i class="bi bi-upload"></i>
+              </ng-container>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+  <!-- Modal Preference -->
+  <div class="modal fade" id="modalPreference" tabindex="-1" aria-labelledby="modalPreferenceLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalPreferenceLabel">Preference</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <!-- Primer Grupo: Preferencias -->
+            <div class="form-group mb-3">
+                <label for="settingDistance">Distancia máxima</label>
+                <input type="range" class="form-range" id="customRange1" min="1" max="100" step="1" [value]="distance" (input)="updateDistance($event)">
+                <output for="settingDistance">{{ distance }} km</output>
+                <!-- <p>Distancia seleccionada: {{ distance }} km</p> -->
+            </div>
+            <div class="form-group mb-3">
+                <label for="settingAgeRange">Rango de edad</label>
+                <div class="d-flex">
+                    <input type="number" class="form-control me-2" id="settingAgeMin" placeholder="Min">
+                    <input type="number" class="form-control" id="settingAgeMax" placeholder="Max">
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label>Mostrarme</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="showMe" id="showMeMen">
+                    <label class="form-check-label" for="showMeMen">Hombres</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="showMe" id="showMeWomen">
+                    <label class="form-check-label" for="showMeWomen">Mujeres</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="showMe" id="showMeEveryone">
+                    <label class="form-check-label" for="showMeEveryone">Todos</label>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-check-label">Configuración de privacidad</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="settingHideProfile">
+                    <label class="form-check-label" for="settingHideProfile">Ocultar mi perfil</label>
+                </div>
+            </div>
+            <hr>
+        
+            <!-- Segundo Grupo: Información de Perfil -->
+            <div class="form-group mb-3">
+                <label for="searchKeywords">Palabras clave</label>
+                <input type="text" class="form-control" id="searchKeywords" placeholder="Ej: Aventurero, Artista, Deportista">
+            </div>
+            <div class="form-group mb-3">
+                <label for="searchLocation">Ubicación</label>
+                <input type="text" class="form-control" id="searchLocation" placeholder="Ciudad, País">
+            </div>
+            <div class="form-group mb-3">
+                <label>Intereses</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="interestMusic">
+                    <label class="form-check-label" for="interestMusic">Música</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="interestTravel">
+                    <label class="form-check-label" for="interestTravel">Viajes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="interestSports">
+                    <label class="form-check-label" for="interestSports">Deportes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="interestArt">
+                    <label class="form-check-label" for="interestArt">Arte</label>
+                </div>
+            </div>
+        </form>
 
-
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <!-- Modal FAQ -->
+  <div class="modal fade" id="modalFAQ" tabindex="-1" aria-labelledby="modalFAQLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalFAQLabel">FAQ</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5 class="fw-bold mb-4">Preguntas Frecuentes</h5>
+        
+          <div class="accordion accordion-flush" id="faqAccordionFlush">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  ¿Cómo creo una cuenta?
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordionFlush">
+                <div class="accordion-body">
+                  Para crear una cuenta:
+                  <ol>
+                    <li>Haz clic en el botón "Registrarse" en la página principal.</li>
+                    <li>Completa el formulario con tus datos personales.</li>
+                    <li>Verifica tu dirección de correo electrónico.</li>
+                    <li>¡Listo! Ya puedes comenzar a usar la aplicación.</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+        
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  ¿Cómo funciona el sistema de compatibilidad?
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordionFlush">
+                <div class="accordion-body">
+                  Nuestro sistema de compatibilidad utiliza un algoritmo avanzado que considera:
+                  <ul>
+                    <li>Tus intereses y pasatiempos.</li>
+                    <li>Tus preferencias de personalidad.</li>
+                    <li>Tus objetivos de relación.</li>
+                    <li>Tu ubicación y disponibilidad.</li>
+                  </ul>
+                  Basándose en estos factores, te sugerimos perfiles con alta probabilidad de compatibilidad.
+                </div>
+              </div>
+            </div>
+        
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                  ¿Cómo puedo reportar un perfil sospechoso?
+                </button>
+              </h2>
+              <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordionFlush">
+                <div class="accordion-body">
+                  Si encuentras un perfil sospechoso:
+                  <ol>
+                    <li>Ve al perfil en cuestión.</li>
+                    <li>Haz clic en el botón "..." o "Más opciones".</li>
+                    <li>Selecciona "Reportar perfil".</li>
+                    <li>Elige el motivo del reporte y proporciona detalles.</li>
+                    <li>Envía el reporte para revisión por nuestro equipo.</li>
+                  </ol>
+                  Tomamos muy en serio la seguridad de nuestros usuarios y revisamos todos los reportes.
+                </div>
+              </div>
+            </div>
+        
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                  ¿Cómo cancelo mi suscripción?
+                </button>
+              </h2>
+              <div id="flush-collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordionFlush">
+                <div class="accordion-body">
+                  Para cancelar tu suscripción:
+                  <ol>
+                    <li>Inicia sesión en tu cuenta.</li>
+                    <li>Ve a "Configuración" o "Ajustes de cuenta".</li>
+                    <li>Selecciona "Suscripción".</li>
+                    <li>Haz clic en "Cancelar suscripción".</li>
+                    <li>Confirma la cancelación.</li>
+                  </ol>
+                  Recuerda que puedes seguir usando la app hasta el final del período facturado.
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <p class="mt-4">¿No encontraste lo que buscabas? <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal">Contáctanos</a> para más ayuda.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>   
+  </section>
+     
+  
+  
+  
+  
+  
+</main>

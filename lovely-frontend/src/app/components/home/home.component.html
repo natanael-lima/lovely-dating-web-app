@@ -1,158 +1,49 @@
-<section class="container-fluid p-0">
-  <!-- HEADER -->
-  <div class="profile-header">
-    <div class="container">
-      <h1 class="text-center mb-0 py-4">
-        Encuentra tu conexión especial
-      </h1>
-      <p class="text-center  mb-0 pb-3">
-        Descubre el amor a un clic de distancia
-      </p>
-    </div>
+<nav class="navbar bg-custom fixed-top">
+  <div class="container">
+    <a class="navbar-brand " href="#">
+      <img src="../../../assets/lovely-fullwhite.png" alt="Logo" width="200" height="48" class="d-inline-block align-text-top">
+    </a>
+     <!-- Este ul solo será visible en pantallas medianas y más grandes -->
+      <ul class="nav nav-pills d-none d-md-flex" >
+        <li class="nav-item me-2 ">
+          <a class="btn btn-outline-light rounded-pill " aria-current="page" href="/user/signup">Registrate</a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-outline-light rounded-pill " aria-current="page" href="/user/signin">Iniciar sesión</a>
+        </li>
+      </ul>
   </div>
-  <!-- CONTENT -->
-  <div class="profile-content">
-    <div class="container-fluid">
-      <div class="card text-center mx-auto position-relative" style="max-width: 380px;">
-        <!-- Card 1 -->
-        <div *ngIf="filterProfilesWithImages.length > 0" [ngClass]="{'hidden-card': currentCard !== 1}" id="card1" class="profile-card">
-          <div style="position: relative;">
-            @if(!filterProfilesWithImages[currentProfileIndex].photoFileName){
-              <img src="https://i.postimg.cc/7hsdHJL7/nofound2.png" class="card-img-top" alt="Imagen del perfil">
-            }@else{
-              <img [src]="filterProfilesWithImages[currentProfileIndex].imageUrl" [alt]="filterProfilesWithImages[currentProfileIndex].photoFileName" class="card-img-top">
-            }
-            <!-- Contenido -->
-            <div class="card-body body-content-card">
-              <h5 class="text-capitalize">{{ filterProfilesWithImages[currentProfileIndex].name }} {{ filterProfilesWithImages[currentProfileIndex].lastname }}</h5>
-              <p class="card-text">{{ filterProfilesWithImages[currentProfileIndex].age }} años</p>
-              <p class="card-text"><small>{{ filterProfilesWithImages[currentProfileIndex].location }}</small></p>
-            </div>
-          </div>
-          <!-- Botones de iconos-->
-          <div class="d-grid gap-2 d-flex justify-content-center m-4">
-            <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-              <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-              <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-            </svg></button>
-            <button class="btn like-btn rounded-pill" type="button" (click)="like()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-            </svg></button>
-            <button class="btn reject-btn rounded-pill" type="button" (click)="dislike()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-            </svg></button>
-          </div>
-        </div>
-        <!-- Card 2 -->
-            <div *ngIf="filterProfilesWithImages.length > 1" [ngClass]="{'hidden-card': currentCard !== 2}" id="card2" class="profile-card">
-              <div style="position: relative;">
-                <img [src]="filterProfilesWithImages[nextProfileIndex()].imageUrl" [alt]="filterProfilesWithImages[nextProfileIndex()].photoFileName" class="card-img-top">
-                <!-- Contenido -->
-                <div class="card-body body-content-card">
-                  <h5 class="text-capitalize">{{ filterProfilesWithImages[nextProfileIndex()].name }} {{ filterProfilesWithImages[nextProfileIndex()].lastname }}</h5>
-                  <p class="card-text">{{ filterProfilesWithImages[nextProfileIndex()].age }} años</p>
-                  <p class="card-text"><small>{{ filterProfilesWithImages[nextProfileIndex()].location }}</small></p>
-                </div>
-              </div>
-              
-              <!-- Botones de iconos-->
-              <div class="d-grid gap-2 d-flex justify-content-center m-4">
-                <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-                  <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-                </svg></button>
-                <button class="btn like-btn rounded-pill" type="button" (click)="like()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-                </svg></button>
-                <button class="btn reject-btn rounded-pill" type="button" (click)="dislike()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                </svg></button>
-              </div>
-            </div>
+</nav>
 
-            <!-- Tarjeta de notificación de match -->
-            @if(showMatchNotification){ 
-              <div class="card text-center mx-auto my-5 match-card" style="max-width: 300px;">
-                <div class="img-container">
-                  <img src="../assets/match.png" alt="">
-                  <button class="btn  btn-custom-match accept-btn " (click)="closeMatchNotification()">Aceptar</button>
-                </div>
-              </div>
-            }
+
+<div class="jumbotron full-screen">
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5 mt-5">
+        <div class="col-12 col-sm-12 col-lg-6">
+            <img src="../../../assets/banner3.jpeg" class="d-block mx-lg-auto img-fluid" alt="banner" width="700" height="500" loading="lazy">
         </div>
-    </div>
-   
+        <div class="col-lg-6">
+            <h1 class="display-1 fw-bold text-body-secondary lh-1 mb-4">Bienvenido a Lovely</h1>
+            <p class="lead text-secondary"> Únete a nuestra comunidad y descubre nuevas personas y conexiones especiales.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button type="button" class="btn btn-custom btn-lg px-4 me-md-2" ><a  style="color: #50504f;" class="icon-link icon-link-hover  link-offset-2 link-underline link-underline-opacity-0" href="/user/signup" >
+                Registrate
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                </svg>
+            </a></button>
+            <button type="button" class="btn btn-custom btn-lg px-4"><a style="color: #50504f;" class="icon-link icon-link-hover link-offset-2 link-underline link-underline-opacity-0" href="/user/signin" >
+                Iniciar sesión
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                </svg>
+            </a></button>
+            </div>
+        </div>
+        <p class="mt-5 text-secondary">Si te registrás, aceptás nuestros <a href="" class="link-underline">Términos y Condiciones</a>. Enterate cómo usamos tus datos en nuestra <a href="">Política de Privacidad</a>.</p>
+        </div>
   </div>
-</section>
+</div>
 
-<!--<div class="container-fluid">
-  <div class="card text-center mx-auto my-5 position-relative" style="max-width: 380px;">
-    
-    <div *ngIf="filterProfilesWithImages.length > 0" [ngClass]="{'hidden-card': currentCard !== 1}" id="card1" class="profile-card">
-      <div style="position: relative;">
-        @if(!filterProfilesWithImages[currentProfileIndex].photoFileName){
-          <img src="https://i.postimg.cc/7hsdHJL7/nofound2.png" class="card-img-top" alt="Imagen del perfil">
-        }@else{
-          <img [src]="filterProfilesWithImages[currentProfileIndex].imageUrl" [alt]="filterProfilesWithImages[currentProfileIndex].photoFileName" class="card-img-top">
-        }
-  
-        <div class="card-body body-content-card">
-          <h5 class="text-capitalize">{{ filterProfilesWithImages[currentProfileIndex].name }} {{ filterProfilesWithImages[currentProfileIndex].lastname }}</h5>
-          <p class="card-text">{{ filterProfilesWithImages[currentProfileIndex].age }} años</p>
-          <p class="card-text"><small>{{ filterProfilesWithImages[currentProfileIndex].location }}</small></p>
-        </div>
-      </div>
-     
-      <div class="d-grid gap-2 d-flex justify-content-center m-4">
-        <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-          <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-          <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-        </svg></button>
-        <button class="btn like-btn rounded-pill" type="button" (click)="like()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-        </svg></button>
-        <button class="btn reject-btn rounded-pill" type="button" (click)="dislike()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-        </svg></button>
-      </div>
-    </div>
- 
-        <div *ngIf="filterProfilesWithImages.length > 1" [ngClass]="{'hidden-card': currentCard !== 2}" id="card2" class="profile-card">
-          <div style="position: relative;">
-            <img [src]="filterProfilesWithImages[nextProfileIndex()].imageUrl" [alt]="filterProfilesWithImages[nextProfileIndex()].photoFileName" class="card-img-top">
-         
-            <div class="card-body body-content-card">
-              <h5 class="text-capitalize">{{ filterProfilesWithImages[nextProfileIndex()].name }} {{ filterProfilesWithImages[nextProfileIndex()].lastname }}</h5>
-              <p class="card-text">{{ filterProfilesWithImages[nextProfileIndex()].age }} años</p>
-              <p class="card-text"><small>{{ filterProfilesWithImages[nextProfileIndex()].location }}</small></p>
-            </div>
-          </div>
-          
-      
-          <div class="d-grid gap-2 d-flex justify-content-center m-4">
-            <button class="btn rotate-btn rounded-pill" type="button" (click)="reload()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-              <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-              <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-            </svg></button>
-            <button class="btn like-btn rounded-pill" type="button" (click)="like()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-            </svg></button>
-            <button class="btn reject-btn rounded-pill" type="button" (click)="dislike()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-            </svg></button>
-          </div>
-        </div>
-        
-   
-    
-        @if(showMatchNotification){ 
-          <div class="card text-center mx-auto my-5 match-card" style="max-width: 300px;">
-            <div class="img-container">
-              <img src="../assets/match.png" alt="">
-              <button class="btn  btn-custom-match accept-btn " (click)="closeMatchNotification()">Aceptar</button>
-            </div>
-          </div>
-        }
-    </div>
-</div> -->
+
 
