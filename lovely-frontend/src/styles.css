@@ -1,34 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+:host {
 
-/* Importar las fuentes de Google Fonts */
-@font-face {
-  font-family: 'MyCustomFont1';
-  src: url('assets/fonts/OpenSans-Light.ttf') format('woff');
-  font-weight: normal;
-  font-style: normal;
+  min-height: 100vh;
 }
 
-@font-face {
-  font-family: 'MyCustomFont2';
-  src: url('../assets/fonts/Roboto-Light.ttf') format('woff');
-  font-weight: bold;
-  font-style: normal;
+.main-content {
+  flex: 1;
+  padding: 20px;
+  padding-bottom: 70px;
+  /*Altura del menú en móviles */
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+@media (min-width: 768px) {
+  :host {
+    flex-direction: row;
   }
-  
-  body {
-    position: relative;
-    font-family: 'MyCustomFont1';
+
+  .main-content {
+    padding-left: 220px;
+    /* Ancho del menú + un poco de espacio extra */
+    padding-bottom: 20px;
   }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'MyCustomFont1';
+}
+
+
+main {
+  position: relative;
+  /*  z-index: 1; */
+  min-height: 100vh;
+  padding-bottom: 60px;
+  /* Ajusta esto según la altura de tu menú en móvil */
+}
+
+@media (min-width: 768px) {
+  main {
+    /*padding-left: 100px;  Ancho del menú en desktop */
+    padding-bottom: 0;
   }
-  
-  button, label {
-    font-family: 'MyCustomFont1';
-  }
+}

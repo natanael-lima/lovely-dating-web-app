@@ -50,8 +50,23 @@ export class PerfilComponent implements OnInit {
     username:''
   };
 
- 
+  
+  photos: string[] = Array(4).fill(null); //Photo edit profile
+  distance: number = 50; // Valor inicial de la barra de rango
 
+  //Selecciona multiple imagenes
+  onFileSelected(event: any, index: number): void {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.photos[index] = e.target.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+  updateDistance(event: Event) {
+    this.distance = +(event.target as HTMLInputElement).value;
+  }
   constructor(private userService:UserService, private formBuilder:FormBuilder,private http: HttpClient, private loginService:LoginService,private router:Router,private sanitizer: DomSanitizer ){
     this.checkScreenSize();
   }

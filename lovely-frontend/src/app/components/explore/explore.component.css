@@ -1,0 +1,228 @@
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../../assets/fonts/OpenSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../../../assets/fonts/Roboto-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Estilos generales */
+body {
+  font-family: 'OpenSans', sans-serif;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+/* Botones y etiquetas */
+button, label {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Otros elementos */
+p, a, li, span {
+  font-family: 'OpenSans', sans-serif;
+}
+
+
+.buttons-container {
+    position: relative;
+    margin: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .rotate-btn {
+    color: #181818; /* Color de la flecha */
+    background-color: gainsboro;
+    border-radius: 50%;
+    transition: ease-in 0.2s;
+  }
+  
+  .like-btn {
+    color: white; /* Color del corazón */
+    background-color: #35be30;
+    border-radius: 50%;
+    transition: ease-in 0.2s;
+  }
+  
+  .reject-btn {
+    color: white; /* Color de la X */
+    background-color: #df5656;
+    border-radius: 50%;
+    transition: ease-in 0.2s;
+  }
+
+  .rotate-btn:hover {
+    background-color: #cacaca;
+    color: #3b3b3b;
+  }
+  
+  .like-btn:hover {
+    background-color:#40a13d;
+    color: #d7ffd6;
+  }
+  
+  .reject-btn:hover {
+    background-color:#ac3e3e;
+    color: #ffcdcd;
+  }
+  .body-content-card{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color:white;
+    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0),#000);
+  }
+
+/* match */
+
+.match-card {
+  position: fixed;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color:rgba(255, 255, 255, 0.9) ;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 1000;
+  overflow: hidden;
+  padding: 12px;
+}
+.img-container {
+  position: relative;
+}
+
+.img-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.accept-btn {
+  position: absolute;
+  width: 80%;
+  top: 74%; /* Ajusta este valor para cambiar la posición vertical del botón */
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+.btn-custom-match {
+  background: linear-gradient(50deg, #84c06c,#90b460, #759e34); /* Degradado de colores rosas y morados */
+  color: white; /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 25px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de la fuente */
+  cursor: pointer; /* Cursor de puntero al pasar sobre el botón */
+  transition: background 0.5s ease-in-out; /* Transición suave para el fondo */
+}
+
+.btn-custom-match:hover {
+  background: linear-gradient(50deg,#72a75d,#7c9e4f,#6c922f); /* Degradado de colores rosas y morados */
+
+}
+/*-------------------carousel de profiles*/
+.profile-card {
+ 
+  transition: transform 0.5s, opacity 0.9s;
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.hidden-card {
+  /*transform: translateX(-100%);*/
+  display: none; /* Oculta completamente la tarjeta */
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+
+.next-card {
+  /*transform: translateX(0);*/
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.like-animation {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.dislike-animation {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.reload-animation {
+  opacity: 0;
+  transform: translateX(0) !important;
+}
+
+.swipe-btn {
+  z-index: 10;
+}
+
+/*--------------------*/
+.profile-header {
+  background: linear-gradient(to bottom right, #8fccff, #ff8fda);
+  height: 150px;
+  position: relative;
+  border-radius: 20px 20px 0 0px;
+}
+
+.profile-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color:#f6fbfd ;
+}
+
+.profile-header p {
+  font-size: 1.2rem;
+  color:#f7eaff ;
+}
+
+@media (max-width: 768px) {
+  .profile-header h1 {
+    font-size: 1.7rem;
+  }
+  
+  .profile-header p {
+    font-size: 1rem;
+    
+  }
+}
+.profile-content {
+  padding-top: 40px;
+  background-color: #ffffff;
+  border-radius: 0 0 20px 20px;
+  min-height: calc(90vh - 150px);
+}
+
+
+@media (min-width: 768px) {
+  .profile-header {
+      height: 200px;
+  }
+
+
+  .profile-content {
+      padding-top: 60px;
+  }
+}
