@@ -16,25 +16,24 @@
       <div class="container-fluid">
         <div class="card text-center mx-auto position-relative" style="max-width: 380px;">
           <!-- Card 1 -->
-          <div *ngIf="filterProfilesWithImages.length > 0" [ngClass]="{'hidden-card': currentCard !== 1}" id="card1" class="profile-card">
+          <div *ngIf="filterProfiles.length > 0" [ngClass]="{'hidden-card': currentCard !== 1}" id="card1" class="profile-card">
             <div style="position: relative;">
-              @if(!filterProfilesWithImages[currentProfileIndex].photoFileName){
+              @if(!filterProfiles[currentProfileIndex].profileDetail.photoFileName){
                 <img src="https://i.postimg.cc/7hsdHJL7/nofound2.png" class="card-img-top" alt="Imagen del perfil">
               }@else{
-                <img [src]="filterProfilesWithImages[currentProfileIndex].imageUrl" [alt]="filterProfilesWithImages[currentProfileIndex].photoFileName" class="card-img-top">
+                <img [src]="getImageUrlOld(filterProfiles[currentProfileIndex].profileDetail.photo)"
+                [alt]="filterProfiles[currentProfileIndex].profileDetail.photoFileName || 'Imagen del perfil'" 
+                class="card-img-top">
               }
               <!-- Contenido -->
               <div class="card-body body-content-card">
                 
-                <h5 class="text-capitalize">{{ filterProfilesWithImages[currentProfileIndex].name }} {{ filterProfilesWithImages[currentProfileIndex].lastname }}</h5>
-                <p class="card-text">{{ filterProfilesWithImages[currentProfileIndex].age }} años</p>
-                <p class="fw-lighter"><small> {{ filterProfilesWithImages[currentProfileIndex].location }}</small></p>
+                <h5 class="text-capitalize">{{ filterProfiles[currentProfileIndex].name }} {{ filterProfiles[currentProfileIndex].lastname }}</h5>
+                <p class="card-text">{{ calculateAge(filterProfiles[currentProfileIndex].profileDetail.birthDate) }} años</p>
+                <p class="fw-lighter"><small>{{ filterProfiles[currentProfileIndex].preference.location }}</small></p>
                 
-                <div class="d-flex gap-2 justify-content-center ">
-                  <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">Primary</span>
-                  <span class="badge bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill">Danger</span>
-                  <span class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">Warning</span>
-                  <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">Info</span>
+                <div  class="d-flex gap-2 justify-content-center ">
+                  <span  *ngFor="let interest  of filterProfiles[currentProfileIndex].preference.interests " class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill ">{{interest }}</span>
                 </div>
               </div>
             </div>
@@ -54,14 +53,14 @@
             </div>
           </div>
           <!-- Card 2 -->
-              <div *ngIf="filterProfilesWithImages.length > 1" [ngClass]="{'hidden-card': currentCard !== 2}" id="card2" class="profile-card">
+              <div *ngIf="filterProfiles.length > 1" [ngClass]="{'hidden-card': currentCard !== 2}" id="card2" class="profile-card">
                 <div style="position: relative;">
-                  <img [src]="filterProfilesWithImages[nextProfileIndex()].imageUrl" [alt]="filterProfilesWithImages[nextProfileIndex()].photoFileName" class="card-img-top">
+                  <img [src]="getImageUrlOld(filterProfiles[currentProfileIndex].profileDetail.photo)"  [alt]="filterProfiles[currentProfileIndex].profileDetail.photoFileName || 'Imagen del perfil'"  class="card-img-top">
                   <!-- Contenido -->
                   <div class="card-body body-content-card">
-                    <h5 class="text-capitalize">{{ filterProfilesWithImages[nextProfileIndex()].name }} {{ filterProfilesWithImages[nextProfileIndex()].lastname }}</h5>
-                    <p class="card-text">{{ filterProfilesWithImages[nextProfileIndex()].age }} años</p>
-                    <p class="card-text"><small>{{ filterProfilesWithImages[nextProfileIndex()].location }}</small></p>
+                    <h5 class="text-capitalize">{{ filterProfiles[currentProfileIndex].name }} {{ filterProfiles[currentProfileIndex].lastname }}</h5>
+                    <p class="card-text">{{ calculateAge(filterProfiles[currentProfileIndex].profileDetail.birthDate) }} años</p>
+                    <p class="fw-lighter"><small>{{ filterProfiles[currentProfileIndex].preference.location }}</small></p>
                   </div>
                 </div>
                 
@@ -82,7 +81,7 @@
   
               <!-- Tarjeta de notificación de match -->
               @if(showMatchNotification){ 
-                <div class="card text-center mx-auto my-5 match-card" style="max-width: 300px;">
+                <div class="card text-center mx-auto match-card" style="max-width: 380px;">
                   <div class="img-container">
                     <img src="../assets/match.png" alt="">
                     <button class="btn  btn-custom-match accept-btn " (click)="closeMatchNotification()">Aceptar</button>

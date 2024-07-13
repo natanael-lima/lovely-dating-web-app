@@ -2,7 +2,6 @@ package com.nl.lovely.service.imp;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,15 +9,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.nl.lovely.dto.UserProfileDTO;
+import com.nl.lovely.dto.ProfileRegistrationDTO;
+import com.nl.lovely.entity.Preference;
+import com.nl.lovely.entity.ProfileDetail;
 import com.nl.lovely.entity.User;
-import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.enums.RoleType;
-import com.nl.lovely.repository.UserProfileRepository;
+import com.nl.lovely.repository.PreferenceRepository;
+import com.nl.lovely.repository.ProfileDetailRepository;
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.request.LoginRequest;
-import com.nl.lovely.request.RegisterRequest;
 import com.nl.lovely.response.AuthResponse;
 import com.nl.lovely.service.AuthService;
 import com.nl.lovely.service.JwtService;
@@ -30,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImp implements AuthService {
 
 	@Autowired
-	private final UserRepository	userRepository;
-	
+	private final PreferenceRepository preferenceRepository;
 	@Autowired
-	private final UserProfileRepository	userProfileRepository;
-	
+	private final ProfileDetailRepository profileDetailRepository;
+	@Autowired
+	private final UserRepository userRepository;
 	@Autowired
 	private final JwtService jwtService;
 	
@@ -42,42 +41,71 @@ public class AuthServiceImp implements AuthService {
 	
 	private final AuthenticationManager authenticationManager;
 	
+	
 	@Override
-	public AuthResponse register(RegisterRequest request, UserProfile req) {
-		
-		// Construir el objeto User con la imagen y otros datos
-		User user = User.builder()
-		        .username(request.getUsername())
-		        .password(passwordEncoder.encode(request.getPassword()))
-		        .lastname(request.getLastname())
-		        .name(request.getName())
-		        .role(RoleType.USER)
-		        .build();
+	public AuthResponse registerProfile(ProfileRegistrationDTO request, MultipartFile file) {
+		// TODO Auto-generated method stub
+		byte[] photoBytes = null;
+        String photoFileName = null;
 
-		// Guardar el usuario en la base de datos
-		userRepository.save(user);
+        if (!file.isEmpty()) {
+            // Obtener los bytes del archivo
+            try {
+				photoBytes = file.getBytes();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            // Establecer el nombre del archivo
+            photoFileName = file.getOriginalFilename();
+        }
 
-		// Construir el objeto UserProfile con los datos del registro
-	    UserProfile userProfile = UserProfile.builder()
-	            .user(user)
-	            .photo(req.getPhoto())
-	            .photoFileName(req.getPhotoFileName())
-	            .location(req.getLocation())
-	            .gender(req.getGender())
-	            .age(req.getAge())
-	            .likeGender(req.getLikeGender())
-	            .maxAge(req.getMaxAge())
-	            .minAge(req.getMinAge())
+        
+		ProfileDetail profileDetailData = ProfileDetail.builder()
+	            .phone(request.getProfileDetail().getPhone())
+	            .gender(request.getProfileDetail().getGender())
+	            .birthDate(request.getProfileDetail().getBirthDate())
+	            .description(request.getProfileDetail().getDescription())
+	            .work(request.getProfileDetail().getWork())
+	            .photo(photoBytes)
+	            .photoFileName(photoFileName)
 	            .timestamp(LocalDateTime.now())
 	            .build();
 
 	    // Guardar el perfil de usuario en la base de datos
-	    userProfileRepository.save(userProfile);
+		profileDetailRepository.save(profileDetailData);
+	    
+	    // Construir el objeto UserProfile con los datos del registro
+	    Preference preferenceData = Preference.builder()
+	    		.maxAge(request.getPreference().getMaxAge())
+	            .minAge(request.getPreference().getMinAge())
+	            .likeGender(request.getPreference().getLikeGender())
+	            .location(request.getPreference().getLocation())
+	            .interests(request.getPreference().getInterests())
+	            .build();
 
+	    // Guardar el perfil de usuario en la base de datos
+	    preferenceRepository.save(preferenceData);
+		
+        // Crear un objeto UserProfile con los datos del registro y la ruta/nombre de la imagen guardada
+        User profileData = User.builder()
+        		.username(request.getUsername())
+		        .password(passwordEncoder.encode(request.getPassword()))
+		        .lastname(request.getLastname())
+		        .name(request.getName())
+		        .role(RoleType.USER)
+                .preference(preferenceData)
+                .profileDetail(profileDetailData)
+	            .build();
+		
+		// Guardar el usuario en la base de datos
+        userRepository.save(profileData);
+		
+        
 		// Crear y devolver la respuesta de autenticación
 		return AuthResponse.builder()
-		        .token(jwtService.getToken(user))
-		        .build();
+				        .token(jwtService.getToken(profileData))
+				        .build();
 	}
 	
 	@Override
@@ -90,6 +118,8 @@ public class AuthServiceImp implements AuthService {
             .build();
 
 	}
+
+	
 
 	
 

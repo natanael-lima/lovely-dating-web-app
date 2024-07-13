@@ -3,24 +3,22 @@ package com.nl.lovely.service.imp;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.nl.lovely.dto.MatchDTO;
-import com.nl.lovely.dto.MessageDTO;
 import com.nl.lovely.entity.Chat;
 import com.nl.lovely.entity.Match;
-import com.nl.lovely.entity.Message;
 import com.nl.lovely.entity.UserAction;
-import com.nl.lovely.entity.UserProfile;
+import com.nl.lovely.entity.User;
 import com.nl.lovely.enums.ActionType;
 import com.nl.lovely.repository.ChatRepository;
 import com.nl.lovely.repository.MatchRepository;
 import com.nl.lovely.repository.UserActionRepository;
-import com.nl.lovely.repository.UserProfileRepository;
+import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.service.MatchService;
 import com.nl.lovely.service.UserActionService;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class MatchServiceImp implements MatchService {
@@ -32,19 +30,23 @@ public class MatchServiceImp implements MatchService {
 	@Autowired
     private UserActionRepository userActionRepository;
 	@Autowired
-    private UserProfileRepository userProfileRepository;
+    private UserRepository userRepository;
 	@Autowired
 	private ChatRepository chatRepository;
 	
 	@Override
 	public void deleteMatch(Long id) {
-		// TODO Auto-generated method stub
-					matchRepository.deleteById(id);
+		 Optional<Match> match = matchRepository.findById(id);
+	     if (match.isPresent()) {
+	            matchRepository.delete(match.get());
+	     } else {
+	            throw new EntityNotFoundException("Match not found with id " + id);
+	     }
 	}
 	
 	//registro de match si hay coincidencia
 	@Override
-	public void handleLike(UserProfile liker, UserProfile target) {
+	public void handleLike(User liker, User target) {
 		// TODO Auto-generated method stub
 		userActionService.registrarLike(liker, target);
 
@@ -64,13 +66,13 @@ public class MatchServiceImp implements MatchService {
         }
 	}
 	@Override
-	public void handleDislike(UserProfile disliker, UserProfile target) {
+	public void handleDislike(User disliker, User target) {
 		// TODO Auto-generated method stub
 		userActionService.registrarDislike(disliker, target);
 	}
 
 	@Override
-	public void processAction(UserProfile liker, UserProfile target, ActionType actionType) {
+	public void processAction(User liker, User target, ActionType actionType) {
 		// TODO Auto-generated method stub
 		UserAction action = new UserAction();
         action.setLiker(liker);
@@ -83,7 +85,7 @@ public class MatchServiceImp implements MatchService {
         target.getActionsReceived().add(action);
         liker.getActionsForMe().add(action);
         
-        userProfileRepository.save(target);
+        userRepository.save(target); ////ediiiiiiiiiiiiiiiiiiit userprofile a user
         
        //Crear un nuevo match si hay una coincidencia recíproca
         if (userActionService.verificaLiked(target, liker)) {
@@ -152,12 +154,6 @@ public class MatchServiceImp implements MatchService {
 	}
 
 	@Override
-	public MatchDTO getMatchByUserProfile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public MatchDTO findMatchByProfileIds(Long profileId1, Long profileId2) {
 		Match match = matchRepository.findMatchByProfileIds(profileId1, profileId2)
 		        .orElseThrow(() -> new RuntimeException("Match not found for profile IDs: " + profileId1 + " and " + profileId2));
@@ -166,7 +162,7 @@ public class MatchServiceImp implements MatchService {
 	}
 
 	@Override
-	public boolean confirmMatch(UserProfile profile1, UserProfile profile2) {
+	public boolean confirmMatch(User profile1, User profile2) {
 		// Verificar si profile1 ha dado like a profile2
         boolean profile1LikesProfile2 = userActionRepository.existsByLikerAndTargetAndActionType(profile1, profile2, ActionType.LIKE);
 

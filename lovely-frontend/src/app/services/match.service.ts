@@ -24,7 +24,7 @@ export class MatchService {
   }
 
   getMyMatches(id: number){
-    return this.http.get<any>(this.apiUrl+"/api/matches/"+id);
+    return this.http.get<any>(this.apiUrl+"/api/matches/my-matches/"+id);
   }
 
   getChatById(id: number){

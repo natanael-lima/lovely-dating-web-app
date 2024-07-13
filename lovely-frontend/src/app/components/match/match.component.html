@@ -29,7 +29,7 @@
                     [ngClass]="{'active': selectedUserId === user.id}">
                     <div>
                       <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
-                      {{ user.name }} {{ user.lastname }}
+                      {{ user.name }} {{ user.lastname }} {{ user.id }}
                     </div>
                     <div>
                       <div class="btn-group dropup">
@@ -59,12 +59,14 @@
             <div class="bg-body p-3 d-flex flex-column flex-grow-1 " style="border-radius: 20px;">
               <h3>Chat</h3>
               @if (isMobile) {
-                <button class="btn btn-custom mb-3 " (click)="goBack()">Volver</button>
+                <button class="btn btn-custom-v1 mb-3 " (click)="goBack()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                </svg> Volver</button>
               }
               <div class="chat-box bg-body p-3 rounded">
-                  <app-chat *ngIf="selectedUserId && currentUserProfile?.userId && targetUserProfile?.userId" 
-                  [currentUserId]="currentUserProfile!.userId"
-                  [targetUserId]="targetUserProfile!.userId"
+                  <app-chat *ngIf="selectedUserId && currentProfile?.id && targetProfile?.id" 
+                  [currentUserId]="currentProfile!.id"
+                  [targetUserId]="targetProfile!.id"
                   [key]="chatKey">
                   </app-chat>
               <div *ngIf="!selectedUserId" class="text-center text-muted">

@@ -5,12 +5,12 @@
         
         <div class="row">
          <!-- Sidebar -->
-         <nav id="sidebar" class="col-lg-2 d-lg-block sidebar collapse">
+         <nav id="sidebar" class="col-lg-2 d-lg-block sidebar collapse" [ngClass]="{'show': isOpen}">
             <div class="position-sticky">
                 <div class="sidebar-heading text-center py-4">
                     <img src="../../assets/lovely-fullwhite.png" alt="Logo" class="img-fluid" width="144">
                 </div>
-                <div class="close-btn" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="close-btn" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleSidebar()">
                     &times;
                 </div>
                 <ul class="nav flex-column">
@@ -58,22 +58,22 @@
             </div>
         </nav>
         <!-- Botón de hamburguesa -->
-        <nav class="navbar navbar-dark  d-block d-lg-none" >
-            <button style=" background-color: #141414;" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-dark d-block d-lg-none" >
+            <button *ngIf="!isOpen" (click)="toggleSidebar()" style=" background-color: #141414;" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" ></span>  
             </button>
         </nav>
             <!-- Contenido principal -->
-            <main class="container-main col-md-12 ml-sm-auto col-lg-12 px-md-4 vh-50">
+            <main class="container-main col-md-12 ml-sm-auto col-lg-12 px-md-4 vh-50" [ngClass]="{'sidebar-open': isOpen}">
                 <!-- Modal 1: Configuración de Cuenta -->
                 <div class="modal fade" id="settingModal" tabindex="-1" aria-labelledby="settingModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" >
-                        <div class="modal-content">
+                        <div class="modal-content ">
                             <div class="modal-header">
                                 <h5 class="modal-title  fs-5" id="settingModalLabel">Setting Modal</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body p-4">
                                 <form>
                                     <div class="form-group mb-2">
                                         <label for="adminLanguage">Idioma de la Interfaz</label>
@@ -127,7 +127,7 @@
                                 <h5 class="modal-title" id="profileModalLabel">Profile Modal</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body p-4">
                                 <form>
                                     <div class="form-group mb-2">
                                         <label for="adminName">Nombre Completo</label>
@@ -165,7 +165,7 @@
                                 <h5 class="modal-title" id="projectModalLabel">Security Modal</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body p-4">
                                 <form>
                                     <div class="form-group mb-2">
                                         <label for="currentPassword">Contraseña Actual</label>

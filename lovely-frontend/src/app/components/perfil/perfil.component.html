@@ -1,48 +1,4 @@
-<!-- CSS for Image Upload Buttons -->
-<style>
-  .image-upload-wrapper {
-  position: relative;
-  width: 80px;
-  height: 100px;
-  border: 2px dashed #6c757d;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
 
-.image-upload-wrapper input[type="file"] {
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-}
-
-.image-upload-wrapper label {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-upload-wrapper i {
-  font-size: 1.5rem;
-  color: #6c757d;
-}
-
-.image-upload-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-</style>
 <main class="main-content">
   <section class="container-fluid p-0">
     <div class="profile-header position-relative">
@@ -59,7 +15,7 @@
       </div>
       <!-- Foto de Perfil -->
       <div class="profile-picture-wrapper">
-        <img [src]="selectedImageURL" [alt]="currentUserProfile.photoFileName" class="profile-picture">
+        <img [src]="selectedImageURL" [alt]="currentProfile.profileDetail.photoFileName" class="profile-picture">
         <div class="change-photo-icon">
           <label for="file-input" class="label-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
             <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
@@ -86,7 +42,7 @@
                 <div *ngIf="selectedImageURL" class="mb-3">
                   <img [src]="selectedImageURL" alt="Preview" class="img-thumbnail">
                 </div>
-                <button type="submit" class="btn btn-custom-v1" [disabled]="!currentUserProfile.photo" data-bs-dismiss="modal">Actualizar</button>
+                <button type="submit" class="btn btn-custom-v1" [disabled]="!currentProfile.profileDetail.photo" data-bs-dismiss="modal">Actualizar</button>
               </form>
             </div>
           </div>
@@ -96,15 +52,15 @@
     
     <div class="profile-content">
       <div class="profile-info text-center">
-        <h2 class="mb-0 text-capitalize">{{currentUser.name}} {{currentUser.lastname}}
-            <a type="button" class="icon-link link-underline-success link-underline-opacity-0'" style="color: rgb(90, 52, 126); transition: color 0.3s ease; cursor: pointer;" onmouseover="this.style.color='blueviolet'" onmouseout="this.style.color='rgb(90, 52, 126)'" data-bs-toggle="modal" data-bs-target="#modalProfile">
+        <h2 class="mb-0 text-capitalize">{{currentProfile.name}} {{currentProfile.lastname}}
+            <a type="button" class="icon-link link-underline-success link-underline-opacity-0'" style="color: rgb(90, 52, 126); transition: color 0.3s ease; cursor: pointer;" onmouseover="this.style.color='blueviolet'" onmouseout="this.style.color='rgb(90, 52, 126)'" data-bs-toggle="modal" data-bs-target="#modalEditProfile">
                <small><i class="bi bi-pencil-fill"></i>
               </small>
             </a>
         </h2>
         
         <p class="text-muted">{{emailTest}}</p>
-        <p class="text-muted text-body-tertiary"><i class="bi bi-calendar-event"></i> Joined {{ currentUserProfile.timestamp | date: 'mediumDate' }}</p>
+        <p class="text-muted text-body-tertiary"><i class="bi bi-calendar-event"></i> Se unió {{ currentProfile.profileDetail.timestamp | date: 'mediumDate' }}</p>
       </div>
       
       <div class="profile-actions mt-5">
@@ -119,7 +75,7 @@
           <div class="col-6">
             <button class="btn  btn-custom-v2  btn-square w-100" type="button" data-bs-toggle="modal" data-bs-target="#modalPreference">
               <i class="bi bi-sliders"></i>
-              <span>Preference</span>
+              <span>Preferencia</span>
             </button>
           </div>
           <div class="col-6">
@@ -175,11 +131,11 @@
                 <label class="form-check-label" for="accountActive">Ocultar mi perfil</label>
               </div>
               <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="unlockActive" checked disabled>
+                <input class="form-check-input" type="checkbox" id="unlockActive" checked>
                 <label class="form-check-label" for="accountActive">Cancelar suscripción</label>
               </div>
             <button type="button" class="btn btn-primary rounded-pill">
-              <i class="bi bi-trash me-2"></i>UPDATE CUENTA
+              UPDATE CUENTA
             </button>
           </div>
 
@@ -226,85 +182,65 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm" data-bs-dismiss="modal">Save changes</button>
         </div>
       </div>
     </div>
   </div> 
-    
-  <!-- Modal Profile Original-->
-  <div class="modal fade" id="modalProfile" tabindex="-1" aria-labelledby="modalProfileLabel" aria-hidden="true">
+
+  <!-- Modal Edit Profile -->
+  <div class="modal fade" id="modalEditProfile" tabindex="-1" aria-labelledby="modalEditProfileLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalProfileLabel">Edit Profile</h1>
+          <h1 class="modal-title fs-5" id="modalEditProfileLabel">Edit Profile</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          
-            <h6 class="mb-3">Profile Data</h6>
-            <form id="changeProfileForm" (ngSubmit)="uploadFileAndProfile()" #userForm="ngForm" enctype="multipart/form-data">
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                  <label for="username" class="form-label">Correo electrónico</label>
-                  <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentUser.username" disabled>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                  <label for="name" class="form-label">Nombre de usuario</label>
-                  <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentUser.name">
-                </div>
-                
+            <form id="changeProfileForm" (ngSubmit)="updateProfileDetailAndBasic()" #userForm="ngForm" enctype="multipart/form-data">
+              <div class="form-group mb-3">
+                <label for="name">Firt Name</label>
+                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentProfile.name" placeholder="Tu name">
               </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                  <label for="lastname" class="form-label">Apellido de usuario</label>
-                  <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentUser.lastname">
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
-                  <label for="location" class="form-label">Localidad</label>
-                  <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentUserProfile.location">
-                    <option selected disabled>Seleccionar</option>
-                    <option *ngFor="let country of countries" [value]="country.name.common">
-                      {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 mb-2">
-                  <label for="age" class="form-label">Edad</label>
-                  <input type="number" class="form-control" id="age" name="age" [(ngModel)]="currentUserProfile.age" >
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 mb-3">
-                  <label for="gender" class="form-label">Genero</label>
-                  <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example" [(ngModel)]="currentUserProfile.gender">
+              <div class="form-group mb-3">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" [(ngModel)]="currentProfile.lastname" placeholder="Tu apellido">
+              </div>
+              <div class="form-group mb-3">
+                <label for="username">Email</label>
+                <input type="email" class="form-control" id="username" name="username" [(ngModel)]="currentProfile.username" placeholder="Tu email" disabled>
+              </div>
+              <div class="form-group mb-3">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="currentProfile.profileDetail.phone" placeholder="Tu phone" >
+              </div>
+              <div class="form-group mb-3">
+                <label for="gender">Gender</label>
+                  <select class="form-control form-select-md mb-3" id="gender" name="gender" [(ngModel)]="currentProfile.profileDetail.gender" aria-label="Large select example">
                     <option selected disabled>Seleccionar</option>
                     <option [value]="'Femenino'">Femenino</option>
                     <option [value]="'Masculino'">Masculino</option>
                   </select>
-                </div>
               </div>
-              <hr>
-              <h6 class="mb-3">Preference</h6>
-              <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                  <label for="maxAge" class="form-label">Edad Maxima</label>
-                  <input type="te" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="currentUserProfile.maxAge">
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                  <label for="minAge" class="form-label">Edad Minima</label>
-                  <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="currentUserProfile.minAge">
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-6 mb-3">
-                  <label for="likeGender" class="form-label">Genero</label>
-                  <select class="form-control form-select-md mb-3" id="likeGender" name="likeGender" aria-label="Large select example"  [(ngModel)]="currentUserProfile.likeGender">
-                    <option selected disabled >Seleccionar</option>
-                    <option [value]="'Femenino'">Femenino</option>
-                    <option [value]="'Masculino'">Masculino</option>
-                  </select>
-                </div>
+              <div class="form-group mb-3">
+                <label for="birthDate">Fecha de nacimiento</label>
+                <input type="date" class="form-control" id="birthDate" name="birthDate" [(ngModel)]="currentProfile.profileDetail.birthDate">
               </div>
-              <!--<div class="d-grid gap-3">
-                  <button type="submit" class="btn btn-custom">Actualizar perfil</button>
-              </div>-->
+              <div class="form-group mb-3">
+                <label for="description">Descripcion</label>
+                <textarea class="form-control" id="description" name="description" [(ngModel)]="currentProfile.profileDetail.description" rows="3" placeholder="Cuéntanos sobre ti"></textarea>
+              </div>
+              <div class="form-group mb-3">
+                <label for="work">Trabajo</label>
+                <input type="text" class="form-control" id="work" name="work" [(ngModel)]="currentProfile.profileDetail.work" placeholder="Tu trabajo actual">
+              </div>
+              <!-- Add Photos Section -->
+              <div class="form-group mb-3">
+                <label for="profilePhotos">Fotos de perfil</label>
+                <button type="button" class="btn btn-custom-v1 m-2" data-bs-toggle="modal" data-bs-target="#addPhotosModal"><i class="bi bi-plus-lg"></i>
+                  <span>Add Photos</span>
+                </button>
+              </div>
             </form>
             @if(uploadSuccess){
               <div class="alert alert-success d-flex align-items-center m-2" role="alert">
@@ -316,73 +252,6 @@
                 </div>
               </div>
             }
-        </div>
-     
-        <div class="modal-footer">
-          <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changeProfileForm">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-    
-  <!-- Modal Edit Profile -->
-  <div class="modal fade" id="modalEditProfile" tabindex="-1" aria-labelledby="modalEditProfileLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalEditProfileLabel">Edit Profile</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-              <div class="form-group mb-3">
-                <label for="profileName">Firt Name</label>
-                <input type="text" class="form-control" id="profileName" placeholder="Tu nombre" value="Pedro">
-              </div>
-              <div class="form-group mb-3">
-                <label for="profileName">Last Name</label>
-                <input type="text" class="form-control" id="profileName" placeholder="Tu apellido" value="Gomez">
-              </div>
-              <div class="form-group mb-3">
-                <label for="profileName">Email</label>
-                <input type="email" class="form-control" id="profileName" placeholder="Tu email" value="pedro@gmail.com">
-              </div>
-              <div class="form-group mb-3">
-                <label for="profileName">Phone</label>
-                <input type="text" class="form-control" id="profileName" placeholder="Tu nombre" value="+44 123 456 678">
-              </div>
-              <div class="form-group mb-3">
-                <label for="gender">Gender</label>
-                  <select class="form-control form-select-md mb-3" id="gender" name="gender" aria-label="Large select example">
-                    <option selected disabled>Seleccionar</option>
-                    <option [value]="'Femenino'">Femenino</option>
-                    <option [value]="'Masculino'">Masculino</option>
-                  </select>
-              </div>
-              <div class="form-group mb-3">
-                <label for="profileBirthday">Fecha de nacimiento</label>
-                <input type="date" class="form-control" id="profileBirthday">
-              </div>
-              <div class="form-group mb-3">
-                <label for="profileBio">Descripcion</label>
-                <textarea class="form-control" id="profileBio" rows="3" placeholder="Cuéntanos sobre ti"></textarea>
-              </div>
-              <div class="form-group mb-3">
-                <label for="profileJob">Trabajo</label>
-                <input type="text" class="form-control" id="profileJob" placeholder="Tu trabajo actual">
-              </div>
-              
-            
-              <!-- Add Photos Section -->
-              <div class="form-group mb-3">
-                <label for="profilePhotos">Fotos de perfil</label>
-                <button type="button" class="btn btn-custom-v1 m-2" data-bs-toggle="modal" data-bs-target="#addPhotosModal"><i class="bi bi-plus-lg"></i>
-                  <span>Add Photos</span>
-                </button>
-              </div>
-              
-            </form>
               
         </div>
         <div class="modal-footer">
@@ -438,79 +307,83 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form id="changePreferenceData" (ngSubmit)="updatePreference()" #preferenceForm="ngForm" >
             <!-- Primer Grupo: Preferencias -->
             <div class="form-group mb-3">
                 <label for="settingDistance">Distancia máxima</label>
-                <input type="range" class="form-range" id="customRange1" min="1" max="100" step="1" [value]="distance" (input)="updateDistance($event)">
-                <output for="settingDistance">{{ distance }} km</output>
+                <input type="range" class="form-range" id="customRange1" name="customRange1" min="1" max="100" step="1" [(ngModel)]="currentProfile.preference.distance" [value]="currentProfile.preference.distance" (input)="updateDistance($event)">
+                <output for="settingDistance">{{ currentProfile.preference.distance }} km</output>
                 <!-- <p>Distancia seleccionada: {{ distance }} km</p> -->
             </div>
             <div class="form-group mb-3">
                 <label for="settingAgeRange">Rango de edad</label>
                 <div class="d-flex">
-                    <input type="number" class="form-control me-2" id="settingAgeMin" placeholder="Min">
-                    <input type="number" class="form-control" id="settingAgeMax" placeholder="Max">
+                    <input type="number" class="form-control me-2" id="settingAgeMin" name="settingAgeMin" [(ngModel)]="currentProfile.preference.minAge" placeholder="Min">
+                    <input type="number" class="form-control" id="settingAgeMax" name="settingAgeMax" [(ngModel)]="currentProfile.preference.maxAge" placeholder="Max">
                 </div>
             </div>
             <div class="form-group mb-3">
                 <label>Mostrarme</label>
+                
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="showMe" id="showMeMen">
-                    <label class="form-check-label" for="showMeMen">Hombres</label>
+                    <input class="form-check-input" type="radio" id="likegenderMen" name="likegenderMen" [(ngModel)]="currentProfile.preference.likeGender" [value]="'Masculino'">
+                    <label class="form-check-label" for="likegenderMen">Hombres</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="showMe" id="showMeWomen">
-                    <label class="form-check-label" for="showMeWomen">Mujeres</label>
+                    <input class="form-check-input" type="radio" id="likegenderWomen" name="likegenderWomen" [(ngModel)]="currentProfile.preference.likeGender" [value]="'Femenino'">
+                    <label class="form-check-label" for="likegenderWomen">Mujeres</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="showMe" id="showMeEveryone">
-                    <label class="form-check-label" for="showMeEveryone">Todos</label>
-                </div>
-            </div>
-            <div class="form-group mb-3">
-                <label class="form-check-label">Configuración de privacidad</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="settingHideProfile">
-                    <label class="form-check-label" for="settingHideProfile">Ocultar mi perfil</label>
+                    <input class="form-check-input" type="radio" id="likegenderEveryone" name="likegenderEveryone" [(ngModel)]="currentProfile.preference.likeGender" [value]="'Todos'">
+                    <label class="form-check-label" for="likegenderEveryone">Todos</label>
                 </div>
             </div>
-            <hr>
         
             <!-- Segundo Grupo: Información de Perfil -->
+           
             <div class="form-group mb-3">
-                <label for="searchKeywords">Palabras clave</label>
-                <input type="text" class="form-control" id="searchKeywords" placeholder="Ej: Aventurero, Artista, Deportista">
-            </div>
-            <div class="form-group mb-3">
-                <label for="searchLocation">Ubicación</label>
-                <input type="text" class="form-control" id="searchLocation" placeholder="Ciudad, País">
+                <label for="location">Ubicación</label>
+                <select class="form-control form-select-md mb-1" id="location" name="location" aria-label="Large select example" [(ngModel)]="currentProfile.preference.location">
+                  <option selected disabled>Seleccionar</option>
+                  <option *ngFor="let country of countries" [value]="country.name.common">
+                    {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
+                  </option>
+                </select>
             </div>
             <div class="form-group mb-3">
                 <label>Intereses</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="interestMusic">
-                    <label class="form-check-label" for="interestMusic">Música</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="interestTravel">
-                    <label class="form-check-label" for="interestTravel">Viajes</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="interestSports">
-                    <label class="form-check-label" for="interestSports">Deportes</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="interestArt">
-                    <label class="form-check-label" for="interestArt">Arte</label>
+                <!--<p>array: {{currentProfile.preference.interests}}</p>-->
+                <div class="form-group mb-3">
+                  <div *ngFor="let interest of interestsList" class="form-check form-check-inline mb-1">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           [id]="'interest' + interest"
+                           [name]="'interests'"
+                           [value]="interest"
+                           [checked]="checkedInterests[interest]"
+                           [disabled]="!checkedInterests[interest] && isCheckboxDisabled()"
+                           (change)="onCheckboxChange($event, interest)">
+                    <label class="form-check-label" [for]="'interest' + interest">
+                      {{ interest }} <!--({{ checkedInterests[interest] ? 'Si' : 'No' }})-->
+                    </label>
+                  </div>
                 </div>
             </div>
         </form>
-
+        @if(uploadSuccess){
+          <div class="alert alert-success d-flex align-items-center m-2" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg> 
+            <div class="ms-2">
+              Perfil de usuario actualizado con éxito.
+            </div>
+          </div>
+        }
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-custom-v1 rounded-pill" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePasswordForm">Save changes</button>
+          <button type="submit" class="btn btn-custom-v1 rounded-pill" form="changePreferenceData">Save changes</button>
         </div>
       </div>
     </div>

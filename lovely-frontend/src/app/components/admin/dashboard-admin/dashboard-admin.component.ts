@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class DashboardAdminComponent {
   currentSection: string = 'analytics'; // Sección actual, inicialmente 'perfil'
+  isOpen = false;
   constructor(){
     
   }
@@ -18,6 +19,12 @@ export class DashboardAdminComponent {
    // Función para cambiar la sección actual
    changeSection(section: string) {
     this.currentSection = section;
+    if (window.innerWidth <= 992) {
+      this.toggleSidebar();  // Cierra la barra lateral al seleccionar una sección en móvil
+    }
+  }
 
+  toggleSidebar() {
+    this.isOpen = !this.isOpen;
   }
 }

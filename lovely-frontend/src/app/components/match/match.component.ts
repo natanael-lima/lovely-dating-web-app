@@ -1,5 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
-import { UserRequest } from '../../interfaces/userRequest';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -7,10 +6,9 @@ import { Observable, Subscription, forkJoin, map } from 'rxjs';
 import { MatchService } from '../../services/match.service';
 import { Match } from '../../models/match';
 import { CommonModule } from '@angular/common';
-import { ProfileRequest } from '../../interfaces/profileRequest';
 import { ChatComponent } from '../chat/chat.component';
-import { Message } from '../../models/message';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { UserResponse } from '../../interfaces/userResponse';
 
 @Component({
   selector: 'app-match',
@@ -21,17 +19,12 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 export class MatchComponent implements OnInit, OnDestroy {
 
-  currentUser: UserRequest ={
-    id:0,
-    name:'',
-    lastname:'',
-    username:''
-  };
   matches: Match[] = [];// Variable para almacenar los matches
-  users: UserRequest[] = []; 
+  users: UserResponse[] = []; 
 
-  currentUserProfile!: ProfileRequest;
-  targetUserProfile!: ProfileRequest;
+  currentProfile!: UserResponse; 
+  targetProfile!: UserResponse;
+
   selectedUserId: number | null = null;
   chatKey: number = 0; // Añade esta línea
   
@@ -42,6 +35,58 @@ export class MatchComponent implements OnInit, OnDestroy {
   private messageSubscription: Subscription | undefined;
   
   constructor(private breakpointObserver: BreakpointObserver, private userService:UserService,private matchService:MatchService, private route: ActivatedRoute, private router: Router, private chatService: ChatService){
+    this.currentProfile = {
+      id: 0,
+      username: '',
+      lastname: '',
+      name: '',
+      preference: {
+        id: 0,
+        maxAge: 0,
+        minAge: 0,
+        likeGender: '',
+        location: '',
+        distance: 0,
+        interests: []
+      },
+      profileDetail: {
+        id: 0,
+        phone: '',
+        gender: '',
+        birthDate: new Date(),
+        description: '',
+        work: '',
+        photo: null,
+        photoFileName: '',
+        timestamp: ''
+      }
+    };
+    this.targetProfile = {
+      id: 0,
+      username: '',
+      lastname: '',
+      name: '',
+      preference: {
+        id: 0,
+        maxAge: 0,
+        minAge: 0,
+        likeGender: '',
+        location: '',
+        distance: 0,
+        interests: []
+      },
+      profileDetail: {
+        id: 0,
+        phone: '',
+        gender: '',
+        birthDate: new Date(),
+        description: '',
+        work: '',
+        photo: null,
+        photoFileName: '',
+        timestamp: ''
+      }
+    };
   }
 
   checkScreenSize() {
@@ -61,9 +106,9 @@ export class MatchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.checkScreenSize();
-    this.userService.getCurrentUser().subscribe(
-      (user: UserRequest) => {
-        this.currentUser = user;
+    this.userService.getCurrentProfile().subscribe(
+      (user: UserResponse) => {
+        this.currentProfile = user;
         this.getAllMatch();
         this.getUsersByMatch();
       },
@@ -81,7 +126,7 @@ export class MatchComponent implements OnInit, OnDestroy {
     }
   }
   getAllMatch(){
-    this.matchService.getMyMatches(this.currentUser.id).subscribe(
+    this.matchService.getMyMatches(this.currentProfile.id).subscribe(
       (data: Match[]) => {
         this.matches = data; // Almacena los matches en la variable
         console.log("datos:"+ data)
@@ -92,8 +137,8 @@ export class MatchComponent implements OnInit, OnDestroy {
     );
   }
   getUsersByMatch(){
-    this.userService.getUsers(this.currentUser.id).subscribe(
-      (data: UserRequest[]) => {
+    this.userService.getUsers(this.currentProfile.id).subscribe(
+      (data: UserResponse[]) => {
         this.users = data; 
         console.log("datos:"+ data)
       },
@@ -110,21 +155,21 @@ export class MatchComponent implements OnInit, OnDestroy {
       // Obtener el perfil del usuario seleccionado y del usuario logueado
       console.log('Going to chat with user:', userId);
       forkJoin({
-        currentUserProfile: this.userService.getCurrentUserProfile(this.currentUser.id),
-        targetUserProfile: this.userService.getCurrentUserProfile(userId)
+        currentProfile: this.userService.getUser(this.currentProfile.id),
+        targetProfile: this.userService.getUser(userId)
       }).subscribe(
-        ({ currentUserProfile, targetUserProfile }) => {
-          this.currentUserProfile = currentUserProfile;
-          this.targetUserProfile = targetUserProfile;
+        ({ currentProfile, targetProfile }) => {
+          this.currentProfile = currentProfile;
+          this.targetProfile = targetProfile;
           
-          console.log("User Logueado:", this.currentUserProfile.userId);
-          console.log("User Match:", this.targetUserProfile.userId);
+          console.log("User Logueado:", this.currentProfile.id);
+          console.log("User Match:", this.targetProfile.id);
           // Actualizar el usuario seleccionado
           this.selectedUserId = userId;
           this.chatKey = Date.now();// Usar Date.now() para asegurar un valor único cada vez
           console.log('Chat key updated:', this.chatKey);
           // Navegar a la URL del chat con los IDs de usuario
-          this.router.navigate(['/match', this.currentUserProfile.userId, this.targetUserProfile.userId]);
+          this.router.navigate(['/match', this.currentProfile.id, this.targetProfile.id]);
 
           // Navegar al chat una vez que se hayan obtenido ambos perfiles
           /*if (this.prueba1 && this.prueba2) {

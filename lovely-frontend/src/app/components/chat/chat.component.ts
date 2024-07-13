@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { UserRequest } from '../../interfaces/userRequest';
 import { MatchService } from '../../services/match.service';
+import { UserResponse } from '../../interfaces/userResponse';
 
 @Component({
   selector: 'app-chat',
@@ -24,12 +25,8 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   messageList: any[] = [];
   chatId!: number;
 
-  currentUser: UserRequest ={
-    id:0,
-    name:'',
-    lastname:'',
-    username:''
-  };
+  currentProfile!: UserResponse; 
+
   private subscription: Subscription | null = null;
 
   @Input() currentUserId!: number;
@@ -37,7 +34,32 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @Input() key!: number;
 
   constructor(private chatService: ChatService, private matchService: MatchService,private route: ActivatedRoute, private userService:UserService, private cdr: ChangeDetectorRef){
-
+  this.currentProfile = {
+        id: 0,
+        username: '',
+        lastname: '',
+        name: '',
+        preference: {
+          id: 0,
+          maxAge: 0,
+          minAge: 0,
+          likeGender: '',
+          location: '',
+          distance: 0,
+          interests: []
+        },
+        profileDetail: {
+          id: 0,
+          phone: '',
+          gender: '',
+          birthDate: new Date(),
+          description: '',
+          work: '',
+          photo: null,
+          photoFileName: '',
+          timestamp: ''
+        }
+      };
   }
 
   ngOnInit(): void {
@@ -67,9 +89,9 @@ private initializeChat(): void {
         (data: any) => {
           this.chatId = data.id;
           console.log('Chat ID obtenido:', this.chatId);
-          this.userService.getCurrentUser().subscribe(
-            (user: UserRequest) => {
-              this.currentUser = user;
+          this.userService.getCurrentProfile().subscribe(
+            (user: UserResponse) => {
+              this.currentProfile = user;
               // Ahora que tenemos el chatId y el usuario actual, podemos inicializar todo
               this.joinChat();
               this.loadInitialMessages();
@@ -91,10 +113,10 @@ sendMessage() {
     if (this.messageInput.trim() !== '' && this.chatId) {
       const message = {
         content: this.messageInput,
-        senderId: this.currentUser.id
+        senderId: this.currentProfile.id
       } as Message;
     console.log('Sending message from component:', message);
-    this.chatService.sendMessage(this.chatId, this.currentUser.id,message);
+    this.chatService.sendMessage(this.chatId, this.currentProfile.id,message);
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     this.messageInput = ''; // Limpiar el campo de entrada después de enviar el mensaje
     
@@ -146,7 +168,7 @@ sendMessage() {
 
   private formatMessage = (message: Message) => ({
     ...message,
-    isSender: message.senderId === this.currentUser.id
+    isSender: message.senderId === this.currentProfile.id
   });
 
 

@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable,PLATFORM_ID, Inject, afterRender  } from '@angular/core';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
-import { User } from '../models/user';
 import { LoginRequest } from '../interfaces/loginRequest';
 
 @Injectable({
