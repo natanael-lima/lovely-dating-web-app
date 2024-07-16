@@ -200,7 +200,7 @@ export class UserFormComponent implements OnInit{
         this.usernameExists = response.exists;
         if (this.usernameExists) {
           this.errorMessage = true;
-          // Puedes mostrar un mensaje al usuario aquí si lo deseas
+          console.log('Usuario existent:',this.errorMessage);
         } else {
           
         }

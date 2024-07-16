@@ -1,10 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable} from '@angular/core';
 import { Observable, catchError, forkJoin, retry, tap, throwError } from 'rxjs';
-import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { UserRequest } from '../interfaces/userRequest';
-import { ProfileRequest } from '../interfaces/profileRequest';
 import { UserDTO } from '../interfaces/userDTO';
 import { PreferenceDTO } from '../interfaces/preferenceDTO';
 

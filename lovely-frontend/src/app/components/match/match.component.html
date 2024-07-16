@@ -28,8 +28,8 @@
                     (click)="goToChat(user.id)"
                     [ngClass]="{'active': selectedUserId === user.id}">
                     <div>
-                      <img src="https://via.placeholder.com/40" alt="Usuario {{ user.name }}">
-                      {{ user.name }} {{ user.lastname }} {{ user.id }}
+                      <img [src]="getImageUrl(user.profileDetail.photo)" alt="Usuario {{ user.name }}" class="img-user-match">
+                      {{ user.name }} {{ user.lastname }}
                     </div>
                     <div>
                       <div class="btn-group dropup">

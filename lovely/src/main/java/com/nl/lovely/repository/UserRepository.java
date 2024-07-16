@@ -31,6 +31,13 @@ public interface UserRepository extends JpaRepository<User,Long>{
 	@Query("update ProfileDetail set phone = :phone, gender = :gender, birthDate = :birthDate, description = :description, work = :work, photo = :photo, photoFileName = :photoFileName where user.id = :userId")
 	void updateProfileDetailWithPhoto(@Param("userId") Long userId, @Param("phone") String phone, @Param("gender") String gender, @Param("birthDate") LocalDate birthDate, @Param("description") String description, @Param("work") String work, @Param("photo") byte[] photo, @Param("photoFileName") String photoFileName);
 	
+	// Versión only imagen
+	@Modifying
+    @Transactional
+    @Query("update ProfileDetail set photo = :photo, photoFileName = :photoFileName where user.id = :userId")
+    void updateProfilePhoto(@Param("userId") Long userId, @Param("photo") byte[] photo, @Param("photoFileName") String photoFileName);
+	
+	
 	public boolean existsByUsername(String username); // Devuelve un bool por la existencia de un username
 	
 	Optional<User> findByProfileDetailId(Long id); // Buscar usuario by id de profile

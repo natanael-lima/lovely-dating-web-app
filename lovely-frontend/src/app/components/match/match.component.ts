@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ChatComponent } from '../chat/chat.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { UserResponse } from '../../interfaces/userResponse';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-match',
@@ -34,7 +35,8 @@ export class MatchComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription | undefined;
   private messageSubscription: Subscription | undefined;
   
-  constructor(private breakpointObserver: BreakpointObserver, private userService:UserService,private matchService:MatchService, private route: ActivatedRoute, private router: Router, private chatService: ChatService){
+
+  constructor(private sanitizer: DomSanitizer, private breakpointObserver: BreakpointObserver, private userService:UserService,private matchService:MatchService, private route: ActivatedRoute, private router: Router){
     this.currentProfile = {
       id: 0,
       username: '',
@@ -96,7 +98,16 @@ export class MatchComponent implements OnInit, OnDestroy {
         this.showUserList = true;
       });
   }
-
+  getImageUrl(imageData: File | null): SafeUrl {
+    // Asegúrate de que los datos de la imagen estén en el formato correcto (base64)
+    if (imageData && typeof imageData === 'string') {
+      const imageUrl = 'data:image/jpeg;base64,' + imageData;
+      return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+    } else {
+      // Si los datos de la imagen no están en el formato correcto, devuelve una URL de imagen predeterminada o null
+      return 'https://i.postimg.cc/7hsdHJL7/nofound2.png';
+    }
+  }
   goBack() {
     if (this.isMobile) {
       this.showUserList = true;

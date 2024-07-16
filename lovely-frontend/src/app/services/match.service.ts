@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { Match } from '../models/match';
-import { ProfileRequest } from '../interfaces/profileRequest';
 import { UserRequest } from '../interfaces/userRequest';
 
 @Injectable({

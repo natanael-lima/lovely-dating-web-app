@@ -94,7 +94,6 @@ p, a, li, span {
 .match-card {
   position: fixed;
   top: 29%;
-
   background-color:rgba(255, 255, 255, 0.9) ;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

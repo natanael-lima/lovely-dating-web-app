@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { LoginService } from '../../services/login.service';
@@ -30,7 +29,7 @@ export class PerfilComponent implements OnInit {
   uploadSuccess: boolean = false;
   isLoggedIn: boolean = false;
   defaultImageURL: string = 'https://t3.ftcdn.net/jpg/05/87/76/66/360_F_587766653_PkBNyGx7mQh9l1XXPtCAq1lBgOsLl6xH.jpg';
-  currentSection: string = 'perfil'; // Sección actual, inicialmente 'perfil'
+
 
   currentProfile!: UserDTO; //new
   
@@ -77,7 +76,15 @@ export class PerfilComponent implements OnInit {
     };
     this.checkScreenSize();
   }
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
 
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+    this.showMenu = true;
+  }
   // Inicializa checkedInterests al cargar los datos del perfil
   initializeInterests() {
     const currentInterests = this.currentProfile.preference?.interests || [];
@@ -111,8 +118,6 @@ export class PerfilComponent implements OnInit {
     return Object.keys(this.checkedInterests).filter(interest => this.checkedInterests[interest]);
   }
 
-
-
   //Selecciona multiple imagenes
   onFileSelected(event: any, index: number): void {
     if (event.target.files && event.target.files[0]) {
@@ -127,24 +132,7 @@ export class PerfilComponent implements OnInit {
     this.currentProfile.preference.distance = +(event.target as HTMLInputElement).value;
   }
   
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.checkScreenSize();
-  }
-
-  checkScreenSize() {
-    this.isMobile = window.innerWidth < 768;
-    this.showMenu = true;
-  }
-
-  // Función para cambiar la sección actual
-  changeSection(section: string) {
-    this.currentSection = section;
-    if (this.isMobile) {
-      this.showMenu = false;
-    }
-  }
+  
 
   goBack() {
     if (this.isMobile) {
@@ -242,8 +230,11 @@ updatePreference() {
     this.userService.updateUserPreference(dataProfileUpdate).pipe(
       tap(response => {
         console.log("Preferece update succesfull:", response);
-        //this.uploadSuccess = true;
-        this.showSuccessToast();
+        this.uploadSuccess = true;
+        setTimeout(() => {
+          this.uploadSuccess = false;
+        }, 2000); // Cerrar el modal después de 2 segundos
+        //this.showSuccessToast();
       }),
       catchError(error => {
         console.log("Error update preference");
@@ -257,14 +248,12 @@ updatePhoto() {
   if (this.currentProfile.profileDetail.photo instanceof File) {
     const formData = new FormData();
     formData.append('req', new Blob([JSON.stringify({
-      profileDetail: {
-        phone: this.currentProfile.profileDetail.phone,
-        gender: this.currentProfile.profileDetail.gender,
-        birthDate: this.currentProfile.profileDetail.birthDate,
-        description: this.currentProfile.profileDetail.description,
-        work: this.currentProfile.profileDetail.work,
-        photoFileName: this.currentProfile.profileDetail.photoFileName
-      }
+      id: this.currentProfile.profileDetail.id,
+      phone: this.currentProfile.profileDetail.phone,
+      gender: this.currentProfile.profileDetail.gender,
+      birthDate: this.currentProfile.profileDetail.birthDate,
+      description: this.currentProfile.profileDetail.description,
+      work: this.currentProfile.profileDetail.work,
     })], {
       type: 'application/json'
     }));

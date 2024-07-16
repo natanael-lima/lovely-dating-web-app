@@ -32,7 +32,6 @@ p, a, li, span {
   font-family: 'OpenSans', sans-serif;
 }
 
-
 /* BTNs */
 .btn-custom-v1{
   background: linear-gradient(to bottom right, #9eb8ce, #aaaed1 ,  #c3afd6, #d8b2cb);
@@ -65,6 +64,7 @@ p, a, li, span {
 .user-image {
   width: 30px;
   height: 30px;
+  object-fit: cover;
   border-radius: 50%; /* Hace que la imagen sea circular */
   margin-right: 5px; /* Espacio entre la imagen y el mensaje */
   margin-left: 5px; /* Espacio entre la imagen y el mensaje */
@@ -105,13 +105,9 @@ p, a, li, span {
   border: 1px solid #e6e6e6; /* Color y grosor del borde */
 }
 
-
-
-
 .message {
   border-radius: 10px;
   padding: 10px;
-
   flex-grow: 1; /* Permite que el mensaje ocupe todo el ancho disponible */
 }
 

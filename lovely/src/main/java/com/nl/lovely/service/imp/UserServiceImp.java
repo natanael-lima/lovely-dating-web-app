@@ -154,16 +154,10 @@ public class UserServiceImp implements UserService{
              profileDetail.setPhotoFileName(file.getOriginalFilename());
              
              // Llamar al método de actualización con foto
-     	    userRepository.updateProfileDetailWithPhoto(
-                     user.getId(),
-                     profileDetail.getPhone(),
-                     profileDetail.getGender(),
-                     profileDetail.getBirthDate(),
-                     profileDetail.getDescription(),
-                     profileDetail.getWork(),
-                     profileDetail.getPhoto(),
-                     profileDetail.getPhotoFileName()
-             );
+     	    userRepository.updateProfilePhoto(
+     	    		user.getId(), 
+     	    		profileDetail.getPhoto(),
+     	            profileDetail.getPhotoFileName());
      	    
 	    } else {
 	    	 System.out.println("update only data");

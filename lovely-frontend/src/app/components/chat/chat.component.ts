@@ -6,7 +6,7 @@ import {FormsModule} from '@angular/forms';
 import { Message } from '../../models/message';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-import { UserRequest } from '../../interfaces/userRequest';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatchService } from '../../services/match.service';
 import { UserResponse } from '../../interfaces/userResponse';
 
@@ -26,6 +26,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   chatId!: number;
 
   currentProfile!: UserResponse; 
+  targetProfile!: UserResponse;
 
   private subscription: Subscription | null = null;
 
@@ -33,8 +34,34 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @Input() targetUserId!: number;
   @Input() key!: number;
 
-  constructor(private chatService: ChatService, private matchService: MatchService,private route: ActivatedRoute, private userService:UserService, private cdr: ChangeDetectorRef){
+  constructor(private chatService: ChatService, private matchService: MatchService,private route: ActivatedRoute, private userService:UserService, private sanitizer: DomSanitizer,){
   this.currentProfile = {
+        id: 0,
+        username: '',
+        lastname: '',
+        name: '',
+        preference: {
+          id: 0,
+          maxAge: 0,
+          minAge: 0,
+          likeGender: '',
+          location: '',
+          distance: 0,
+          interests: []
+        },
+        profileDetail: {
+          id: 0,
+          phone: '',
+          gender: '',
+          birthDate: new Date(),
+          description: '',
+          work: '',
+          photo: null,
+          photoFileName: '',
+          timestamp: ''
+        }
+      };
+      this.targetProfile = {
         id: 0,
         username: '',
         lastname: '',
@@ -64,6 +91,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     console.log('ChatComponent initialized with:', this.currentUserId, this.targetUserId, this.key);
+    
     //this.initializeChat(); //genera duplex
   }
   ngOnDestroy(): void {
@@ -82,7 +110,6 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
 private initializeChat(): void {
     console.log('Inicializamos chat');
-
     if (this.currentUserId && this.targetUserId) {
       // Primero, obtenemos el ID del chat
       this.matchService.getMatchByIds(this.currentUserId, this.targetUserId).subscribe(
@@ -93,6 +120,7 @@ private initializeChat(): void {
             (user: UserResponse) => {
               this.currentProfile = user;
               // Ahora que tenemos el chatId y el usuario actual, podemos inicializar todo
+              this.getUserTarget();
               this.joinChat();
               this.loadInitialMessages();
               this.subscribeToMessages();
@@ -108,7 +136,28 @@ private initializeChat(): void {
       );
     }
   }
-  
+  getImageUrl(imageData: File | null): SafeUrl {
+    // Asegúrate de que los datos de la imagen estén en el formato correcto (base64)
+    if (imageData && typeof imageData === 'string') {
+      const imageUrl = 'data:image/jpeg;base64,' + imageData;
+      return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+    } else {
+      // Si los datos de la imagen no están en el formato correcto, devuelve una URL de imagen predeterminada o null
+      return 'https://i.postimg.cc/7hsdHJL7/nofound2.png';
+    }
+  }
+
+  getUserTarget(){
+    this.userService.getUser(this.targetUserId).subscribe(
+      (userTarger: UserResponse) => {
+        this.targetProfile = userTarger;
+      },
+      (error) => {
+        console.error('Error al obtener el usuario target:', error);
+      }
+    );
+  }
+
 sendMessage() {
     if (this.messageInput.trim() !== '' && this.chatId) {
       const message = {
