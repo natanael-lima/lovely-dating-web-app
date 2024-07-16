@@ -21,11 +21,11 @@ import com.nl.lovely.dto.MessageDTO;
 import com.nl.lovely.entity.Chat;
 import com.nl.lovely.entity.Match;
 import com.nl.lovely.entity.Message;
-import com.nl.lovely.entity.UserProfile;
+import com.nl.lovely.entity.User;
 import com.nl.lovely.service.ChatService;
 import com.nl.lovely.service.MatchService;
 import com.nl.lovely.service.MessageService;
-import com.nl.lovely.service.UserProfileService;
+import com.nl.lovely.service.UserService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class WebSocketController {
 	private ChatService chatService;
 	
 	@Autowired
-	private UserProfileService userProfileService;
+	private UserService userService;
 	
 	@Autowired
 	private MessageService messageService;
@@ -55,7 +55,7 @@ public class WebSocketController {
         // Asignar el chat al mensaje
         messageDTO.setChatId(chat.getId());
         // Asignar el ID del remitente al mensaje
-        UserProfile sender = userProfileService.findUserById(userId);
+        User sender = userService.findUserById(userId);
         messageDTO.setSenderId(sender.getId());
         messageDTO.setTimestamp(LocalDateTime.now());
         System.out.println("backend message content: "+messageDTO.getContent());

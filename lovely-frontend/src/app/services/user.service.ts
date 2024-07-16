@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable} from '@angular/core';
 import { Observable, catchError, forkJoin, retry, tap, throwError } from 'rxjs';
-import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { UserRequest } from '../interfaces/userRequest';
-import { ProfileRequest } from '../interfaces/profileRequest';
+import { UserDTO } from '../interfaces/userDTO';
+import { PreferenceDTO } from '../interfaces/preferenceDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -14,57 +14,43 @@ export class UserService {
 
   constructor(private http: HttpClient, private router:Router) { }
 
- // Método para registrar un usuario + profile
- registerUser(formData:FormData): Observable<User> { 
+ // Método para registrar un usuario completo con todos los datos
+ registerUser(formData:FormData): Observable<UserDTO> { 
   
-  return this.http.post<User>(this.apiUrl+'/auth/registration-user', formData).pipe(
+  return this.http.post<UserDTO>(this.apiUrl+'/auth/registration-profile', formData).pipe(
   );
  }
- // Método para checkear si existe username
+
+ // Método para checkear si existe username para mostrar mensaje y elegir otro username
  checkUsernameExists(username: string): Observable<any> { 
-  return this.http.get<any>(`${this.apiUrl}/api/user/checkUsername?username=${username}`).pipe(
+  return this.http.get<any>(`${this.apiUrl}/api/user/check-username?username=${username}`).pipe(
   );
  }
 
-// Método para obtener un usuario
+// Método para obtener un usuario por ID
  getUser(id:number):Observable<any>{
-  return this.http.get<any>(this.apiUrl+"/api/user/"+id).pipe(
+  return this.http.get<any>(this.apiUrl+"/api/user/get-user/"+id).pipe(
     catchError(this.handleError)
   )
 }
 
-// Método para obtener un profile
-getUserProfile(id:number):Observable<any>{
-  return this.http.get<any>(this.apiUrl+"/api/user/profile/"+id).pipe(
+// Método para obtener un datos de user basico
+getUserBasic(id:number):Observable<any>{
+  return this.http.get<any>(this.apiUrl+"/api/user/get-user/basic/"+id).pipe(
     catchError(this.handleError)
   )
 }
 
-// Método para obtener los datos del usuario actualmente logueado
- getCurrentUser(): Observable<UserRequest> {
-  return this.http.get<UserRequest>(this.apiUrl+'/api/user/current').pipe(
+// Método para obtener los datos del usuario completo actualmente logueado
+ getCurrentProfile(): Observable<any> {
+  return this.http.get<any>(this.apiUrl+'/api/user/current-user-profile').pipe(
     catchError(this.handleError)
   );
 }
 
-// Método para obtener los datos del perfil actualmente logueado
-getCurrentUserProfile(id:number): Observable<ProfileRequest> {
-  return this.http.get<ProfileRequest>(this.apiUrl+'/api/user/currentProfile/'+id).pipe(
-    catchError(this.handleError)
-  );
-}
-
-// Método para actualizar un usuario
-updateUser(userRequest:UserRequest):Observable<any>
-  {
-    return this.http.put(this.apiUrl+'/api/user/updateUser', userRequest).pipe(
-      catchError(this.handleError)
-    )
-  }
-
-// Método para obtener los datos del perfil actualmente logueado
-updatePhotoAndProfile(formData:FormData): Observable<any> {
-  return this.http.put<any>(this.apiUrl+'/api/user/update-profile-image',formData).pipe(
+// Método para actualizar profile detail o photo profile
+updateUserDetail(data:FormData,id:number): Observable<any> {
+  return this.http.put(`${this.apiUrl}/api/profile/update-profile-detail/${id}`,data).pipe(
     catchError(error => {
       if (error instanceof HttpErrorResponse) {
         console.error('Error en la solicitud:', error);
@@ -75,19 +61,28 @@ updatePhotoAndProfile(formData:FormData): Observable<any> {
     })
   );
 }
+// Método para actualizar un usuario 
+updateUserBasic(data:UserRequest):Observable<any>
+  {
+    return this.http.put(`${this.apiUrl}/api/user/update-user/${data.id}`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
 
-getFilterByPreference(): Observable<ProfileRequest[]> {
-  return this.http.get<ProfileRequest[]>(this.apiUrl+'/api/user/filter-users');
+// Método para actualizar un usuario 
+updateUserPreference(data:PreferenceDTO):Observable<any>
+  {
+    return this.http.put(`${this.apiUrl}/api/preference/update-preference/${data.id}`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+getFilterByPreference(): Observable<any[]> {
+  return this.http.get<any[]>(this.apiUrl+'/api/user/filter-users');
 }
-getRandomProfile(): Observable<ProfileRequest> {
-  return this.http.get<any>(this.apiUrl+'/api/user/random-user');
-}
-getRandomProfiles(): Observable<ProfileRequest[]> {
-  return this.http.get<any[]>(this.apiUrl+'/api/user/random-users');
-}
-getUsers(userId: number): Observable<UserRequest[]> {
-  return this.http.get<UserRequest[]>(this.apiUrl+'/api/user/all/'+userId);
-   
+
+getUsers(id: number): Observable<any[]> {
+  return this.http.get<any[]>(this.apiUrl+'/api/user/match-all/'+id);
 }
 
 getCountries(): Observable<any[]> {

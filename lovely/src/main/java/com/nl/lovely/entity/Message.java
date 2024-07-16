@@ -27,10 +27,11 @@ public class Message {
 
     private String content;
     private LocalDateTime timestamp;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
-    private UserProfile sender;
+    private User sender;
+    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")

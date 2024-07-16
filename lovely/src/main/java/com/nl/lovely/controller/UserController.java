@@ -26,21 +26,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.nl.lovely.dto.UserCompleteDTO;
+
+import com.nl.lovely.dto.PreferenceDTO;
+import com.nl.lovely.dto.ProfileDTO;
+import com.nl.lovely.dto.ProfileDetailDTO;
 import com.nl.lovely.dto.UserDTO;
-import com.nl.lovely.dto.UserProfileDTO;
+import com.nl.lovely.entity.Preference;
+import com.nl.lovely.entity.ProfileDetail;
 import com.nl.lovely.entity.User;
-import com.nl.lovely.entity.UserProfile;
 import com.nl.lovely.repository.UserRepository;
-import com.nl.lovely.request.RegisterRequest;
-import com.nl.lovely.request.UserProfileCompleteRequest;
-import com.nl.lovely.request.UserProfilePhotoRequest;
-import com.nl.lovely.request.UserProfileRequest;
-import com.nl.lovely.request.UserRequest;
+import com.nl.lovely.response.ApiResponse;
 import com.nl.lovely.response.AuthResponse;
 import com.nl.lovely.response.UserProfileResponse;
 import com.nl.lovely.response.UserResponse;
-import com.nl.lovely.service.UserProfileService;
 import com.nl.lovely.service.UserService;
 
 
@@ -50,15 +48,110 @@ import com.nl.lovely.service.UserService;
 public class UserController {
 	@Autowired
     private UserService userService;
-	@Autowired
-    private UserProfileService userProfileService;
+	//@Autowired
+    //private UserProfileService userProfileService;
 	
 	@Autowired
     private UserRepository userRepository;
 	
-	
+    //************************** API para actualizar los datos del usuario. ************************** new
+    @PutMapping("/update-user/{id}")
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id,@RequestBody ProfileDTO userRequest)
+    {
+    	userRequest.setId(id); 
+        return ResponseEntity.ok(userService.updateUserData(userRequest));
+    }
+
+    //************************** API para eliminar un usuario.**************************
+    @DeleteMapping("/delete-user/{id}")
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
+    	try {
+    		System.out.print("entre eliminar");
+            ApiResponse response = userService.deleteUserComplete(id);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error al eliminar el usuario: " + e.getMessage()));
+        }
+    }
+    //************************** API para obtener solo datos basico by ID. **************************
+  	@GetMapping("/get-user/basic/{id}")
+      public ResponseEntity<UserDTO> getUser(@PathVariable Long id)
+      {
+          UserDTO userDTO = userService.getUser(id);
+          if (userDTO==null)
+          {
+             return ResponseEntity.notFound().build();
+          }
+          return ResponseEntity.ok(userDTO);
+      }
+    //************************** API para obtener el usuario completo by ID por paramaetro. ************************** new
+    @GetMapping("/get-user/{id}")
+    public ResponseEntity<ProfileDTO> findProductById(@PathVariable Long id) throws Exception {
+        try {
+        	ProfileDTO dto = userService.getProfileById(id);
+            return ResponseEntity.ok(dto);
+        } catch (RuntimeException e) {
+            return ResponseEntity.noContent().build(); 
+        }
+    }
+    
+  	//************************** API para obtener el usuario logueado actual. **************************
+  	@GetMapping("/current-user-profile")
+  	public ResponseEntity<ProfileDTO> getCurrentUserProfile() {
+  	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  	    if (!(authentication.getPrincipal() instanceof UserDetails)) {
+  	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  	    }
+  	    
+  	    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+  	    User user = userRepository.findByUsername(userDetails.getUsername())
+  	            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+  	    
+  	    ProfileDTO profileDTO = ProfileDTO.builder()
+  	            .id(user.getId())
+  	            .username(user.getUsername())
+  	            .lastname(user.getLastname())
+  	            .name(user.getName())
+  	            .role(user.getRole())
+  	            .preference(mapToPreferenceDTO(user.getPreference()))
+  	            .profileDetail(mapToProfileDetailDTO(user.getProfileDetail()))
+  	            .build();
+  	    
+  	    return ResponseEntity.ok(profileDTO);
+  	}
+  	
+  	private PreferenceDTO mapToPreferenceDTO(Preference preference) {
+  	    if (preference == null) return null;
+  	    return PreferenceDTO.builder()
+  	            .id(preference.getId())
+  	            .maxAge(preference.getMaxAge())
+  	            .minAge(preference.getMinAge())
+  	            .likeGender(preference.getLikeGender())
+  	            .location(preference.getLocation())
+  	            .distance(preference.getDistance())
+  	            .interests(preference.getInterests())
+  	            .build();
+  	}
+
+  	private ProfileDetailDTO mapToProfileDetailDTO(ProfileDetail profileDetail) {
+  	    if (profileDetail == null) return null;
+  	    return ProfileDetailDTO.builder()
+  	            .id(profileDetail.getId())
+  	            .phone(profileDetail.getPhone())
+  	            .gender(profileDetail.getGender())
+  	            .birthDate(profileDetail.getBirthDate())
+  	            .description(profileDetail.getDescription())
+  	            .work(profileDetail.getWork())
+  	            .photo(profileDetail.getPhoto())
+  	            .photoFileName(profileDetail.getPhotoFileName())
+  	            .timestamp(profileDetail.getTimestamp())
+  	            .build();
+  	}
+  	
+    
 	//************************** API para checkear si existe el username **************************
-    @GetMapping("/checkUsername")
+    @GetMapping("/check-username")
     public ResponseEntity<Map<String, Boolean>> checkUsername(@RequestParam String username) {
     	 System.out.println("Buscando usuario: '" + username + "'");
         boolean exists = userRepository.findByUsername(username).isPresent();
@@ -68,70 +161,81 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
     
-	//************************** API para obtener el usuario logueado actual. **************************
-    @GetMapping("/current")
-	public UserDetails getCurrentUser() {
-	        // Obtener los detalles del usuario actualmente autenticado
-	        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
-   //************************** API para obtener el usuario by ID por paramaetro. **************************
-	@GetMapping(value = "{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id)
-    {
-        UserDTO userDTO = userService.getUser(id);
-        if (userDTO==null)
-        {
-           return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userDTO);
-    }
-	
 	//************************** API para obtener todos los usuarios con los que hizo match por id de usuario especifico.**************************
-	@GetMapping(value = "/all/{id}")
-    public ResponseEntity<List<UserDTO>> getUsersByMatch(@PathVariable Long id)
+	@GetMapping("/match-all/{id}")
+    public ResponseEntity<List<ProfileDTO>> getUsersByMatch(@PathVariable Long id)
     {
-		List<UserDTO> lista = userService.getUsersByMatch(id);
+		List<ProfileDTO> lista = userService.getUsersByMatch(id);
         if (lista.isEmpty())
         {
            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(lista);
     }
+	//************************** API para obtener perfil de usuario segun preferencias.**************************
+    @GetMapping("/filter-users")
+    public ResponseEntity<List<ProfileDTO>> getFilterProfileUsers() {
+    	Long userId = getCurrentUserId();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<ProfileDTO> listProfiles = userService.getFilteredUserProfiles(userId);
+        if (listProfiles != null) {
+            return ResponseEntity.ok(listProfiles);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    
+    //************************** Metodo para obtener el id del user logueado.**************************
+    private Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            User user = userService.findByUsername(username).orElse(null);
+            if (user != null) {
+            	 System.out.println("id de user: "+user.getId());
+                return user.getId();
+               
+            }
+        }
+        return null;
+    }
+    
+    
 	
+    
+    
 	//************************** API para obtener un UserProfile by ID. **************************
-	@GetMapping(value = "/profile/{id}")
+	/*@GetMapping(value = "/profile/{id}")
     public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable Long id)
     {
-        UserProfileDTO userProfileDTO = userProfileService.getUserProfile(id);
+        UserProfileDTO userProfileDTO = userService.getUserProfile(id);
         if (userProfileDTO==null)
         {
            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(userProfileDTO);
-    }
+    }*/
 	
 	//************************** API para obtener un UserProfile by UserId logueado actualmente. **************************
-	@GetMapping(value = "/currentProfile/{id}")
+	/*@GetMapping(value = "/currentProfile/{id}")
     public ResponseEntity<UserProfileDTO> getIdByProfile(@PathVariable Long id)
     {
-		Long idUser = userProfileService.getUserProfileByUserId(id);
+		Long idUser = userService.getUserProfileByUserId(id);
 		UserProfileDTO userProfileDTO = userProfileService.getUserProfile(idUser);
 	    if (userProfileDTO==null)
 	    {
 	        return ResponseEntity.notFound().build();
 	    }
 	        return ResponseEntity.ok(userProfileDTO);
-    }
+    }*/
 	
-	//************************** API para actualizar los datos del usuario. **************************
-    @PutMapping("/updateUser")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest)
-    {
-        return ResponseEntity.ok(userService.updateUser(userRequest));
-    }
-    
+
     //************************** API para actualizar la foto de perfil del usuario + profile. **************************
-    @PutMapping(value="/update-profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    /*@PutMapping(value="/update-profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserProfileResponse> updateProfileAndPhoto(@RequestPart(value = "photoFile", required = false) MultipartFile photoFile, @RequestPart(value = "req", required = true) UserProfileDTO req, @RequestParam(value = "keepCurrentImage", required = false) Boolean keepCurrentImage) throws Exception {
         // Tu lógica existente para cargar el archivo y actualizar el perfil
     	 if (req == null && photoFile == null ) {
@@ -158,79 +262,9 @@ public class UserController {
 			        } catch (RuntimeException e) {
 			            return ResponseEntity.noContent().build(); 
 			        }
-     }
+     }*/
     
-    //************************** API para obtener perfiles de usuarios aletorios, una lista. **************************
-    @GetMapping("/random-users")
-    public ResponseEntity<List<UserProfileDTO>> getRandomUser() {
-    	List<UserProfileDTO> randomUser = userProfileService.getRandomProfiles(5);
-        return ResponseEntity.ok(randomUser);
-    }
-    //************************** API para obtener perfil de usuario aleatorio.**************************
-    @GetMapping("/random-user")
-    public ResponseEntity<UserProfileDTO> getRandomUsers() {
-    	Long userId = getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
-        UserProfileDTO randomProfile = userProfileService.getRandomProfile(userId);
-        if (randomProfile != null) {
-            return ResponseEntity.ok(randomProfile);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-    //************************** API para obtener perfil de usuario aleatorio.**************************
-    @GetMapping("/filter-users")
-    public ResponseEntity<List<UserProfileDTO>> getFilterProfileUsers() {
-    	Long userId = getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        List<UserProfileDTO> listProfiles = userProfileService.getFilteredUserProfiles(userId);
-        if (listProfiles != null) {
-            return ResponseEntity.ok(listProfiles);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-    
-    //************************** Metodo para obtener el id del user logueado.**************************
-    private Long getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            User user = userService.findByUsername(username).orElse(null);
-            if (user != null) {
-            	 System.out.println("id de user: "+user.getId());
-                return user.getId();
-               
-            }
-        }
-        return null;
-    }
-    
-    //************************** API para eliminar un usuario.**************************
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-    }
-    
-    //************************** prueba user+profile en uno solo
-    @GetMapping("/complete/{id}")
-    public ResponseEntity <UserCompleteDTO> obtenerUser() throws Exception {
-    	UserCompleteDTO dto = userService.getUserDTO(getCurrentUserId());
-        if (dto != null) {
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
     
     /*
       //************************** API que registra un nuevo profile. **************************

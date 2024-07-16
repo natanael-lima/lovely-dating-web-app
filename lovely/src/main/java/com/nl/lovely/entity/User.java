@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nl.lovely.enums.RoleType;
 import jakarta.persistence.*;
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Builder
@@ -28,19 +26,30 @@ public class User implements UserDetails{
     private Long id;
 	@Column(name = "username", nullable=false)
     private String username;
-	@Column(name = "password")
     private String password;
-	@Column(name = "lastname")
     private String lastname;
-	@Column(name = "name")
 	private String name;
 	@Enumerated(EnumType.STRING)
-	private RoleType role; //ADMIN-USER
+	private RoleType role; 
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "preference_id",  referencedColumnName = "id")
+	private Preference preference;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore // Evita la serialización infinita
-    private UserProfile profile;
-   
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_detail_id", referencedColumnName = "id")
+    private ProfileDetail profileDetail;
+	
+	@OneToMany(mappedBy = "liker", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserAction> actionsForMe;
+
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserAction> actionsReceived;
+
+    @OneToMany(mappedBy = "profile1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Match> matches;
+  
+    
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
@@ -75,9 +84,7 @@ public class User implements UserDetails{
     
 	@Override
 	public String toString() {
-	    return "User [id=" + id + ", username=" + username + ", profile=" + profile + "]";
-	}
-
-    
+	    return "User [id=" + id + ", username=" + username+"]";
+	} 
     
 }

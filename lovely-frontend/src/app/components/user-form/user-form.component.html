@@ -1,123 +1,174 @@
 <nav class="nav nav-pills nav-justified">
-  <img src="../../../assets/lovely-fullwhite.png" class="d-block mx-lg-auto img-fluid m-5" alt="logo" width="250" height="250" loading="lazy">
+  <img src="../../../assets/lovely-full-dark.png" class="d-block mx-auto img-fluid m-5" alt="logo" width="250" height="250" loading="lazy">
 </nav>
   <div class="container">
     <div class="row">
-      <div class="col-md-5 offset-md-3 mx-auto">
-        <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="was-validated login-form" enctype="multipart/form-data">
+      <div class="col-md-6 offset-md-3">
+        <form class="login-form was-validated" (ngSubmit)="onSubmit()" #userForm="ngForm" enctype="multipart/form-data">
           <!-- Sección de datos del usuario -->
-          @if(activeSection === 'user' ){
-              <h1 class="text-center mb-4">Registrarte</h1>
-              <div class="row p-1">
-                <div class="col-lg-12 col-md-6 col-sm-12 mb-2">
+          @if(activeSection === 'profilePersonal' ){
+              <h2 class="text-center mb-4">Registrarte</h2>
+              <div class="row">
+                <div class="form-group mb-3">
                   <label for="name">Nombre</label>
-                  <input type="text" class="form-control" id="name"  name="name" [(ngModel)]="user.name" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" placeholder="Ingrese su nombre" required>
-                  
+                  <input type="text" class="form-control" id="name"  name="name" [(ngModel)]="userRequest.name" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" placeholder="Ingrese su nombre" required>
                 </div>
-                <div class="col-lg-12 col-md-6 col-sm-12 mb-2">
+                <div class="form-group mb-3">
                   <label for="lastname">Apellido</label>
-                  <input type="text" class="form-control" id="lastname"  name="lastname" [(ngModel)]="user.lastname" [ngModelOptions]="{standalone: true}" placeholder="Ingrese su apellido" required>
+                  <input type="text" class="form-control" id="lastname"  name="lastname" [(ngModel)]="userRequest.lastname" [ngModelOptions]="{standalone: true}" placeholder="Ingrese su apellido" required>
                   <!-- <div class="invalid-feedback">Por favor, ingrese su apellido.</div>-->
                 </div>
-                <div class="col-lg-12 col-md-6 col-sm-12 mb-2">
+                <div class="form-group mb-3">
                   <label for="username">Email</label>
-                  <input type="email" class="form-control" id="username" name="username" [(ngModel)]="user.username" [ngModelOptions]="{standalone: true}" (blur)="checkUsername()" (input)="resetErrorMessage()" placeholder="Ingrese su correo electrónico" required>
+                  <input type="email" class="form-control" id="username" name="username" [(ngModel)]="userRequest.username" [ngModelOptions]="{standalone: true}" (blur)="checkUsername()" (input)="resetErrorMessage()"  placeholder="Ingrese su correo electrónico" required email>
                   @if(errorMessage){
-                  
-                    <div class="invalid-feedback">Por favor, ingrese otro usuario ya existe ese username!</div>
+                    <div class="alert alert-danger mt-2">
+                        Error usuario ya existe con ese username!
+                    </div>
+                  }@else{
+                    <div class="invalid-feedback">
+                      Por favor, ingrese un correo electrónico válido.
+                    </div>
                   }
-                  <div class="invalid-feedback">Erro!</div>
-                 
+                  
                 </div>
-                <div class="col-lg-12 col-md-6 col-sm-12 mb-2">
+                <div class="form-group mb-3">
                   <label for="password">Contraseña</label>
-                  <input type="password" class="form-control" id="password" name="password" [(ngModel)]="user.password" [ngModelOptions]="{standalone: true}" placeholder="Ingrese su contraseña" required>
+                  <input type="password" class="form-control" id="password" name="password" [(ngModel)]="userRequest.password" [ngModelOptions]="{standalone: true}" placeholder="Ingrese su contraseña" required>
+                </div>
+
+                <div class="col-12 col-md-12 col-sm-12 mb-3 text-center">
+                  <label for="file-input">Foto</label>
+                  <div class="position-relative ">
+                    <input id="file-input" type="file" class="form-control visually-hidden" (change)="onFileSelect($event)" accept="image/*" aria-label="file example" required>
+                    <!-- Placeholder para el círculo con borde -->
+                    @if(!selectedImageURL){
+                    <div class="invalid-feedback">Seleccione su imagen de perfil</div>
+                    <div class="container">
+                      <div class="row justify-content-center">
+                        <div class="col-6 text-center d-flex justify-content-center align-items-center">
+                          <div class="image-placeholder position-relative" (click)="onFileInputClick()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload"
+                              viewBox="0 0 16 16">
+                              <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                              <path
+                                d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    }
+                    <!-- Vista previa de la imagen -->
+                    @if(selectedImageURL){
+                      <div class="container">
+                        <div class="row justify-content-center">
+                          <div class="col-6 text-center d-flex justify-content-center align-items-center">
+                            <div class="image-preview-container position-relative ">
+                              <img [src]="selectedImageURL" alt="Preview" class="preview-image">
+                            </div>
+                            <div class="change-photo-btn text-white position-absolute top-100 start-50 translate-middle" (click)="onFileInputClick()">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat"
+                                viewBox="0 0 16 16">
+                                <path
+                                  d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                                <path fill-rule="evenodd"
+                                  d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+                              </svg> <!-- Icono para cambiar la foto -->
+                            </div>
+                          </div>  
+                        </div> 
+                      </div> 
+                    }
+                
+                  </div>
                 </div>
               </div>
-
             <div class="d-grid gap-1 mt-2">
-              
-                <button type="submit" class="btn btn-custom btn-lg btn-block" [disabled]="!userForm.form.valid || errorMessage || !user.name || !user.lastname || !user.username || !user.password" (click)="nextSection()">Continuar Registradome</button>
-
-               <!--<button type="button" class="btn btn-outline-danger rounded-pill px-3 btn-sm btn-block" (click)="newUser();userForm.reset()">Nuevo Usuario</button>-->
-              
+                <button type="button" class="btn btn-custom btn-lg btn-block" [disabled]="!userForm.form.valid || errorMessage || !userRequest.name || !userRequest.lastname || !userRequest.username || !userRequest.password || !selectedImageURL" (click)="nextSection()">Continuar</button>
             </div>
             <p class="mt-3 text-center">¿Ya tienes cuenta? <a href="/user/signin">Inicia Sesion aquí</a></p>
-          } @if(activeSection === 'profile' ){
+          } @if(activeSection === 'profileDetail' ){
              <!-- Sección de datos del perfil -->
              <h2 class="text-center mb-4">Completar Datos</h2>
             
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
-                    <label for="location">Localidad</label>
-                    <input type="text" class="form-control" id="location" name="location" [(ngModel)]="user.profile.location" [ngModelOptions]="{standalone: true}" required>
-                </div>
-                <div class="col-6 col-md-6 col-sm-12 mb-2">
-                    <label for="gender">Género</label>
-                    <select class="form-control" id="gender" name="gender" [(ngModel)]="user.profile.gender" [ngModelOptions]="{standalone: true}" required>
-                        <option value="" disabled>Seleccionar</option>
-                        <option value="Femenino"> Soy Femenino</option>
-                        <option value="Masculino">Soy Masculino</option>
-                    </select>
-                </div>
-                <div class="col-12 col-md-4 col-sm-12 mb-2">
-                  <label for="age">Edad</label>
-                  <input type="number" class="form-control" id="age" name="age" [(ngModel)]="user.profile.age" [ngModelOptions]="{standalone: true}" required>
-                </div>
-                <div class="col-12 col-md-4 col-sm-12 mb-2">
-                  <label for="day">Día</label>
-                  <input type="number" class="form-control" id="day" name="day" required min="1" max="31">
-                </div>
-                <div class="col-12 col-md-4 col-sm-12 mb-2">
-                  <label for="month">Mes</label>
-                  <input type="number" class="form-control" id="month" name="month"  required min="1" max="12">
-                </div>
-                <div class="col-12 col-md-4 col-sm-12 mb-2">
-                  <label for="year">Año</label>
-                  <input type="number" class="form-control" id="year" name="year"  required min="1920" max="2024">
-                </div>
+            <div class="form-group mb-3">
+              <label for="phone">Phone</label>
+              <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="userRequest.profileDetail.phone" [ngModelOptions]="{standalone: true}" placeholder="Ingrese su phone" #phone="ngModel" required>
             </div>
-            <h3>Preferencias</h3>
-            <div class="row">
-                <div class="col-6 col-md-6 col-sm-12 mb-2">
-                    <label for="maxAge">Edad Máxima</label>
-                    <input type="number" class="form-control" id="maxAge" name="maxAge" [(ngModel)]="user.profile.maxAge" [ngModelOptions]="{standalone: true}" value="18" required max="70" min="18">
-                </div>
-                <div class="col-6 col-md-6 col-sm-12 mb-2">
-                    <label for="minAge">Edad Mínima</label>
-                    <input type="number" class="form-control" id="minAge" name="minAge" [(ngModel)]="user.profile.minAge" [ngModelOptions]="{standalone: true}" requiredmax="70" min="18" >
-                </div>
-               
-            </div>
-            <div class="row">
-              <div class="col-4 col-md-4 col-sm-12 mb-2">
-                <label for="likeGender">Género de Interés</label>
-                <select class="form-control" id="likeGender" name="likeGender" [(ngModel)]="user.profile.likeGender" [ngModelOptions]="{standalone: true}" required>
-                    <option value="" disabled>Seleccionar</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Masculino">Masculino</option>
+            <div class="form-group mb-3">
+              <label for="gender">Gender</label>
+                <select class="form-control form-select-md mb-3" id="gender" name="gender" [(ngModel)]="userRequest.profileDetail.gender" [ngModelOptions]="{standalone: true}" #gender="ngModel" required aria-label="select example">
+                  <option value="" disabled>Seleccionar</option>
+                  <option [value]="'Femenino'">Femenino</option>
+                  <option [value]="'Masculino'">Masculino</option>
                 </select>
-              </div>
-              <div class="col-8 col-md-8 col-sm-12 mb-2">
-                <label for="file-input">Foto</label>
-                <div class="">
-                  <input id="file-input" type="file" class="form-control" (change)="onFileSelect($event)"  accept="image/*" aria-label="file example" required>
-                <div class="invalid-feedback">Seleccione su imagen de perfil</div>
-                @if(selectedImageURL ){
-                  <div class="image-preview">
-                    <img [src]="selectedImageURL" alt="Preview" class="preview-image">
-                  </div>
-                }
-                
-              </div>
-              
-          </div>
-      </div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="birthDate">Fecha de nacimiento</label>
+              <input type="date" class="form-control" id="birthDate" name="birthDate" [(ngModel)]="userRequest.profileDetail.birthDate" [ngModelOptions]="{standalone: true}" #birthDate="ngModel" required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="description">Descripcion</label>
+              <textarea class="form-control" id="description" name="description" [(ngModel)]="userRequest.profileDetail.description" [ngModelOptions]="{standalone: true}" rows="3" placeholder="Cuéntanos sobre ti" #description="ngModel" required ></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="work">Trabajo</label>
+              <input type="text" class="form-control" id="work" name="work" [(ngModel)]="userRequest.profileDetail.work" [ngModelOptions]="{standalone: true}" placeholder="Tu trabajo actual"  #work="ngModel" required >
+            </div>
+        
             <div class="d-grid gap-1 mt-2">
-              <button type="submit" class="btn btn-custom rounded-pill px-3 btn-lg btn-block">Registrarme</button>
+              <button type="button" class="btn btn-custom rounded-pill px-3 btn-lg btn-block" [disabled]="!userForm.form.valid || !userRequest.profileDetail.phone || !userRequest.profileDetail.gender || !userRequest.profileDetail.birthDate || !userRequest.profileDetail.description || !userRequest.profileDetail.work" (click)="nextSection()">Continuar</button>
+              <button type="button" class="btn btn-custom rounded-pill px-3 btn-lg btn-block" (click)="previousSection()">Anterior</button>
             </div>
             
-            <p class="mt-3 text-center">Volver a Formulario <a href="/user/signup">Aquí</a></p> 
+            
+          } @if(activeSection === 'profilePreference' ){
+            <h2 class="text-center mb-4">Preferencias</h2>
+          
+              <!-- Primer Grupo: Preferencias -->
+              <div class="form-group mb-3">
+                  <label for="settingAgeRange">Rango de edad</label>
+                  <div class="d-flex">
+                      <input type="number" class="form-control me-2" min="18" max="99" id="maxAge" name="maxAge" [(ngModel)]="userRequest.preference.maxAge" [ngModelOptions]="{standalone: true}" placeholder="Min"   #maxAge="ngModel" required >
+                      <input type="number" class="form-control" min="18" max="99" id="minAge" name="minAge" [(ngModel)]="userRequest.preference.minAge" [ngModelOptions]="{standalone: true}" placeholder="Max" #minAge="ngModel" required >
+                  </div>
+              </div>
+              <div class="form-group mb-3">
+                <label for="likeGender">Mostrarme</label>
+                <select class="form-select" id="likeGender" name="likeGender" [(ngModel)]="userRequest.preference.likeGender" [ngModelOptions]="{standalone: true}" #likeGender="ngModel" required aria-label="select example">
+                  <option value="" disabled>Seleccionar</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="everyone">Todos</option>
+                </select>
+              </div>
+              
+              <!-- Segundo Grupo: Información de Perfil -->
+              <div class="form-group mb-3">
+                  <label for="location">Ubicación</label>
+                  <select class="form-control form-select-md mb-1" id="location" name="location" [(ngModel)]="userRequest.preference.location" placeholder="Ciudad, País" #location="ngModel" required >
+                    <option value="" selected disabled>Seleccionar</option>
+                    <option *ngFor="let country of countries" [value]="country.name.common">
+                      {{ getFlagEmoji(country.cca2) }} {{ country.name.common }}
+                    </option>
+                  </select>
+              </div>
+             
+                <label>Intereses y palabras clave</label>
+                <div class="form-group mb-3">
+                  <div *ngFor="let interest of interestsList" class="form-check form-check-inline"  >
+                    <input class="form-check-input" type="checkbox" [id]="'interest' + interest" [name]="'interests'" [value]="interest" [(ngModel)]="checkedInterests[interest]" #interest="ngModel" required >
+                    <label class="form-check-label" [for]="'interest' + interest">{{ interest }}</label>
+                  </div>
+                </div>
+                <input type="text" class="form-control mt-2 mb-3" id="searchKeywords" placeholder="Ej: Aventurero, Artista, Deportista (opcional)">
+
+            <div class="d-grid gap-1 mt-2">
+              <button type="submit" class="btn btn-custom rounded-pill px-3 btn-lg btn-block" [disabled]="!userForm.form.valid || !userRequest.preference.maxAge || !userRequest.preference.minAge || !userRequest.preference.likeGender || !userRequest.preference.location">Finalizar Registro</button>
+              <button type="button" class="btn btn-custom rounded-pill px-3 btn-lg btn-block" (click)="previousSection()">Anterior</button>
+            </div>
           }
            
           </form>
@@ -130,7 +181,3 @@
     </div>
   </div>     
 </div>
-
-
-
-  

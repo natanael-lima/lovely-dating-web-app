@@ -35,10 +35,10 @@ public class UserAction {
     
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "liker_id")
-   private UserProfile liker;// Usuario que realiza la acción
+   private User liker;// Usuario que realiza la acción
 
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "target_id")
-   private UserProfile target;// Perfil objetivo de la acción
+   private User target;// Perfil objetivo de la acción
     
 }

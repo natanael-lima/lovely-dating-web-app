@@ -38,14 +38,14 @@ public class Match {
 	 	@Column(name="fecha")
 	 	@Temporal(TemporalType.TIMESTAMP)
 	    private LocalDateTime matchedAt;
-
+	    
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "profile1_id")
-	    private UserProfile profile1;
+	    private User profile1;
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "profile2_id")
-	    private UserProfile profile2;
+	    private User profile2;
 
 	    @OneToOne(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	    private Chat chat;

@@ -36,7 +36,6 @@ public class SecurityConfig {
               	.requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 //.requestMatchers("/chat-socket").permitAll()
-                //.requestMatchers("/app/chat/**").permitAll()
                 .requestMatchers("/api/matches/**").authenticated()
                 .anyRequest().authenticated()
                 )

@@ -1,15 +1,15 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { UserRequest } from '../../interfaces/userRequest';
-import { ProfileRequest } from '../../interfaces/profileRequest';
 import { catchError, forkJoin, tap, throwError } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { UserDTO } from '../../interfaces/userDTO';
+import { PreferenceDTO } from '../../interfaces/preferenceDTO';
 //import * as bootstrap from 'bootstrap';
 declare var window: any;
 
@@ -29,30 +29,94 @@ export class PerfilComponent implements OnInit {
   uploadSuccess: boolean = false;
   isLoggedIn: boolean = false;
   defaultImageURL: string = 'https://t3.ftcdn.net/jpg/05/87/76/66/360_F_587766653_PkBNyGx7mQh9l1XXPtCAq1lBgOsLl6xH.jpg';
-  currentSection: string = 'perfil'; // Sección actual, inicialmente 'perfil'
-  currentUserProfile: ProfileRequest={
-    id:0,
-    userId:0,
-    photo:null,
-    photoFileName:'',
-    location: '',
-    gender: '',
-    age: 0,
-    likeGender: '',
-    maxAge: 0,
-    minAge: 0,
-    timestamp:new Date()
-  };
-  currentUser: UserRequest ={
-    id:0,
-    name:'',
-    lastname:'',
-    username:''
-  };
 
+
+  currentProfile!: UserDTO; //new
   
+
   photos: string[] = Array(4).fill(null); //Photo edit profile
-  distance: number = 50; // Valor inicial de la barra de rango
+
+  interestsList: string[] = [
+    'Música', 'Viajes', 'Deportes', 'Arte', 'Fotografía',
+    'Literatura', 'Ciencia', 'Moda', 'Historia', 'Cine'
+  ];
+  
+  checkedInterests: { [key: string]: boolean } = {};
+  selectedInterests: string[] = [];
+  maxInterests: number = 4;
+
+  constructor(private userService:UserService, private formBuilder:FormBuilder,private http: HttpClient, private loginService:LoginService,private router:Router,private sanitizer: DomSanitizer ){
+    this.currentProfile = {
+      id: 0,
+      username: '',
+      password: '',
+      lastname: '',
+      name: '',
+      role: '',
+      preference: {
+        id: 0,
+        maxAge: 0,
+        minAge: 0,
+        likeGender: '',
+        location: '',
+        distance: 0,
+        interests: []
+      },
+      profileDetail: {
+        id: 0,
+        phone: '',
+        gender: '',
+        birthDate: new Date(),
+        description: '',
+        work: '',
+        photo: null,
+        photoFileName: '',
+        timestamp: ''
+      }
+    };
+    this.checkScreenSize();
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+    this.showMenu = true;
+  }
+  // Inicializa checkedInterests al cargar los datos del perfil
+  initializeInterests() {
+    const currentInterests = this.currentProfile.preference?.interests || [];
+    console.log('Intereses actuales:', currentInterests);
+  
+    this.interestsList.forEach(interest => {
+      this.checkedInterests[interest] = currentInterests.includes(interest);
+      console.log(`${interest}: ${this.checkedInterests[interest]}`);
+    });
+  }
+  // Manejar cambios en los checkboxes
+  onCheckboxChange(event: Event, interest: string) {
+    const target = event.target as HTMLInputElement;
+    const currentlySelected = Object.values(this.checkedInterests).filter(Boolean).length;
+
+    if (target.checked && currentlySelected >= this.maxInterests) {
+      // Si ya hay 4 seleccionados y se intenta marcar otro, prevenimos la acción
+      event.preventDefault();
+      target.checked = false;
+      return;
+    }
+
+    this.checkedInterests[interest] = target.checked;
+  }
+  isCheckboxDisabled(): boolean {
+    const selectedCount = Object.values(this.checkedInterests).filter(Boolean).length;
+    return selectedCount >= this.maxInterests;
+  }
+  // Obtener los intereses seleccionados
+  getSelectedInterests(): string[] {
+    return Object.keys(this.checkedInterests).filter(interest => this.checkedInterests[interest]);
+  }
 
   //Selecciona multiple imagenes
   onFileSelected(event: any, index: number): void {
@@ -65,28 +129,10 @@ export class PerfilComponent implements OnInit {
     }
   }
   updateDistance(event: Event) {
-    this.distance = +(event.target as HTMLInputElement).value;
+    this.currentProfile.preference.distance = +(event.target as HTMLInputElement).value;
   }
-  constructor(private userService:UserService, private formBuilder:FormBuilder,private http: HttpClient, private loginService:LoginService,private router:Router,private sanitizer: DomSanitizer ){
-    this.checkScreenSize();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.checkScreenSize();
-  }
-
-  checkScreenSize() {
-    this.isMobile = window.innerWidth < 768;
-    this.showMenu = true;
-  }
-  // Función para cambiar la sección actual
-  changeSection(section: string) {
-    this.currentSection = section;
-    if (this.isMobile) {
-      this.showMenu = false;
-    }
-  }
+  
+  
 
   goBack() {
     if (this.isMobile) {
@@ -95,28 +141,19 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getCurrentUser().subscribe(
-      (user: UserRequest) => {
-        this.currentUser = user;
-        // Una vez que se haya obtenido el usuario actual, llamamos a getCurrentUserProfile
-        this.userService.getCurrentUserProfile(this.currentUser.id).subscribe(
-          (userProfilee: ProfileRequest) => {
-            // Asigna los datos del perfil actual a currentUserProfile
-              this.currentUserProfile = userProfilee;
+    this.userService.getCurrentProfile().subscribe(
+      (user: UserDTO) => {
+        this.currentProfile = user;
               this.getAllCountries();
+              this.initializeInterests();
               // Verifica si hay una foto de perfil en el perfil actual
-              if (this.currentUserProfile.photo) {
+              if (this.currentProfile.profileDetail.photo) {
                 // Se guarda la URL de la imagen y se la muestra en el perfil  
-                this.selectedImageURL = this.getImageUrl(this.currentUserProfile.photo);
+                this.selectedImageURL = this.getImageUrl(this.currentProfile.profileDetail.photo);
               } else {
                 // Si no hay foto de perfil, usa la URL de la imagen por defecto
                 this.selectedImageURL = this.defaultImageURL;
               }
-          },
-          (error) => {
-            console.error('Error al obtener el profile actual:', error);
-          }
-        );
       },
       (error) => {
         console.error('Error al obtener el usuario actual:', error);
@@ -143,8 +180,8 @@ onFileSelect(event: any) {
     const file = event.target.files[0]; // Obtiene el archivo seleccionado
 
     if (file) {
-      this.currentUserProfile.photo = file;
-      this.currentUserProfile.photoFileName = file.name;
+      this.currentProfile.profileDetail.photo = file;
+      this.currentProfile.profileDetail.photoFileName = file.name;
       const reader = new FileReader(); // Crea un FileReader para leer el archivo
       reader.onload = () => { // Se ejecuta cuando la lectura del archivo es completada
         // Actualizar el campo de la imagen con los datos binarios de la imagen
@@ -164,33 +201,74 @@ if (toastElement) {
   toast.show();
 }
 }
-updatePhoto() {
-  if (this.currentUserProfile.photo instanceof File) {
-    const formData = new FormData();
+updateInterests() {
+  const selectedInterests = Object.keys(this.checkedInterests)
+    .filter(interest => this.checkedInterests[interest]);
+  
+  if (this.currentProfile.preference) {
+    this.currentProfile.preference.interests = selectedInterests;
+  }
+  
+  // Aquí puedes llamar a tu método para guardar en la BD
+  // this.saveToDatabase();
+}
+updatePreference() {
+  if (this.currentProfile.preference) {
+    const selectedInterests = this.getSelectedInterests();
+    this.currentProfile.preference.interests = selectedInterests;
 
+    const dataProfileUpdate: PreferenceDTO = {
+      id: this.currentProfile.preference.id, // Asegúrate de tener el ID de la preferencia
+      maxAge: this.currentProfile.preference.maxAge,
+      minAge: this.currentProfile.preference.minAge,
+      likeGender: this.currentProfile.preference.likeGender,
+      location: this.currentProfile.preference.location,
+      distance: this.currentProfile.preference.distance,
+      interests: this.currentProfile.preference.interests
+    };
+
+    this.userService.updateUserPreference(dataProfileUpdate).pipe(
+      tap(response => {
+        console.log("Preferece update succesfull:", response);
+        this.uploadSuccess = true;
+        setTimeout(() => {
+          this.uploadSuccess = false;
+        }, 2000); // Cerrar el modal después de 2 segundos
+        //this.showSuccessToast();
+      }),
+      catchError(error => {
+        console.log("Error update preference");
+        return throwError(() => error);
+      })
+    ).subscribe();
+  }
+}
+
+updatePhoto() {
+  if (this.currentProfile.profileDetail.photo instanceof File) {
+    const formData = new FormData();
     formData.append('req', new Blob([JSON.stringify({
-      id: this.currentUserProfile.id,
-      userId: this.currentUserProfile.userId,
-      location: this.currentUserProfile.location,
-      gender: this.currentUserProfile.gender,
-      age: (this.currentUserProfile.age),  // Asegurarse de que age sea un número
-      likeGender: this.currentUserProfile.likeGender,
-      maxAge: this.currentUserProfile.maxAge,
-      minAge: this.currentUserProfile.minAge
+      id: this.currentProfile.profileDetail.id,
+      phone: this.currentProfile.profileDetail.phone,
+      gender: this.currentProfile.profileDetail.gender,
+      birthDate: this.currentProfile.profileDetail.birthDate,
+      description: this.currentProfile.profileDetail.description,
+      work: this.currentProfile.profileDetail.work,
     })], {
       type: 'application/json'
     }));
-    // Verificar si hay una nueva imagen seleccionada para el user
-    if (this.currentUserProfile.photo instanceof File) {
-      // Agregar la nueva imagen al FormData
-      console.log("update photo");
-      formData.append('photoFile', this.currentUserProfile.photo, this.currentUserProfile.photoFileName);
-      formData.append('keepCurrentImage', 'false');
-  } 
 
-    this.userService.updatePhotoAndProfile(formData).pipe(
+    // Verificar si hay una nueva imagen seleccionada para el usuario
+    if (this.currentProfile.profileDetail.photo instanceof File) {
+      // Agregar la nueva imagen al FormData
+      formData.append('file', this.currentProfile.profileDetail.photo, this.currentProfile.profileDetail.photoFileName);
+      formData.append('keepCurrentImage', 'false');
+      console.log("update only photo");
+    }
+
+    this.userService.updateUserDetail(formData,this.currentProfile.id).pipe(
       tap(response => {
-        console.log("Foto actualizada:", response);
+        console.log("Photo update successfull:", response);
         //this.uploadSuccess = true;
         this.showSuccessToast();
       }),
@@ -203,69 +281,63 @@ updatePhoto() {
 }
 
 
-uploadFileAndProfile() {
-  const formData = new FormData();
-  // Convertir el objeto JSON a una cadena JSON y agregarlo al FormData
-  formData.append('req', new Blob([JSON.stringify({
-    id: this.currentUserProfile.id,
-    userId: this.currentUserProfile.userId,
-    location: this.currentUserProfile.location,
-    gender: this.currentUserProfile.gender,
-    age: (this.currentUserProfile.age),  // Asegurarse de que age sea un número
-    likeGender: this.currentUserProfile.likeGender,
-    maxAge: this.currentUserProfile.maxAge,
-    minAge: this.currentUserProfile.minAge
-  })], {
-    type: 'application/json'
-  }));
-  // Agregar un parámetro indicando que se debe mantener la imagen actual
-  formData.append('keepCurrentImage', 'true');
+updateProfileDetailAndBasic() {
+    const formData = new FormData();
+    formData.append('req', new Blob([JSON.stringify({
+      id: this.currentProfile.profileDetail.id,
+      phone: this.currentProfile.profileDetail.phone,
+      gender: this.currentProfile.profileDetail.gender,
+      birthDate: this.currentProfile.profileDetail.birthDate,
+      description: this.currentProfile.profileDetail.description,
+      work: this.currentProfile.profileDetail.work,
+    })], {
+      type: 'application/json'
+    }));
+    formData.append('keepCurrentImage', 'true');
 
-
-  console.log('Archivo:', formData.get('photoFile'));
+  console.log('Archivo:',formData.get('file'))
   console.log('Objeto:',formData.get('req'))
-  
-  this.userService.updatePhotoAndProfile(formData).pipe(
+  console.log('id: ',this.currentProfile.profileDetail.id)
+
+  this.userService.updateUserDetail(formData,this.currentProfile.id).pipe(
     tap(response => {
       // Lógica adicional después de actualizar el perfil
-      console.log("Respuesta del servidor userProfile:", response);
+      console.log("Respuesta del servidor profileDetail:", response);
       if (response) {
         this.uploadSuccess = true;
           setTimeout(() => {
             this.uploadSuccess = false;
           }, 2000); // Cerrar el modal después de 2 segundos
-        console.log("Se actualizo correcto userProfile:", response.message);
+        console.log("Se actualizo correcto profileDetail:", response.message);
       } else {
-        console.error('Error al actualizar la userProfile:', response.message);
+        console.error('Error al actualizar la profileDetail:', response.message);
       }
 
     }),
     catchError(error => {
-      console.error('Error al actualizar la userProfile:', error.message);
+      console.error('Error al actualizar la profileDetail:', error.message);
       return throwError(error);
     })
    ).subscribe();
-   this.userService.updateUser(this.currentUser).pipe(
+
+   const dataUserUpdate: UserRequest = {
+     id: this.currentProfile.id, // Asegúrate de tener el ID de la preferencia
+     name: this.currentProfile.name,
+     lastname: this.currentProfile.lastname,
+     username: this.currentProfile.username
+   };
+   this.userService.updateUserBasic(dataUserUpdate).pipe(
     tap(response => {
-      // Lógica adicional después de actualizar el usuario
-      console.log("Respuesta del servidor user:", response);
-      if (response) {
-        console.log("Se actualizo correcto user:", response.message);
-        this.uploadSuccess = true;
-          setTimeout(() => {
-            this.uploadSuccess = false;
-          }, 2000); // Cerrar el modal después de 2 segundos
-      } else {
-        console.error('Error al actualizar la user:', response.message);
-      }
+      console.log("UserBasic update successfull:", response);
+      //this.uploadSuccess = true;
+      this.showSuccessToast();
     }),
     catchError(error => {
-      console.error('Error al actualizar la user:', error.message);
-      // Puedes manejar el error aquí, por ejemplo, mostrar un mensaje de error
-      return throwError(error);
+      console.log("Error update UserBasic");
+      return throwError(() => error);
     })
   ).subscribe();
-}    
+}
 
   onLogout(): void {
     // Llamar al método logout() del servicio LoginService

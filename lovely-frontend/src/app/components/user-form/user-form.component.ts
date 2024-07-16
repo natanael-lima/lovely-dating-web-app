@@ -1,72 +1,134 @@
-import { Component, NgModule } from '@angular/core';
-import { User, UserProfile } from '../../models/user';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormsModule, FormBuilder, FormControl } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserDTO } from '../../interfaces/userDTO';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [ FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.css'
 })
-export class UserFormComponent {
-  activeSection: 'user' | 'profile' = 'user';
+export class UserFormComponent implements OnInit{
+  activeSection: 'profilePersonal' | 'profileDetail' | 'profilePreference' = 'profilePersonal';
   registerSuccessMessage = false; // Variable para controlar la visibilidad del mensaje de registro exitoso
   errorMessage=false;
-  user: User;
-  model = new User('', '', '', '');
   selectedImageURL: string | ArrayBuffer = '';
+  usernameExists = false;
+  countries : any [] = [];
+  userRequest!: UserDTO; //new
+  interestsList: string[] = [
+    'Música', 'Viajes', 'Deportes', 'Arte', 'Fotografía',
+    'Literatura', 'Ciencia', 'Moda', 'Historia', 'Cine'
+  ];
+  
+  checkedInterests: { [key: string]: boolean } = {};
   
   constructor(private userService: UserService,private router: Router) { 
-    this.user = new User('','','','');
-    this.user.profile = new UserProfile();
+    this.userRequest = {
+      id: 0,
+      username: '',
+      password: '',
+      lastname: '',
+      name: '',
+      role: '',
+      preference: {
+        id: 0,
+        maxAge: 0,
+        minAge: 0,
+        likeGender: '',
+        location: '',
+        distance: 0,
+        interests: []
+      },
+      profileDetail: {
+        id: 0,
+        phone: '',
+        gender: '',
+        birthDate: new Date(),
+        description: '',
+        work: '',
+        photo: null,
+        photoFileName: '',
+        timestamp: ''
+      }
+    };
 
-    
+  }
+  ngOnInit(): void {
+    this. getAllCountries();
   }
 
-  usernameExists = false;
-
-
+  
+  // Método para obtener los intereses seleccionados
+  getSelectedInterests() {
+    return Object.keys(this.checkedInterests).filter(key => this.checkedInterests[key]);
+  }
   nextSection() {
-    this.activeSection = 'profile';
+    if (this.activeSection === 'profilePersonal') {
+      this.activeSection = 'profileDetail';
+    } else if (this.activeSection === 'profileDetail') {
+      this.activeSection = 'profilePreference';
+    }
+  }
+  previousSection() {
+    if (this.activeSection === 'profilePreference') {
+      this.activeSection = 'profileDetail';
+    } else if (this.activeSection === 'profileDetail') {
+      this.activeSection = 'profilePersonal';
+    }
   }
   resetErrorMessage() {
     this.errorMessage = false;
-}
-
-
+  }
 
   onSubmit() {
-    if (this.activeSection === 'user') {
+    if (this.activeSection === 'profilePersonal') {
        this.nextSection();
     } else {
+      // Crear un nuevo FormData
       const formData = new FormData();
+      const selectedInterests = this.getSelectedInterests();
+      this.userRequest.preference.interests = selectedInterests;//falta limitar a que no pueda marcar +4 intereses
 
-        // Agregar campos de datos del usuario
-        formData.append('name', this.user.name);
-        formData.append('lastname', this.user.lastname);
-        formData.append('username', this.user.username);
-        formData.append('password', this.user.password);
-        
-        // Agregar campos de datos del perfil
-        formData.append('profile.location', this.user.profile.location);
-        formData.append('profile.gender', this.user.profile.gender);
-        formData.append('profile.age', this.user.profile.age.toString());
-        formData.append('profile.likeGender', this.user.profile.likeGender);
-        formData.append('profile.maxAge', this.user.profile.maxAge.toString());
-        formData.append('profile.minAge', this.user.profile.minAge.toString());
-
-        // Agregar archivo de imagen de perfil
-        if (this.user.profile.photo) {
-          formData.append('photoFile', this.user.profile.photo, this.user.profile.photo.name);
-          //formData.append('profile.photoFileName', this.user.profile.photo.name);
+      formData.append('request', new Blob([JSON.stringify({
+        username: this.userRequest.username,
+        password: this.userRequest.password,
+        lastname: this.userRequest.lastname,
+        name: this.userRequest.name,
+        preference: {
+          maxAge: this.userRequest.preference.maxAge,
+          minAge: this.userRequest.preference.minAge,
+          likeGender: this.userRequest.preference.likeGender,
+          location: this.userRequest.preference.location,
+          distance: 1,
+          interests: this.userRequest.preference.interests
+        },
+        profileDetail: {
+          phone: this.userRequest.profileDetail.phone,
+          gender: this.userRequest.profileDetail.gender,
+          birthDate: this.userRequest.profileDetail.birthDate.toString(),
+          description: this.userRequest.profileDetail.description,
+          work: this.userRequest.profileDetail.work,
+          photoFileName: this.userRequest.profileDetail.photoFileName
         }
-        console.log('data:',formData.get('profile.photoFileName'))
+      })], {
+        type: 'application/json'
+      }));  
+    
+      // Agregar el archivo de foto (si existe) en FormData
+      if (this.userRequest.profileDetail.photo) {
+        formData.append('file', this.userRequest.profileDetail.photo, this.userRequest.profileDetail.photoFileName);
+      }
+      
+      console.log('data:',formData.get('request'))
+
       this.userService.registerUser(formData).pipe(
         tap(response => {
           // Registro exitoso, mostrar el mensaje
@@ -88,9 +150,10 @@ export class UserFormComponent {
     const file = event?.target?.files?.[0];
     
     if (file) {
-        this.user.profile.photo = file;
-        this.user.profile.photoFileName = file.name;
-
+      console.log("entre file");
+      this.userRequest.profileDetail.photo = file;
+      this.userRequest.profileDetail.photoFileName = file.name;
+      console.log("tengo file ",this.userRequest.profileDetail.photo);
         // Crear una URL local para la imagen seleccionada
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -99,19 +162,45 @@ export class UserFormComponent {
         };
     }
   }
-  
+  onFileInputClick(): void {
+    const inputElement = document.getElementById('file-input') as HTMLInputElement;
+    if (inputElement) {
+        inputElement.click(); // Simula el clic en el input de tipo file
+    }
+  }
+
   //this.router.navigate(['/registration-profile', response.id]);
   newUser() {
-    this.model = new User('','','','');
+    //this.userRequest = new User('','','','');
+  }
+
+  getAllCountries(){
+    this.userService.getCountries().subscribe(
+      (data: any[]) => {
+        this.countries = data; // Almacena los paises en la variable
+        console.log("datos:"+ data)
+      },
+      (error) => {
+        console.error('Error', error);
+      }
+    );
+  }
+
+  getFlagEmoji(countryCode: string): string {
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
   }
 
   checkUsername() {
-    this.userService.checkUsernameExists(this.user.username).subscribe(
+    this.userService.checkUsernameExists(this.userRequest.username).subscribe(
       response => {
         this.usernameExists = response.exists;
         if (this.usernameExists) {
           this.errorMessage = true;
-          // Puedes mostrar un mensaje al usuario aquí si lo deseas
+          console.log('Usuario existent:',this.errorMessage);
         } else {
           
         }

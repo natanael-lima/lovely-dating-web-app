@@ -3,26 +3,23 @@ package com.nl.lovely.service.imp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.nl.lovely.dto.MessageDTO;
 import com.nl.lovely.entity.Chat;
 import com.nl.lovely.entity.Message;
-import com.nl.lovely.entity.UserProfile;
-import com.nl.lovely.repository.ChatRepository;
+import com.nl.lovely.entity.User;
 import com.nl.lovely.repository.MessageRepository;
 import com.nl.lovely.service.ChatService;
 import com.nl.lovely.service.MessageService;
-import com.nl.lovely.service.UserProfileService;
+import com.nl.lovely.service.UserService;
 @Service
 public class MessageServiceImp implements MessageService{
 
 	@Autowired
 	private MessageRepository messageRepository;
 	@Autowired
-	private UserProfileService userProfileService;
+	private UserService userService;
 	@Autowired
 	private ChatService chatService;
 	
@@ -58,7 +55,7 @@ public class MessageServiceImp implements MessageService{
 	    message.setTimestamp(messageDTO.getTimestamp());
 	    
 	    // Aquí debes establecer las relaciones, como el sender y el chat
-	    UserProfile sender = userProfileService.findUserById(messageDTO.getSenderId());
+	    User sender = userService.findUserById(messageDTO.getSenderId());
 	    if(sender == null) {
 	        throw new RuntimeException("Sender with ID " + messageDTO.getSenderId() + " not found");
 	    }

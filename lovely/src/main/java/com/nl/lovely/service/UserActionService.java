@@ -1,13 +1,12 @@
 package com.nl.lovely.service;
 
 import com.nl.lovely.entity.User;
-import com.nl.lovely.entity.UserProfile;
 
 public interface UserActionService {
 	
-	public boolean verificaLiked(UserProfile liker, UserProfile target);
+	public boolean verificaLiked(User liker, User target);
 	
-	public void registrarLike(UserProfile liker, UserProfile target);
+	public void registrarLike(User liker, User target);
 	
-	public void registrarDislike(UserProfile disliker, UserProfile target);
+	public void registrarDislike(User disliker, User target);
 }
