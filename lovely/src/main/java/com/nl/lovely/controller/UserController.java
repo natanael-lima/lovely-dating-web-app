@@ -1,6 +1,7 @@
 package com.nl.lovely.controller;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.nl.lovely.dto.ChangePasswordDTO;
+import com.nl.lovely.dto.NotificationDTO;
 import com.nl.lovely.dto.PreferenceDTO;
 import com.nl.lovely.dto.ProfileDTO;
 import com.nl.lovely.dto.ProfileDetailDTO;
@@ -39,6 +41,7 @@ import com.nl.lovely.response.ApiResponse;
 import com.nl.lovely.response.AuthResponse;
 import com.nl.lovely.response.UserProfileResponse;
 import com.nl.lovely.response.UserResponse;
+import com.nl.lovely.service.NotificationService;
 import com.nl.lovely.service.UserService;
 
 
@@ -48,8 +51,8 @@ import com.nl.lovely.service.UserService;
 public class UserController {
 	@Autowired
     private UserService userService;
-	//@Autowired
-    //private UserProfileService userProfileService;
+	@Autowired
+	private NotificationService notificationService;
 	
 	@Autowired
     private UserRepository userRepository;
@@ -188,6 +191,39 @@ public class UserController {
         }
     }
     
+    // API para cambiar password.
+    @PutMapping("/{id}/change-password")
+    public ResponseEntity<ApiResponse> changePasswordDTO(@PathVariable Long id, @RequestBody ChangePasswordDTO changePasswordRequest) throws Exception {
+    	
+    	// Obtener el contexto de autenticación
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verificar si el usuario está autenticado
+        if (authentication != null && authentication.isAuthenticated()) {
+            		// Obtener los detalles del usuario autenticado
+		        	String username = authentication.getName();
+		            User userId = userService.findByUsername(username).orElse(null);
+		            
+		            System.out.println("id de user1: "+userId.getId());
+		            System.out.println("id de user2: "+id);
+		            
+			        // Comparar el ID del usuario autenticado con el ID que se desea cambiar
+			        if (!userId.getId().equals(id)) {
+			            throw new AccessDeniedException("No tienes permiso para cambiar la contraseña de otro usuario.");
+			        }
+			        try {
+		        		userService.changePassword(id, changePasswordRequest.getCurrentPassword(), changePasswordRequest.getNewPassword());
+
+		                return ResponseEntity.ok(new ApiResponse( "La contraseña se cambió satisfactoriamente."));
+		            } catch (RuntimeException e) {
+		                return ResponseEntity.status(404).body(new ApiResponse("La contraseña no se pudo cambiar."));
+		            }    
+		 
+        } else {
+            // Si no está autenticado
+        	return ResponseEntity.notFound().build();
+        }
+    }
     
     //************************** Metodo para obtener el id del user logueado.**************************
     private Long getCurrentUserId() {

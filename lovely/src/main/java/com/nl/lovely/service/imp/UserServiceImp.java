@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.nl.lovely.dto.PreferenceDTO;
@@ -33,13 +35,32 @@ public class UserServiceImp implements UserService{
 	@Autowired
 	private UserRepository userRepository;
 	
+	private final PasswordEncoder passwordEncoder;
+	
 	@Transactional
 	public ProfileDTO getProfileById(Long id) throws Exception{
 		// TODO Auto-generated method stub
 	    Optional<User> profile = userRepository.findById(id); 
 		return convertDtoOptional(profile) ;
 	}
-	
+	@Override
+	public void changePassword(Long userId, String currentPassword, String newPassword) throws Exception {
+        // Encuentra el usuario por su ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + userId));
+
+        // Verifica si la contraseña actual coincide
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new BadRequestException("La contraseña actual es incorrecta.");
+        }
+
+        // Encripta y establece la nueva contraseña
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        // Guarda el usuario actualizado en la base de datos
+        userRepository.save(user);
+    }
+
 	// Método para convertir User a ProfileDTO
 	private ProfileDTO convertToDTOProfile(User profile) {
         return ProfileDTO.builder()

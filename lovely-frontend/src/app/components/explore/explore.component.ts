@@ -229,7 +229,7 @@ export class ExploreComponent implements OnInit {
 
   closeMatchNotification() {
     this.showMatchNotification = false;
-    this.router.navigate(['/home']);
+    this.router.navigate(['/explore']);
     this.loadFilterProfiles();
   }
 

@@ -17,6 +17,7 @@ import com.nl.lovely.repository.MatchRepository;
 import com.nl.lovely.repository.UserActionRepository;
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.service.MatchService;
+import com.nl.lovely.service.NotificationService;
 import com.nl.lovely.service.UserActionService;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -33,7 +34,8 @@ public class MatchServiceImp implements MatchService {
     private UserRepository userRepository;
 	@Autowired
 	private ChatRepository chatRepository;
-	
+	@Autowired
+	private NotificationService notificationService;
 	@Override
 	public void deleteMatch(Long id) {
 		 Optional<Match> match = matchRepository.findById(id);
@@ -44,33 +46,6 @@ public class MatchServiceImp implements MatchService {
 	     }
 	}
 	
-	//registro de match si hay coincidencia
-	@Override
-	public void handleLike(User liker, User target) {
-		// TODO Auto-generated method stub
-		userActionService.registrarLike(liker, target);
-
-        // Verificar si hay una coincidencia recíproca
-        if (userActionService.verificaLiked(target, liker)) {
-            //Crear un nuevo match si hay una coincidencia recíproca
-        	if (liker == null || target == null) {
-    	        throw new IllegalArgumentException("El profile1 y el profile2 no pueden ser nulos");
-    	    }
-
-    	    Match matching = new Match();
-    	    matching.setMatchedAt(LocalDateTime.now());
-    	    matching.setProfile1(liker);
-    	    matching.setProfile2(target);
-    	   
-    	    matchRepository.save(matching);
-        }
-	}
-	@Override
-	public void handleDislike(User disliker, User target) {
-		// TODO Auto-generated method stub
-		userActionService.registrarDislike(disliker, target);
-	}
-
 	@Override
 	public void processAction(User liker, User target, ActionType actionType) {
 		// TODO Auto-generated method stub
@@ -85,7 +60,7 @@ public class MatchServiceImp implements MatchService {
         target.getActionsReceived().add(action);
         liker.getActionsForMe().add(action);
         
-        userRepository.save(target); ////ediiiiiiiiiiiiiiiiiiit userprofile a user
+        userRepository.save(target); 
         
        //Crear un nuevo match si hay una coincidencia recíproca
         if (userActionService.verificaLiked(target, liker)) {
@@ -98,7 +73,10 @@ public class MatchServiceImp implements MatchService {
     	    matching.setMatchedAt(LocalDateTime.now());
     	    matching.setProfile1(liker);
     	    matching.setProfile2(target);
-    	   
+    	    
+    	    notificationService.saveNotifyMatch(liker, target);
+    	    notificationService.saveNotifyMatch(target,liker);
+    	    
     	    matchRepository.save(matching);
     	    Chat chat = new Chat();
     	    chat.setMatch(matching);
@@ -172,5 +150,30 @@ public class MatchServiceImp implements MatchService {
         return profile1LikesProfile2 && profile2LikesProfile1;
 	}
 
+	/*@Override
+	public void handleLike(User liker, User target) {
+		// TODO Auto-generated method stub
+		userActionService.registrarLike(liker, target);
+
+        // Verificar si hay una coincidencia recíproca
+        if (userActionService.verificaLiked(target, liker)) {
+            //Crear un nuevo match si hay una coincidencia recíproca
+        	if (liker == null || target == null) {
+    	        throw new IllegalArgumentException("El profile1 y el profile2 no pueden ser nulos");
+    	    }
+
+    	    Match matching = new Match();
+    	    matching.setMatchedAt(LocalDateTime.now());
+    	    matching.setProfile1(liker);
+    	    matching.setProfile2(target);
+    	   
+    	    matchRepository.save(matching);
+        }
+	}
+	@Override
+	public void handleDislike(User disliker, User target) {
+		// TODO Auto-generated method stub
+		userActionService.registrarDislike(disliker, target);
+	}*/
 	
 }

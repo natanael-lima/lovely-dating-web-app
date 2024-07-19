@@ -21,6 +21,8 @@ public interface UserService {
 	public ApiResponse updateProfileWithPhoto(ProfileDetailDTO request, MultipartFile file) throws Exception;
 	
 	public ApiResponse deleteUserComplete(Long id);
+	
+	public void changePassword(Long userId, String currentPassword, String newPassword) throws Exception;
 	//----------------------------------------------------------------
 	public User findUserById(Long id);
 	

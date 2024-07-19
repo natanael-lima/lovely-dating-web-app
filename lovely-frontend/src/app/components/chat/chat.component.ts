@@ -9,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatchService } from '../../services/match.service';
 import { UserResponse } from '../../interfaces/userResponse';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-chat',
@@ -34,7 +35,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @Input() targetUserId!: number;
   @Input() key!: number;
 
-  constructor(private chatService: ChatService, private matchService: MatchService,private route: ActivatedRoute, private userService:UserService, private sanitizer: DomSanitizer,){
+  constructor(private chatService: ChatService, private matchService: MatchService, private notificationService: NotificationService, private userService:UserService, private sanitizer: DomSanitizer,){
   this.currentProfile = {
         id: 0,
         username: '',
@@ -168,7 +169,15 @@ sendMessage() {
     this.chatService.sendMessage(this.chatId, this.currentProfile.id,message);
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     this.messageInput = ''; // Limpiar el campo de entrada después de enviar el mensaje
-    
+    this.notificationService.registerNotificationMessages(this.targetProfile.id).subscribe(
+      (response) => {
+        console.log("Mensaje server",response);
+      },
+      (error) => {
+        console.error('Error loading filtered profiles:', error);
+  
+      }
+    );
     }
   }
   handleKeydown(event: KeyboardEvent): void {

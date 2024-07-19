@@ -25,6 +25,7 @@ import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.response.ApiResponse;
 import com.nl.lovely.service.ChatService;
 import com.nl.lovely.service.MatchService;
+import com.nl.lovely.service.NotificationService;
 import com.nl.lovely.service.UserService;
 
 
@@ -36,12 +37,11 @@ public class MatchController {
     private MatchService matchService;
 	@Autowired
     private ChatService chatService;
-    
     @Autowired
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
-
+	
     // API que registra un like.
     @PostMapping("/like/{targetId}")
     public ResponseEntity<Map<String, String>> ActionLike(@PathVariable Long targetId, Authentication authentication) {
@@ -86,7 +86,7 @@ public class MatchController {
             .orElseThrow();
         User profile2 = userRepository.findById(profileId2)
             .orElseThrow();
-
+        
         boolean isMatch = matchService.confirmMatch(profile1, profile2);
         return ResponseEntity.ok(isMatch);
     }
