@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserRequest } from '../interfaces/userRequest';
 import { UserDTO } from '../interfaces/userDTO';
 import { PreferenceDTO } from '../interfaces/preferenceDTO';
+import { PasswordRequest } from '../interfaces/passwordRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,14 @@ getCountries(): Observable<any[]> {
   return this.http.get<any[]>('https://restcountries.com/v3.1/all');
    
 }
+
+// Método para actualizar un password
+updatePassword(id:number,  change :PasswordRequest): Observable<PasswordRequest> {
+  return this.http.put<PasswordRequest>(`${this.apiUrl}/api/user/${id}/change-password`,change).pipe(
+    catchError(this.handleError)
+  );
+}
+
 
 private handleError(error: any): Observable<never> {
   console.error('Ocurrio un error:', error);

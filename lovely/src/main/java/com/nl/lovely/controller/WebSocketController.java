@@ -11,6 +11,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import com.nl.lovely.entity.User;
 import com.nl.lovely.service.ChatService;
 import com.nl.lovely.service.MatchService;
 import com.nl.lovely.service.MessageService;
+import com.nl.lovely.service.NotificationService;
 import com.nl.lovely.service.UserService;
 
 import jakarta.transaction.Transactional;
@@ -44,12 +47,12 @@ public class WebSocketController {
 	
 	@Autowired
 	private MessageService messageService;
-
+	
 	// API para chat en tiempo real usando websocket.
     @MessageMapping("/chat/{chatId}/{userId}")
     @SendTo("/topic/{chatId}")
     @Transactional
-    public MessageDTO  chat3(@DestinationVariable Long chatId, @DestinationVariable Long userId, MessageDTO messageDTO) {
+    public MessageDTO  chatMessage(@DestinationVariable Long chatId, @DestinationVariable Long userId, MessageDTO messageDTO) {
         // Obtener el chat correspondiente al chatId
         Chat chat = chatService.findChatById(chatId);
         // Asignar el chat al mensaje
@@ -82,6 +85,22 @@ public class WebSocketController {
         }
         
     }
+    
+    //************************** Metodo para obtener el id del user logueado.**************************
+    private Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            User user = userService.findByUsername(username).orElse(null);
+            if (user != null) {
+            	 System.out.println("id de user: "+user.getId());
+                return user.getId();
+               
+            }
+        }
+        return null;
+    }
+    
     
     /*@MessageMapping("/chat/{roomId}")
 	@SendTo("/topic/{roomId}")

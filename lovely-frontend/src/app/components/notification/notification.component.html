@@ -23,24 +23,38 @@
                           <a href="#" 
                              class="notification" 
                              [class.unread]="notification.isUnread"
-                             (click)="markAsRead(notification); $event.preventDefault()">
+                             (click)="markAsRead(notification); $event.preventDefault()"
+                            >
+                           
                             <div class="notification-avatar">
-                              <img [src]="notification.avatar" alt="Avatar" class="rounded-circle">
+                              <img [src]="getImageUrl(notification.sender.profileDetail.photo)" alt="Avatar" class="rounded-circle">
                             </div>
                             <div class="notification-content">
-                              <span *ngIf="notification.content === 'Tienes un nuevo match con'">
-                                <p>{{ notification.content }}<strong> {{ notification.name }}</strong></p>
-                                <small class="text-muted">{{ notification.time }}</small>
+                              <span *ngIf="notification.content === 'Tienes un nuevo match con '">
+                                <p>{{ notification.content }}<strong> {{ notification.sender.name }}</strong></p>
+                                <small class="text-muted">{{ timeAgo(notification.time) }}</small>
                               </span>
-                              <span *ngIf="notification.content !== 'Tienes un nuevo match con'">
-                                <p><strong>{{ notification.name }}</strong> {{ notification.content }}</p>
-                                <small class="text-muted">{{ notification.time }}</small>
+                              <span *ngIf="notification.content === 'Nuevo mensaje de '">
+                                <p>{{ notification.content }} <strong>{{ notification.sender.name }}</strong> </p>
+                                <small class="text-muted">{{ timeAgo(notification.time) }}</small>
                               </span>
                               
                             </div>
                             @if (notification.isUnread) {
                               <span class="badge rounded-pill bg-primary new-badge">Nuevo</span>
                             }
+                            <div>
+                              <div class="btn-group  dropstart">
+                                <button type="button" class="p-1 border rounded-circle link-dark btn btn-light icon-link  link-underline-opacity-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                </svg>
+                                </button>
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                </ul>
+                              </div>
+                            </div>
                           </a>
                         }
                       </div>

@@ -27,10 +27,8 @@ public class MessageServiceImp implements MessageService{
 	public MessageDTO saveMessage(MessageDTO messageDTO) {
 		Message message = convertToEntity(messageDTO);
 	    message = messageRepository.save(message);
-
 	    // Aquí puedes volver a convertir el objeto Message actualizado a MessageDTO si es necesario
 	    MessageDTO savedMessageDTO = convertToDTO(message);
-
 	    return savedMessageDTO;
 	}
 	

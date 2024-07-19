@@ -10,6 +10,7 @@ import { catchError, forkJoin, tap, throwError } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UserDTO } from '../../interfaces/userDTO';
 import { PreferenceDTO } from '../../interfaces/preferenceDTO';
+import { PasswordRequest } from '../../interfaces/passwordRequest';
 //import * as bootstrap from 'bootstrap';
 declare var window: any;
 
@@ -45,6 +46,14 @@ export class PerfilComponent implements OnInit {
   selectedInterests: string[] = [];
   maxInterests: number = 4;
 
+// Propiedades para el formulario de edición password
+  password: PasswordRequest ={
+    currentPassword:'',
+    newPassword:''
+  };
+  oldPassword!: String;
+  newPassword!: String;
+  newPasswordRepeat!: String;
   constructor(private userService:UserService, private formBuilder:FormBuilder,private http: HttpClient, private loginService:LoginService,private router:Router,private sanitizer: DomSanitizer ){
     this.currentProfile = {
       id: 0,
@@ -132,13 +141,7 @@ export class PerfilComponent implements OnInit {
     this.currentProfile.preference.distance = +(event.target as HTMLInputElement).value;
   }
   
-  
 
-  goBack() {
-    if (this.isMobile) {
-      this.showMenu = true;
-    }
-  }
 
   ngOnInit(): void {
     this.userService.getCurrentProfile().subscribe(
@@ -337,6 +340,33 @@ updateProfileDetailAndBasic() {
       return throwError(() => error);
     })
   ).subscribe();
+}
+
+changePassword() {
+  console.log('Entré a cambiar la contraseña');
+
+  if (!this.currentProfile.id) {
+    console.log('No hay usuario para cambiar la contraseña');
+    return;
+  }
+
+  if (this.newPassword !== this.newPasswordRepeat) {
+    console.log('Las contraseñas no coinciden');
+    return;
+  }
+  console.log('Las contraseñas coinciden');
+  this.password.newPassword = this.newPassword.toString();
+  this.password.currentPassword = this.oldPassword.toString();
+
+  this.userService.updatePassword(this.currentProfile.id,this.password)
+    .subscribe(response => {
+      console.log('Password actualizado:', response);
+      this.uploadSuccess = true;
+          setTimeout(() => {
+            this.uploadSuccess = false;
+          }, 2000); // Cerrar el modal después de 2 segundos
+      // Cerrar el modal programáticamente
+  });
 }
 
   onLogout(): void {

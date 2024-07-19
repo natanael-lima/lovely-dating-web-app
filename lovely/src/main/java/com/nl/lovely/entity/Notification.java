@@ -1,8 +1,6 @@
 package com.nl.lovely.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,11 +22,18 @@ public class Notification {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	private String content;
+    private LocalDateTime time;
+    private Boolean isUnread;
+    
+    //Para match debe ser viceversa
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private User receiver;  // El usuario que recibe la notificación
 
-    private String message;
-    private LocalDateTime sentAt;
-
-   // @ManyToOne(fetch = FetchType.LAZY)
-   // @JoinColumn(name = "user_id")
-   // private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private User sender; // El usuario que realizó la acción
+   
 }

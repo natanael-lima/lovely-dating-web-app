@@ -30,7 +30,8 @@ public class User implements UserDetails{
     private String lastname;
 	private String name;
 	@Enumerated(EnumType.STRING)
-	private RoleType role; 
+	private RoleType role;
+	//private String state;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "preference_id",  referencedColumnName = "id")
@@ -48,7 +49,9 @@ public class User implements UserDetails{
 
     @OneToMany(mappedBy = "profile1", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Match> matches;
-  
+    
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> receivedNotifications; // Notificaciones recibidas por el usuario
     
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
