@@ -3,13 +3,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #e7e7e7;
+    background: radial-gradient(circle, #e5f8fd, #8998c0, #555586); /* Degradado circular de tres colores */
+    font-family: 'Open Sans', sans-serif; /* Fuente limpia y profesional */
 }
 .login-container {
     width: 100%;
     max-width: 400px;
     padding: 30px;
-    background: rgba(255, 255, 255, 0.582);
+    background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;

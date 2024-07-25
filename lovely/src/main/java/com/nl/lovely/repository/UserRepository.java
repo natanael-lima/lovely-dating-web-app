@@ -38,6 +38,7 @@ public interface UserRepository extends JpaRepository<User,Long>{
     void updateProfilePhoto(@Param("userId") Long userId, @Param("photo") byte[] photo, @Param("photoFileName") String photoFileName);
 	
 	
+	
 	public boolean existsByUsername(String username); // Devuelve un bool por la existencia de un username
 	
 	Optional<User> findByProfileDetailId(Long id); // Buscar usuario by id de profile
@@ -58,7 +59,12 @@ public interface UserRepository extends JpaRepository<User,Long>{
 	@Transactional
 	@Query("update User set lastname=:lastname, name=:name where id = :id")
     void updateUserQuery(@Param(value = "id") Long id,   @Param(value = "lastname") String lastname, @Param(value = "name") String name);
-
+	//Actualizar User visibilidad
+	@Modifying
+	@Transactional
+	@Query("update User u set u.isVisible = :isVisible where u.id = :id")
+	void updateUserVisibility(@Param("id") Long id, @Param("isVisible") Boolean isVisible);
+	
 	// Método para buscar perfiles de usuario que cumplan con las preferencias del usuario actual
 	@Query("SELECT u FROM User u " +
 		       "JOIN u.profileDetail pd " +

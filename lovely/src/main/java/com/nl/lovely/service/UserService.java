@@ -18,6 +18,8 @@ public interface UserService {
 	
 	public ApiResponse updateUserData(ProfileDTO request);
 	
+	public ApiResponse updateUserIsVisible(ProfileDTO request);
+	
 	public ApiResponse updateProfileWithPhoto(ProfileDetailDTO request, MultipartFile file) throws Exception;
 	
 	public ApiResponse deleteUserComplete(Long id);

@@ -7,6 +7,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nl.lovely.enums.RoleType;
+import com.nl.lovely.enums.UserStatus;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +33,10 @@ public class User implements UserDetails{
 	private String name;
 	@Enumerated(EnumType.STRING)
 	private RoleType role;
-	//private String state;
-
+	@Enumerated(EnumType.STRING)
+	private UserStatus state;
+	private Boolean isVisible;
+	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "preference_id",  referencedColumnName = "id")
 	private Preference preference;

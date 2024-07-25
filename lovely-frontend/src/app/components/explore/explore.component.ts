@@ -45,6 +45,9 @@ export class ExploreComponent implements OnInit {
       username: '',
       lastname: '',
       name: '',
+      role: '',
+      state: '',
+      isVisible:false,
       preference: {
         id: 0,
         maxAge: 0,
@@ -128,13 +131,13 @@ export class ExploreComponent implements OnInit {
 
 
   like() {
-    this.animateCard('like'); // Método para animación (si es necesario)
+    this.animateCard('reload'); // Método para animación (si es necesario)
     this.onLike(this.filterProfiles[this.currentProfileIndex].id); // Realizar acción de like
     this.nextProfile(); // Cambiar al siguiente perfil y alternar cards
   }
 
   dislike() {
-    this.animateCard('dislike'); // Método para animación (si es necesario)
+    this.animateCard('reload'); // Método para animación (si es necesario)
     this.onDislike(this.filterProfiles[this.currentProfileIndex].id); // Realizar acción de dislike
     this.nextProfile(); // Cambiar al siguiente perfil y alternar cards
   }
@@ -229,7 +232,7 @@ export class ExploreComponent implements OnInit {
 
   closeMatchNotification() {
     this.showMatchNotification = false;
-    this.router.navigate(['/explore']);
+    this.router.navigate(['/search']);
     this.loadFilterProfiles();
   }
 
