@@ -62,6 +62,8 @@ export class PerfilComponent implements OnInit {
       lastname: '',
       name: '',
       role: '',
+      state: '',
+      isVisible:false,
       preference: {
         id: 0,
         maxAge: 0,
@@ -147,6 +149,7 @@ export class PerfilComponent implements OnInit {
     this.userService.getCurrentProfile().subscribe(
       (user: UserDTO) => {
         this.currentProfile = user;
+        console.log("preuba: "+this.currentProfile.isVisible);
               this.getAllCountries();
               this.initializeInterests();
               // Verifica si hay una foto de perfil en el perfil actual
@@ -324,10 +327,11 @@ updateProfileDetailAndBasic() {
    ).subscribe();
 
    const dataUserUpdate: UserRequest = {
-     id: this.currentProfile.id, // Asegúrate de tener el ID de la preferencia
-     name: this.currentProfile.name,
-     lastname: this.currentProfile.lastname,
-     username: this.currentProfile.username
+      id: this.currentProfile.id, // Asegúrate de tener el ID de la preferencia
+      name: this.currentProfile.name,
+      lastname: this.currentProfile.lastname,
+      username: this.currentProfile.username,
+      isVisible: this.currentProfile.isVisible,
    };
    this.userService.updateUserBasic(dataUserUpdate).pipe(
     tap(response => {
@@ -337,6 +341,30 @@ updateProfileDetailAndBasic() {
     }),
     catchError(error => {
       console.log("Error update UserBasic");
+      return throwError(() => error);
+    })
+  ).subscribe();
+}
+
+updateProfileVisibility() {
+  const data: UserRequest = {
+    id: this.currentProfile.id, // Asegúrate de tener el ID de la preferencia
+    name: this.currentProfile.name,
+    lastname: this.currentProfile.lastname,
+    username: this.currentProfile.username,
+    isVisible: this.currentProfile.isVisible,
+  };
+  console.log("prueba xd:", data);
+  this.userService.updateUserVisible(data).pipe(
+    tap(response => {
+      console.log("Visible update successfull:", response);
+      this.uploadSuccess = true;
+      setTimeout(() => {
+        this.uploadSuccess = false;
+      }, 2000); // Cerrar el modal después de 2 segundos
+    }),
+    catchError(error => {
+      console.log("Error update Visible");
       return throwError(() => error);
     })
   ).subscribe();

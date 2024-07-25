@@ -35,7 +35,7 @@ export class NotificationComponent  implements OnInit {
     this.notificationService.getAllNotificationByUserId().subscribe(
       (data: NotificationDTO[]) => {
         this.notifications = data;
-        console.log(this.notifications);
+        console.log("notis: "+this.notifications[0].isUnread);
       },
       (error) => {
         console.error('Error loading filtered profiles:', error);

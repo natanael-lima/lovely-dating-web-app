@@ -38,6 +38,8 @@ export class UserFormComponent implements OnInit{
       lastname: '',
       name: '',
       role: '',
+      state: '',
+      isVisible: false,
       preference: {
         id: 0,
         maxAge: 0,

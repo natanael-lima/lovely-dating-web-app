@@ -8,6 +8,8 @@ export interface UserDTO {
     lastname: string;
     name: string;
     role: string;
+    state: string;
+    isVisible: Boolean;
     preference: PreferenceDTO;
     profileDetail: ProfileDetailDTO;
   }

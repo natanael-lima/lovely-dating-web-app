@@ -41,6 +41,9 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
         username: '',
         lastname: '',
         name: '',
+        role: '',
+      state: '',
+      isVisible:false,
         preference: {
           id: 0,
           maxAge: 0,
@@ -67,6 +70,9 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
         username: '',
         lastname: '',
         name: '',
+        role: '',
+      state: '',
+      isVisible:false,
         preference: {
           id: 0,
           maxAge: 0,

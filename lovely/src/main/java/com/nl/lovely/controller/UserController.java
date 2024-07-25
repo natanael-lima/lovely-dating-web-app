@@ -36,6 +36,7 @@ import com.nl.lovely.dto.UserDTO;
 import com.nl.lovely.entity.Preference;
 import com.nl.lovely.entity.ProfileDetail;
 import com.nl.lovely.entity.User;
+import com.nl.lovely.enums.UserStatus;
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.response.ApiResponse;
 import com.nl.lovely.response.AuthResponse;
@@ -65,6 +66,14 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserData(userRequest));
     }
 
+    //************************** API para actualizar los datos del usuario visibilidad. ************************** new
+    @PutMapping("/update-visiblity/{id}")
+    public ResponseEntity<ApiResponse> updateUserVisibility(@PathVariable Long id,@RequestBody ProfileDTO userRequest)
+    {
+    	userRequest.setId(id); 
+        return ResponseEntity.ok(userService.updateUserIsVisible(userRequest));
+    }
+
     //************************** API para eliminar un usuario.**************************
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
@@ -90,7 +99,7 @@ public class UserController {
       }
     //************************** API para obtener el usuario completo by ID por paramaetro. ************************** new
     @GetMapping("/get-user/{id}")
-    public ResponseEntity<ProfileDTO> findProductById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ProfileDTO> findUserById(@PathVariable Long id) throws Exception {
         try {
         	ProfileDTO dto = userService.getProfileById(id);
             return ResponseEntity.ok(dto);
@@ -117,6 +126,8 @@ public class UserController {
   	            .lastname(user.getLastname())
   	            .name(user.getName())
   	            .role(user.getRole())
+  	            .state(user.getState())
+		        .isVisible(user.getIsVisible())
   	            .preference(mapToPreferenceDTO(user.getPreference()))
   	            .profileDetail(mapToProfileDetailDTO(user.getProfileDetail()))
   	            .build();

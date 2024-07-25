@@ -16,8 +16,10 @@
   }
 
   .notification:hover {
-    background-color: #d1e8ff;
+    background-color: #cae0f7;
     text-decoration: none;
+    position: relative;
+    display: flex;
   }
 
   .notification.unread {
@@ -42,9 +44,26 @@
     margin-bottom: 0;
   }
 
+  .notification-options {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .notification:hover .notification-options {
+    display: block;
+  }
   .badge {
-    margin-left: 10px;
-    
+    width: 10px; /* Ajusta el tamaño según tus necesidades */
+    height: 10px; /* Ajusta el tamaño según tus necesidades */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Hace que el badge sea circular */
+    margin-left: 10px; /* Mantiene el margen izquierdo */
+    padding: 0; /* Elimina el padding por defecto */
   }
   .bg-primary {
     background: linear-gradient(to bottom right, #57649c, #965496) !important;

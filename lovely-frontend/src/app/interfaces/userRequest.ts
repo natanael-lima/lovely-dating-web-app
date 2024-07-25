@@ -3,4 +3,5 @@ export interface UserRequest {
     name:string;
     lastname:string;
     username:string;
+    isVisible: Boolean;
 }

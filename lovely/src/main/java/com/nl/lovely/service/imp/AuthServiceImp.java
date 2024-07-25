@@ -14,6 +14,7 @@ import com.nl.lovely.entity.Preference;
 import com.nl.lovely.entity.ProfileDetail;
 import com.nl.lovely.entity.User;
 import com.nl.lovely.enums.RoleType;
+import com.nl.lovely.enums.UserStatus;
 import com.nl.lovely.repository.PreferenceRepository;
 import com.nl.lovely.repository.ProfileDetailRepository;
 import com.nl.lovely.repository.UserRepository;
@@ -60,13 +61,14 @@ public class AuthServiceImp implements AuthService {
             photoFileName = file.getOriginalFilename();
         }
 
-        
+        String capitalizedDescription = capitalizeFirstLetter(request.getProfileDetail().getDescription());
+        String capitalizedWork = capitalizeFirstLetter(request.getProfileDetail().getWork());
 		ProfileDetail profileDetailData = ProfileDetail.builder()
 	            .phone(request.getProfileDetail().getPhone())
 	            .gender(request.getProfileDetail().getGender())
 	            .birthDate(request.getProfileDetail().getBirthDate())
-	            .description(request.getProfileDetail().getDescription())
-	            .work(request.getProfileDetail().getWork())
+	            .description(capitalizedDescription)
+	            .work(capitalizedWork)
 	            .photo(photoBytes)
 	            .photoFileName(photoFileName)
 	            .timestamp(LocalDateTime.now())
@@ -86,14 +88,19 @@ public class AuthServiceImp implements AuthService {
 
 	    // Guardar el perfil de usuario en la base de datos
 	    preferenceRepository.save(preferenceData);
-		
+	    
         // Crear un objeto UserProfile con los datos del registro y la ruta/nombre de la imagen guardada
-        User profileData = User.builder()
+	    // Capitalizar la primera letra del nombre y apellido
+        String capitalizedName = capitalizeFirstLetter(request.getName());
+        String capitalizedLastname = capitalizeFirstLetter(request.getLastname());
+	    User profileData = User.builder()
         		.username(request.getUsername())
 		        .password(passwordEncoder.encode(request.getPassword()))
-		        .lastname(request.getLastname())
-		        .name(request.getName())
+		        .lastname(capitalizedLastname)
+		        .name(capitalizedName)
 		        .role(RoleType.USER)
+		        .state(UserStatus.ACTIVO)
+		        .isVisible(false)
                 .preference(preferenceData)
                 .profileDetail(profileDetailData)
 	            .build();
@@ -119,7 +126,12 @@ public class AuthServiceImp implements AuthService {
 
 	}
 
-	
+	public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
 
 	
 

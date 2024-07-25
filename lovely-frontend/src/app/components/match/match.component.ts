@@ -42,6 +42,9 @@ export class MatchComponent implements OnInit, OnDestroy {
       username: '',
       lastname: '',
       name: '',
+      role: '',
+      state: '',
+      isVisible:false,
       preference: {
         id: 0,
         maxAge: 0,
@@ -68,6 +71,9 @@ export class MatchComponent implements OnInit, OnDestroy {
       username: '',
       lastname: '',
       name: '',
+      role: '',
+      state: '',
+      isVisible:false,
       preference: {
         id: 0,
         maxAge: 0,

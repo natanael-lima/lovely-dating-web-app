@@ -69,6 +69,13 @@ updateUserBasic(data:UserRequest):Observable<any>
       catchError(this.handleError)
     )
   }
+// Método para actualizar un usuario 
+updateUserVisible(data:UserRequest):Observable<any>
+  {
+    return this.http.put(`${this.apiUrl}/api/user/update-visiblity/${data.id}`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
 
 // Método para actualizar un usuario 
 updateUserPreference(data:PreferenceDTO):Observable<any>

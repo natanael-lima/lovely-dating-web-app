@@ -21,6 +21,7 @@ import com.nl.lovely.entity.ProfileDetail;
 import com.nl.lovely.entity.User;
 import com.nl.lovely.enums.ActionType;
 import com.nl.lovely.enums.RoleType;
+import com.nl.lovely.enums.UserStatus;
 import com.nl.lovely.exception.NotFoundException;
 import com.nl.lovely.repository.UserRepository;
 import com.nl.lovely.response.ApiResponse;
@@ -69,6 +70,8 @@ public class UserServiceImp implements UserService{
                 .lastname(profile.getLastname())
                 .name(profile.getName())
                 .role(profile.getRole())
+                .state(profile.getState())
+		        .isVisible(profile.getIsVisible())
                 .preference(convertToPreferenceDTO(profile.getPreference())) // Convertir entidad a DTO
                 .profileDetail(convertToProfileDetailDTO(profile.getProfileDetail())) // Convertir entidad a DTO
                 .build();
@@ -88,6 +91,8 @@ public class UserServiceImp implements UserService{
 	            .lastname(profile.getLastname())
 	            .name(profile.getName())
 	            .role(profile.getRole())
+	            .state(profile.getState())
+		        .isVisible(profile.getIsVisible())
 	            .preference(convertToPreferenceDTO(profile.getPreference())) // Convertir entidad a DTO
 	            .profileDetail(convertToProfileDetailDTO(profile.getProfileDetail())) // Convertir entidad a DTO
 	            .build();
@@ -129,14 +134,21 @@ public class UserServiceImp implements UserService{
 	            .timestamp(profileDetail.getTimestamp())
 	            .build();
 	}
-
+	@Override
+	public ApiResponse updateUserIsVisible(ProfileDTO request) {
+		// TODO Auto-generated method stub
+		userRepository.updateUserVisibility(request.getId(), request.getIsVisible());
+		return new ApiResponse("La visibilidad del usuario se actualizo satisfactoriamente");
+	}
 	@Transactional
 	public ApiResponse updateUserData(ProfileDTO request) {
 		// TODO Auto-generated method stub
+		String capitalizedName = capitalizeFirstLetter(request.getName());
+        String capitalizedLastname = capitalizeFirstLetter(request.getLastname());
 		User user = User.builder()
 		        .id(request.getId())
-		        .lastname(request.getLastname())
-		        .name(request.getName())
+		        .lastname(capitalizedLastname)
+		        .name(capitalizedName)
 		        .role(RoleType.USER)
 		        .build();
 		        userRepository.updateUserQuery(user.getId(), user.getLastname(), user.getName());
@@ -154,13 +166,16 @@ public class UserServiceImp implements UserService{
         if (profileDetail == null) {
             throw new Exception("ProfileDetail no encontrado para el usuario con ID: " + user.getId());
         }
-
+        
+        String capitalizedDescription = capitalizeFirstLetter(profileRequest.getDescription());
+        String capitalizedWork = capitalizeFirstLetter(profileRequest.getWork());
+        
 	    // Actualización de campos del ProfileDetail
 	    profileDetail.setPhone(profileRequest.getPhone());
 	    profileDetail.setGender(profileRequest.getGender());
 	    profileDetail.setBirthDate(profileRequest.getBirthDate());
-	    profileDetail.setDescription(profileRequest.getDescription());
-	    profileDetail.setWork(profileRequest.getWork());
+	    profileDetail.setDescription(capitalizedDescription);
+	    profileDetail.setWork(capitalizedWork);
 	    
 	    
 	    // Guardar la imagen nueva si se proporciona
@@ -195,7 +210,13 @@ public class UserServiceImp implements UserService{
 	 		return new ApiResponse("El perfil se actualizo satisfactoriamente");
 	}
 	
-	
+	public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
+
 	/*@Override
 	public Optional<User> findByUsername(String username) {
 		// TODO Auto-generated method stub
@@ -335,6 +356,7 @@ public class UserServiceImp implements UserService{
             .username(u.getUsername())
             .lastname(u.getLastname())
             .name(u.getName())
+            .isVisible(u.getIsVisible())
             .preference(convertToPreferenceDTO(u.getPreference())) // Convertir entidad a DTO
             .profileDetail(convertToProfileDetailDTO(u.getProfileDetail())) // Convertir entidad a DTO
             .build();
@@ -400,6 +422,8 @@ public class UserServiceImp implements UserService{
 	    user.setLastname(profileDTO.getLastname());
 	    user.setName(profileDTO.getName());
 	    user.setRole(profileDTO.getRole());
+	    user.setState(profileDTO.getState());
+	    user.setIsVisible(profileDTO.getIsVisible());
 	    
 	    // Convertir DTOs anidados a entidades
 	    user.setPreference(convertToPreferenceEntity(profileDTO.getPreference())); // Convertir DTO Preference a entidad

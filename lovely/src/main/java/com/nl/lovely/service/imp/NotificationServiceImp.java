@@ -52,7 +52,7 @@ public class NotificationServiceImp implements NotificationService{
 	    }
 	    
 		// String messageContent en parametro para ver el mensaje
-		String content = "Nuevo mensaje de "; //+ sender.getName();
+		String content = "te ha enviado un mensaje"; //+ sender.getName();
 		//String content = "Tienes un nuevo mensaje de " + sender.getName() + ": " + messageContent;
 		
 		 Notification notification = Notification.builder()
