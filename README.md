@@ -38,7 +38,6 @@ Lovely es una aplicación de citas similar a Tinder, que permite a los usuarios 
    ```bash
    git clone https://github.com/natanael-lima/lovely-dating-web-app.git
    cd lovely-dating-web-app
-   ## :
 2. **Configuración del Backend**
     - Configura el archivo `application.properties` con los detalles de tu base de datos MySQL.  
     ```bash
