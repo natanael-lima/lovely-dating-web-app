@@ -1,4 +1,4 @@
-# LovelyApp - Aplicación de Citas
+# Lovely - Aplicación de Citas
 
 Lovely es una aplicación de citas similar a Tinder, que permite a los usuarios registrarse y crear perfiles detallados. Con un buscador integrado, los usuarios pueden encontrar coincidencias basadas en preferencias configuradas. Una vez emparejados, pueden chatear en tiempo real utilizando WebSocket. La función de match mutuo desencadena conversaciones significativas. Además, los usuarios pueden editar perfiles, cambiar preferencias y acceder a opciones de seguridad en la sección de perfil. LovelyApp proporciona una plataforma intuitiva y segura.
 
